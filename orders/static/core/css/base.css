@@ -1,0 +1,48 @@
+
+body {
+   
+    margin: 0;  
+    margin-left: .1%;
+    margin-right: .1%;   
+    clear: both;   
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+    
+}
+
+.ancor:hover {    
+    cursor: pointer;
+    color: brown;
+
+}
+
+.inputstyle{
+    padding:5px;   
+    border:1px solid black;
+    border-radius: 6px;
+    
+}
+.labelstyle {
+  padding:6px;
+  
+}
+
+.buttonstyle {
+    background-color: rgb(185, 226, 238);
+    padding: 8px 30px;
+    border-radius: 5px;
+    border: 1px solid black;
+
+}
+.buttonstyle:hover{
+    cursor: pointer;
+}
+
+.noselect {   
+        -webkit-touch-callout: none; /* iOS Safari */
+          -webkit-user-select: none; /* Safari */
+           -khtml-user-select: none; /* Konqueror HTML */
+             -moz-user-select: none; /* Old versions of Firefox */
+              -ms-user-select: none; /* Internet Explorer/Edge */
+                  user-select: none; /* No */
+
+}

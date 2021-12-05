@@ -1,0 +1,41 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'core/css/base.css' %}" />   
+<style>
+a:hover{
+  cursor: pointer; 
+  color: red;
+}
+</style>
+<form method="POST" style="position: relative; top:10; bottom: 0; margin: auto;">
+   {% csrf_token %}
+   <div style="padding-bottom: 50px; padding-top: 1px; width: 350px;
+  
+   background-color: lightblue;
+   border-radius: 10px;
+  
+   top:0;
+   bottom: 0;
+   left: 0;
+   right: 0;
+   
+   margin: auto;">
+    
+    {% for field in fm %}
+   
+      <h5 style="text-align:left; padding-left:20px;">
+        {{ field.label_tag }} 
+      
+      <span style="right:0;float:right; padding-right:20px; word-wrap: break-word;">  {{ field }} </span>
+      
+      {% for error in field.errors %}
+      <p style="color: red;">{{ error }}</p>
+      {% endfor %}
+      </h5>
+    {% endfor %}
+     <button type="submit" class="buttonstyle" style="float:right; margin-right:20px; border:1px solied red;">Submit</button>
+      <a id="signupBtn"  href="{% url 'home' %}" style="float:right; text-decoration: none; margin-right:20px; padding-top: 5px;" >Login</a>
+
+    </div>
+</form>
+
+

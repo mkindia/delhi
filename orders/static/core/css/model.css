@@ -1,0 +1,120 @@
+/* The Modal (background) */
+.loginmodal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top:  50px; /* Location of the box */    
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  }
+  
+  /* menu model */
+  .menumodal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */   
+    z-index: 1; /* Sit on top */
+    padding-top:  50px; /* Location of the box */
+    padding-right: 10px; /* location right of box */
+    float: right;
+    right: 0;
+    top: 0;
+    width: 100%; /* Full widt*/
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  }
+  
+  /* menu model contener */
+  .menu-modal-content {
+    position: relative;
+    float: right;
+    background-color: #ffffff;    
+    width: 300px;
+    height:70%;       
+    border-radius: 11px;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+    -webkit-animation-name: menuanimatetop;
+    -webkit-animation-duration: 0.4s;
+    animation-name: menuanimatetop;
+    animation-duration: 0.4s
+    
+  }
+  
+  /* login Modal Content */
+  .Login-modal-content {
+    position: relative;
+    background-color: #e4e4e4;
+    margin: auto;
+    width: 350px;
+    padding: 0px;
+    border-radius: 11px;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+    -webkit-animation-name: animatetop;
+    -webkit-animation-duration: 0.4s;
+    animation-name: animatetop;
+    animation-duration: 0.4s
+  }
+  
+  /* Add Animation */
+  @-webkit-keyframes animatetop {
+    from {top:-300px; opacity:0} 
+    to {top:0; opacity:1}
+  }
+  
+  @keyframes animatetop {
+    from {top:-300px; opacity:0}
+    to {top:0; opacity:1}
+  }
+  
+  /* animation menu model container */
+  @-webkit-keyframes menuanimatetop {
+    from {right:-300px; opacity:0} 
+    to {right:0; opacity:1}
+  }
+  
+  @keyframes menuanimatetop {
+    from {right:-300px; opacity:0}
+    to {right:0; opacity:1}
+  }
+  
+  
+  
+  .modal-header {
+    padding: 0px;
+    border-top-left-radius: 11px;
+    border-top-right-radius: 11px;
+    background-color: lightblue;
+    color: rgb(15, 15, 15);
+    height: 50px;
+  }
+
+  .login-modal-body {
+    padding-top: 0;    
+    overflow-y: auto;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    background-color: #e4e4e4;
+    
+  }
+  
+  .menu-modal-body {    
+    border-radius: 10px;
+   
+    background-color: #e4e4e4;
+   
+  }
+  
+  .modal-body button{
+    right: 40px;
+    font-weight:normal;
+    background-color: lightblue;
+    padding: 8px 30px;
+    border-radius: 5px;
+    margin-top:2px;
+  }

@@ -1,0 +1,33 @@
+
+{% block page_head %} <style>
+a:hover{
+  cursor: pointer; 
+  color: red;
+}
+</style> 
+{% endblock page_head %}
+{% if messages %}{% for message in messages %}
+   <div style="text-align: center; font-weight: bold; padding: 5px;">  {{message}} </div>
+{% endfor %}{% endif %}
+<form method="POST" action="signin/">
+   {% csrf_token %}
+   <div style="padding-bottom:30px;">
+    {% for field in fm %}
+      <h5 style="text-align:left; padding-left:20px;">
+        {{ field.label_tag }} 
+      
+      <span style="float:right; padding-right:20px;">  {{ field }} </span>
+      
+        {% for error in field.errors %}
+          <p style="color: red">{{ error }}</p>
+        {% endfor %}
+      </h5>
+    {% endfor %}
+    <div>     
+     <button id="sub" type="Submit" class="buttonstyle" style="float:right; margin-right:20px;">Submit</button>     
+
+      <a  href="signup/" style="text-decoration: none; float:right; margin-right:20px; padding-top: 10px;" >New  SignUp</a>
+      </div>
+  <div id="iner"></div>
+</div>
+

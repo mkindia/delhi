@@ -1,0 +1,99 @@
+.showdiv{
+    position:absolute; 
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px; 
+      padding:0;    
+      margin:0;
+      top:0;
+      left:0;
+      bottom: 0;
+      width: 100%;   
+      background-color: #ffffff;
+      overflow-y:auto;
+    display: none;
+    text-align: center;
+    
+  }
+  
+  
+  
+  .show{
+    display: block;
+  }
+    .hide{
+      display: none;
+    }
+  
+    .backbtn{
+      position: absolute;
+      left:10;
+      top: 15;
+      font-size: 24px;
+      
+     border: 2px solid black;
+     border-radius: 50%;
+     
+      display: block;
+    }
+    .menuitembtn{
+      
+      padding: 7px 15px;
+      width: 280px;      
+      margin-top: 7px;
+      border-radius: 7px;
+      border: 1px solid black;    
+      
+    }
+  
+    .submenuitembtn{
+      
+      padding: 7px 15px;
+      width: 280px;      
+      margin-top: 7px;
+      border-radius: 7px;
+      border: 1px solid black;    
+      
+    }
+  
+    .menuhead{
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;   
+      position:relative; 
+      top:0; 
+      height: 60px; 
+      width: 100%; 
+      background-color: lightblue
+    
+    }
+  
+    .headtitle{
+      position: relative;
+      top: 16;    
+      font-weight:normal; 
+      font-size: 24px; 
+      background-color: transparent;
+      border: 0px;
+       margin:0; 
+       
+        }
+  
+        .itemcontainer{
+          position:absolute;
+          width: 100%;            
+          background-color: violet;
+          text-align: center; 
+          overflow-y: auto;
+          top: 60;
+          bottom: 0;
+          right: 0;
+        
+        }
+  
+   .menuitembtn:after {
+    content: '\25B7';
+    color: rgb(104, 103, 103);
+    font-weight: bold;
+    float: right;
+    margin-left: 5px;
+  }
+  
