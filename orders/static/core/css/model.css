@@ -13,6 +13,7 @@
     background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
   }
   
+  
   /* menu model */
   .menumodal {
     display: none; /* Hidden by default */
@@ -35,7 +36,7 @@
     position: relative;
     float: right;
     background-color: #ffffff;    
-    width: 300px;
+    width: 350px;
     height:70%;       
     border-radius: 11px;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);

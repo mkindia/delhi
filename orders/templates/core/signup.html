@@ -1,24 +1,66 @@
-{% load static %}
-<link rel="stylesheet" href="{% static 'core/css/base.css' %}" />   
+
+{% extends 'core/base.html' %}
+{% block page_head %}
 <style>
-a:hover{
-  cursor: pointer; 
-  color: red;
+.signupmodal {    
+  position: fixed; /* Stay in place */
+  padding-top:  10px; /* Location of the box */
+  z-index: 1; /* Sit on top */ 
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
 }
+.signup-modal-content {
+    position: relative;
+    background-color: #e4e4e4;
+    margin: auto;
+    width: 400px;
+    padding: 0px;
+    border-radius: 11px;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+    -webkit-animation-name: animatetop;
+    -webkit-animation-duration: 0.4s;
+    animation-name: animatetop;
+    animation-duration: 0.4s
+  }
+
+  .signup-modal-header {
+    padding: 0px;
+    border-top-left-radius: 11px;
+    border-top-right-radius: 11px;
+    background-color: lightblue;
+    color: rgb(15, 15, 15);
+    height: 50px;
+  }
+  .signup-modal-body {
+    padding-top: 0;
+    padding-bottom: 20px;    
+    overflow-y: auto;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    background-color: #e4e4e4;
+    
+  }
+
 </style>
-<form method="POST" style="position: relative; top:10; bottom: 0; margin: auto;">
+{% endblock page_head %}
+{% block title %}signup{% endblock title %}
+
+{% block main_content %}
+<div class="signupmodal">
+  <div class="signup-modal-content">
+    <div class="signup-modal-header">
+      <h3 style="margin-top:10px; padding: 13px; text-align: center;">Please Signup</h3>
+     
+  </div>        
+    <div class= "signup-modal-body">
+<form method="POST" >
    {% csrf_token %}
-   <div style="padding-bottom: 50px; padding-top: 1px; width: 350px;
-  
-   background-color: lightblue;
-   border-radius: 10px;
-  
-   top:0;
-   bottom: 0;
-   left: 0;
-   right: 0;
    
-   margin: auto;">
     
     {% for field in fm %}
    
@@ -32,10 +74,15 @@ a:hover{
       {% endfor %}
       </h5>
     {% endfor %}
-     <button type="submit" class="buttonstyle" style="float:right; margin-right:20px; border:1px solied red;">Submit</button>
+     <button type="submit" class="buttonstyle" style="float:right; margin-right:20px;">Submit</button>
       <a id="signupBtn"  href="{% url 'home' %}" style="float:right; text-decoration: none; margin-right:20px; padding-top: 5px;" >Login</a>
 
-    </div>
+    
 </form>
-
-
+  </div>
+</div>
+</div>
+{% endblock main_content %} 
+{% block main_scripts %} <script>
+  
+</script> {% endblock main_scripts %} 

@@ -1,15 +1,26 @@
+.menuitembody{
+  position: absolute; 
+  top: 60; bottom: 0; 
+  border-bottom-left-radius: 10px; 
+  border-bottom-right-radius: 10px; 
+  background-color: #6e15d3; 
+  overflow-y:auto;
+  display: block;
+}
+
 .showdiv{
-    position:absolute; 
-    border-bottom-right-radius: 10px;
+    position:absolute;
+   
     border-bottom-left-radius: 10px; 
       padding:0;    
       margin:0;
       top:0;
       left:0;
       bottom: 0;
-      width: 100%;   
-      background-color: #ffffff;
-      overflow-y:auto;
+      width: 100%;    
+      padding-bottom: 10px;     
+      background-color: #c50b0b;
+     overflow-y: auto;
     display: none;
     text-align: center;
     
@@ -23,17 +34,24 @@
     .hide{
       display: none;
     }
+
+    .overflowy-h {
+      overflow-y:hidden;
+    }
   
     .backbtn{
       position: absolute;
-      left:10;
+      left:5px;
       top: 15;
-      font-size: 24px;
-      
-     border: 2px solid black;
-     border-radius: 50%;
-     
+      font-size: 28px;
+      color: rgba(32, 32, 32, 0.801);      
+      background-color: transparent;
+      border: 0;
+      transform: rotateZ(-180deg);
       display: block;
+    }
+    .backbtn:hover{
+      color: rgba(255, 0, 0, 0.877);
     }
     .menuitembtn{
       
