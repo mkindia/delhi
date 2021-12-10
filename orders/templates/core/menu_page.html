@@ -3,52 +3,45 @@
 {% block page_head %}
 <link rel="stylesheet" href="{% static 'core/css/menu_page.css' %}" />
 {% endblock page_head %}
-  
+
 <div style="border-top-left-radius: 10px; border-top-right-radius: 10px; text-align: center;">
-    <div class="menuhead" >
-      <a class="headtitle noselect" id="menuhead">Menu</a>
-      <button id="backbtn" onclick="showhide1()" class="hide">&#10132;</button>    
+  <div class="menuhead">
+    <a class="headtitle noselect" id="menuhead">Menu</a>
+    <button id="backbtn" onclick="showhide1()" class="noselect hide">&#10132;</button>
+  </div>
+  <div id="menuitembody" class="menuitembody">
+    <button id="party_menu" class="menuitembtn" onclick="showhide('party_menu','party_menu_items')">Partys</button>
+    <button id="consignee_menu" class="menuitembtn" onclick="showhide('consignee_menu','consignee_menu_items')">Consignees</button>
+    <button id="items_menu" class="menuitembtn" onclick="showhide('items_menu','items_menu_items')">Items</button>
+    <button id="som" class="menuitembtn" onclick="showhide('som','som_item')">Sales Orders</button>
+    <button id="pom" class="menuitembtn" onclick="showhide('pom','pom_item')">Purchase Orders</button>
+  </div>
+  <div id="consignee_menu_items" class="showdiv">
+    <h>mainFrameOnejhfjhjh</h>
+  </div>
+  <div id="items_menu_items" class="showdiv">
+    <p>mainFrameTwo</p>
+  </div>
+  <div id="som_item" class="showdiv">
+    <button id="open1-1" class="menuitembtn" onclick="showhide('open1-1','open-1_item')">Sub Orders</button>
+    <div id="open-1_item" class="showdiv" style="top:0">
+      <p>mainFrameTwoLKDFGJODJFGIODJG</p>
     </div>
-    <div id="menuitembody" class="menuitembody">
-      <button id="open3" class="menuitembtn" onclick="showhide('open3')">Partys</button> 
-            <div class="showdiv">         
-              <button id="add-party" class="submenuitembtn" >Add Party</button>
-              <button id="edit-party" class="submenuitembtn">Edit Party</button>
-              <button id="delete-party" class="submenuitembtn">Delete Party</button>
-                
-            </div>
-
-      <button id="open" class="menuitembtn" onclick="showhide('open')">Consignees</button>
-          <div class="showdiv">       
-            <h>mainFrameOnejhfjhjh</h>        
-          </div>
-
-      <button id="open1" class="menuitembtn" onclick="showhide('open1')">Items</button>
-          <div class="showdiv">   
-              <p>mainFrameTwo</p>      
-          </div>
-          
-      <button id="open4" class="menuitembtn" onclick="showhide('open4')">Sales Orders</button>
-            <div class="showdiv">       
-                  <button id="open1-1" class="submenuitembtn" onclick="showhide('open1-1')">Sub Orders</button>
-                          <div class="showdiv" style="top:0">
-                              <p>mainFrameTwoLKDFGJODJFGIODJG</p>            
-                          </div> 
-            </div> 
-
-      <button id="purord" class="menuitembtn" onclick="showhide('purord')">Purchase Orders</button>
-            <div class="showdiv">       
-                  <button id="subpur" class="submenuitembtn" onclick="showhide('subpur')">Add Purchase Orders</button>
-                          <div class="showdiv" style="top:0">
-                              <p>Purchases</p>            
-                          </div> 
-            </div> 
-
+  </div>
+  <div id="party_menu_items" class="showdiv">
+    <button id="add-party" class="submenuitembtn">Add Party</button>
+    <button id="edit-party" class="submenuitembtn">Edit Party</button>
+    <button id="delete-party" class="submenuitembtn">Delete Party</button>
+  </div>
+  <div id="pom_item" class="showdiv">
+    <button id="subpur" class="submenuitembtn" onclick="showhide('subpur')">Add Purchase Orders</button>
+    <div class="showdiv5" style="top:0">
+      <p>Purchases</p>
     </div>
-
+  </div>
 </div>
 
 
-{% block main_scripts %}  
+{% block main_scripts %}
 <script src="{% static 'core/js/menu_page.js' %}"></script>
- {% endblock main_scripts %}
+{% endblock main_scripts %}

@@ -1,11 +1,11 @@
 openeddiv = ['Menu'];
-            function showhide(d) {
-            x = document.getElementById(d).innerText;
-            h=document.getElementById("menuitembody").classList.toggle('overflowy-h');
-            document.getElementById(d).nextElementSibling.classList.toggle('show');
+            function showhide(d,sd) {
+            x = document.getElementById(d).innerText;            
+            document.getElementById(sd).classList.toggle('show');
             openeddiv.push(x);
             document.getElementById('menuhead').innerText=x;
             document.getElementById('backbtn').classList.add('backbtn');
+            h=document.getElementById("menuitembody").classList.add('overflowy-h');
             }
 
             function showhide1() {
@@ -34,5 +34,6 @@ openeddiv = ['Menu'];
             if(divcount==1) {
                document.getElementById('backbtn').classList.remove('backbtn'); 
                document.getElementById("menuitembody").classList.remove('overflowy-h'); 
-                   }
-            }
+                } 
+               
+            } 

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">    
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">    
     <link rel="stylesheet" href="{% static 'core/css/topnav.css' %}" />
     <link rel="stylesheet" href="{% static 'core/css/model.css' %}" />
     <link rel="stylesheet" href="{% static 'core/css/base.css' %}" />   
@@ -14,12 +14,11 @@
 </head>
 
 <body>
-
-
- <div style="position: absolute; top: 45; bottom: 0; left: 0; right: 0; overflow-y: auto; ">
- {% block main_content %} 
- {% endblock main_content%}
- </div>
+    {% include 'core/topnavbar.html' %}
+    <div style="position: absolute; top: 45; bottom: 0; left: 0; right: 0; overflow-y: auto; ">
+        {% block main_content %}
+        {% endblock main_content%}
+    </div>
  
     
     <script src="{% static 'core/js/model.js' %}"></script>

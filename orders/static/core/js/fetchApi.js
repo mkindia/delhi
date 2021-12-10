@@ -15,26 +15,7 @@ const csrftoken = getCookie('csrftoken');
 
             return option ;
         }
-
-        function putoption(data)
-        {
-         let option = { 
-            method: 'PUT',
-            credentials: 'same-origin',
-            headers:{
-            'Accept': 'application/json',
-            'X-Requested-With': 'XMLHttpRequest', //Necessary to work with request.is_ajax()
-            'X-CSRFToken': csrftoken,
-            },
-                body: JSON.stringify(data) //JavaScript object of data to POST
-            } 
-
-            return option ;
-        
-        }
-   
-   
-   
+      
    
    function getCookie(name) { 
         let cookieValue = null;

@@ -1,23 +1,27 @@
 .menuitembody{
   position: absolute; 
   top: 60; bottom: 0; 
+  padding-left: 5px;
+  padding-right: 5px;
   border-bottom-left-radius: 10px; 
   border-bottom-right-radius: 10px; 
   background-color: #6e15d3; 
   overflow-y:auto;
-  display: block;
+  padding-bottom: 10px;
 }
 
 .showdiv{
     position:absolute;
    
-    border-bottom-left-radius: 10px; 
-      padding:0;    
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;     
       margin:0;
-      top:0;
+      top:60;
       left:0;
-      bottom: 0;
-      width: 100%;    
+      right: 0;
+      bottom: 0;     
+     padding-left: 5px;
+     padding-right: 5px;  
       padding-bottom: 10px;     
       background-color: #c50b0b;
      overflow-y: auto;
@@ -36,16 +40,19 @@
     }
 
     .overflowy-h {
+      margin-top: 0;
       overflow-y:hidden;
+    
     }
   
     .backbtn{
       position: absolute;
-      left:5px;
+      padding: 0;
+      left:7px;
       top: 15;
       font-size: 28px;
       color: rgba(32, 32, 32, 0.801);      
-      background-color: transparent;
+      background-color:transparent;
       border: 0;
       transform: rotateZ(-180deg);
       display: block;
@@ -56,21 +63,21 @@
     .menuitembtn{
       
       padding: 7px 15px;
-      width: 280px;      
+      width: 100%;      
       margin-top: 7px;
       border-radius: 7px;
       border: 1px solid black;    
-      
+      font-size: 17px;
     }
   
     .submenuitembtn{
       
       padding: 7px 15px;
-      width: 280px;      
+      width: 100%;      
       margin-top: 7px;
       border-radius: 7px;
       border: 1px solid black;    
-      
+      font-size: 17px;
     }
   
     .menuhead{
