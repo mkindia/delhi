@@ -1,0 +1,42 @@
+{% extends 'core/base.html' %}
+
+{% block title %}home{% endblock title %}
+
+{% block main_content %} 
+
+
+{% if user.is_authenticated and user.is_staff %}
+
+{% include 'core/staff_dashboard.html' %}
+
+{% elif user.is_authenticated and user.is_admin %}
+
+{% include 'clients/admin_dashboard.html' %}
+ 
+{% elif user.is_authenticated %}
+{% include 'clients/client_dashboard.html' %}
+{% endif%}
+  <!-- For The login/signup Modal -->
+<div id="loginModal" class="loginmodal">
+
+    <!-- Modal content -->
+    <div class="login-modal-content">
+        <div class="modal-header">
+            <h3 id="headertext" style="margin-top:10px; padding: 13px; text-align: center;">Please Login</h3>
+           
+        </div>            
+        <div id="loginmodel-body" class="login-modal-body">
+           
+        
+        </div>
+
+    </div>
+
+</div>
+
+<!-- for all Center Model -->
+{% endblock main_content%}
+
+{% block main_scripts %}
+   
+{% endblock main_scripts %}

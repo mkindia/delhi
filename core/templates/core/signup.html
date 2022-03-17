@@ -1,0 +1,49 @@
+
+{% extends 'core/base.html' %}
+{% block page_head %}
+
+{% endblock page_head %}
+{% block title %}signup{% endblock title %}
+
+{% block main_content %}
+<div class="basemodal">
+  <div class="base-modal-content col-l-6 col-m-9 col-s-11">
+    <div class="base-modal-header">
+      <h3 style="margin-top:10px; padding: 13px; text-align: center;">Please Signup</h3>
+     
+  </div>        
+    <div class= "base-modal-body">
+     
+<form method="POST">
+   {% csrf_token %}   
+    {% for field in fm %}   
+    <div class="col-l-6 col-m-6 col-s-6 col-" style="float:left; padding:2px">      
+       {{ field.label_tag }}     
+       {{ field }}      
+      {% for error in field.errors %}
+      <p style="color: red;"><small>{{error}}</small></p>
+      {% endfor %}
+    </div>
+    {% endfor %}
+
+    <div class="col-l-6 col-m-6 col-s-6 col-" style="float:left; padding:2px">      
+      <label for="id_client_id">Client_ID:</label>     
+      <input type="text" name="client" class="inputstyle" required id="id_client_id">      
+     
+   </div>
+      
+     <button type="submit" id="submitbtn" class="buttonstyle" style="float:right; margin-top: 20px; margin-right: 2px;">Submit</button>
+    <a id="signupBtn" class="ancor"  href="{% url 'home' %}" style="float:right; text-decoration: none; margin-right:10px; padding-top: 25px;" >Login</a>
+    
+</form>
+  </div>
+</div>
+</div>
+{% endblock main_content %} 
+
+{% block main_scripts %}
+<script>
+document.getElementById("submitbtn").onclick=function(evt){document.getElementById("loader").style.display='block';}
+</script>
+    
+{% endblock main_scripts %}

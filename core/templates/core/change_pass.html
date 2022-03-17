@@ -1,0 +1,60 @@
+
+{% extends 'core/base.html' %}
+
+{% block title %}changepassword{% endblock title %}
+
+{% block main_content %} 
+
+
+<div  class="basemodal">
+
+    <!-- Modal content -->
+    <div class="base-modal-content col-l-6 col-m-9 col-s-11">
+        <div class="modal-header">
+            <h3 id="headertext" style="margin-top:10px; padding: 13px; text-align: center;">{{header}}</h3>
+           
+        </div>            
+        <div class="base-modal-body">
+            
+            <form method="POST">
+                {% csrf_token %}
+
+                {% for field in fm %}
+                <div class="col-l-6 col-m-6 col-s-6 col-" style="float:left; padding:2px">
+                    {{ field.label_tag }} 
+  
+                    {{ field }}
+  
+                    {% for error in field.errors %}
+
+                        <p style="color: red">{{ error }}</p>
+
+                    {% endfor %}
+                </div>
+                {% endfor %}
+                
+                <div>
+                    <button type="submit" class="buttonstyle" style="float:right; margin-top:22px; margin-right: 10px;">Submit</button>
+                    <a  href="/" class="ancor" style="text-decoration: none; float:right; margin-right:10px; margin-top:30px;" ><i> Exit </i></a>
+                    
+                </div>
+            </form>        
+            
+        
+        </div>
+
+    </div>
+
+  </div>
+
+
+{% endblock main_content%}
+
+
+{% block main_scripts %}
+    {% if messages %}
+        {% for message in messages %}
+        <script>alert('{{message}}')</script>
+        {% endfor %}
+    {% endif %}
+{% endblock main_scripts %}

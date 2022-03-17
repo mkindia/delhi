@@ -1,0 +1,44 @@
+{% extends 'core/base.html' %}
+{% block title %}forgetpassword{% endblock title %}
+
+{% block main_content %} 
+
+<div  class="basemodal">
+
+    <!-- Modal content -->
+    <div class="base-modal-content col-l-6 col-m-9 col-s-11">
+        <div class="modal-header">
+            <h3 id="headertext" style="margin-top:10px; padding: 13px; text-align: center;">{{header}}</h3>
+           
+        </div>            
+        <div class="base-modal-body">           
+            <form method="POST">
+                {% csrf_token %}
+                <div class="col-l-6 col-m-6 col-s-6 col-" style="float:left; padding:2px">
+                <label for="id_email">Enter Registred Email:</label>       
+                <input type="email" name="email" class="inputstyle" required id="id_email">
+                </div>
+                <div style="float:right">
+                    <a  href="/" class="ancor" style="text-decoration: none; float:left; margin-right:10px; margin-top:30px;" ><i> Exit </i></a>
+                    <button type="submit" class="buttonstyle" style="float:right; margin-top:22px; margin-right: 10px;">Submit</button>
+                   
+                </div>
+            </form>        
+            
+        
+        </div>
+
+    </div>
+
+  </div>
+
+
+{% endblock main_content%}
+
+{% block main_scripts %}
+    {% if messages %}
+        {% for message in messages %}
+        <script>alertmsg('{{message}}',3000)</script>
+        {% endfor %}
+    {% endif %}
+{% endblock main_scripts %}

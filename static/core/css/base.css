@@ -1,0 +1,196 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+   top: 0;
+   bottom: 0;
+    margin: 0;  
+    margin-left: .1%;
+    margin-right: .1%;   
+    clear: both;   
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+}
+.inputstyle,
+input[list] { 
+  color:#535353;
+  font-size: 17px;
+  border-radius:7px;
+  padding: 4px;
+  height: 33px;
+  width: 100%;  
+  -webkit-appearance: none;
+  appearance: none;
+  border:1px solid black;
+}
+
+
+.ancor:hover {    
+    cursor: pointer;
+    color: brown;
+
+}
+
+
+.labelstyle {
+  padding:6px;
+  
+}
+
+.smallbuttonstyleround{
+    background-color: rgb(94, 94, 94);
+    padding: 2px 8px;
+    border-radius: 10px;    
+    border: 1px solid black;
+    font-size: x-small;
+    color: white;
+    text-decoration: none;
+}
+.smallbuttonstyleround:hover{
+  cursor: pointer;
+  color: rgb(114, 253, 1);
+ background-color: #a1a1a1;
+}
+
+.buttonstyle {   
+    background-color: rgb(185, 226, 238);
+    padding: 6px 16px;
+    border-radius: 7px;
+    color: black;
+    border: 1px solid black;   
+}
+.buttonstyle:hover{
+    cursor: pointer;
+    color: red;
+}
+
+.noselect {   
+        -webkit-touch-callout: none; /* iOS Safari */
+          -webkit-user-select: none; /* Safari */
+           -khtml-user-select: none; /* Konqueror HTML */
+             -moz-user-select: none; /* Old versions of Firefox */
+              -ms-user-select: none; /* Internet Explorer/Edge */
+                  user-select: none; /* No */
+
+}
+
+.capitalize{
+  text-transform: capitalize;
+}
+
+
+
+@media only screen and (max-width: 480px){
+   
+    [class*="col-"] {
+        width: 100%;
+      } 
+  .col-1 {width: 8.33%;}
+  .col-2 {width: 16.66%;}
+  .col-3 {width: 25%;}
+  .col-4 {width: 33.33%;}
+  .col-5 {width: 41.66%;}
+  .col-6 {width: 50%;}
+  .col-7 {width: 58.33%;}
+  .col-8 {width: 66.66%;}
+  .col-9 {width: 75%;}
+  .col-10 {width: 83.33%;}
+  .col-11 {width: 91.66%;}
+  .col-12 {width: 100%;}
+    
+}
+@media only screen and (min-width: 481px) and (max-width: 768px){
+
+  
+  .col-s-1 {width: 8.33%;}
+  .col-s-2 {width: 16.66%;}
+  .col-s-3 {width: 25%;}
+  .col-s-4 {width: 33.33%;}
+  .col-s-5 {width: 41.66%;}
+  .col-s-6 {width: 50%;}
+  .col-s-7 {width: 58.33%;}
+  .col-s-8 {width: 66.66%;}
+  .col-s-9 {width: 75%;}
+  .col-s-10 {width: 83.33%;}
+  .col-s-11 {width: 91.66%;}
+  .col-s-12 {width: 100%;}
+    }
+    
+@media only screen and (min-width: 769px) and (max-width: 1024px){
+  
+  .col-m-1 {width: 8.33%;}
+  .col-m-2 {width: 16.66%;}
+  .col-m-3 {width: 25%;}
+  .col-m-4 {width: 33.33%;}
+  .col-m-5 {width: 41.66%;}
+  .col-m-6 {width: 50%;}
+  .col-m-7 {width: 58.33%;}
+  .col-m-8 {width: 66.66%;}
+  .col-m-9 {width: 75%;}
+  .col-m-10 {width: 83.33%;}
+  .col-m-11 {width: 91.66%;}
+  .col-m-12 {width: 100%;}
+    
+    }    
+
+@media only screen and (min-width: 1025px){
+
+       /* For desktop: */
+  .col-l-1 {width: 8.33%;}
+  .col-l-2 {width: 16.66%;}
+  .col-l-3 {width: 25%;}
+  .col-l-4 {width: 33.33%;}
+  .col-l-5 {width: 41.66%;}
+  .col-l-6 {width: 50%;}
+  .col-l-7 {width: 58.33%;}
+  .col-l-8 {width: 66.66%;}
+  .col-l-9 {width: 75%;}
+  .col-l-10 {width: 83.33%;}
+  .col-l-11 {width: 91.66%;}
+  .col-l-12 {width: 100%;}
+    
+    }
+
+/* For base Model */
+.basemodal {    
+  position: fixed; /* Stay in place */
+  padding-top:  10px; /* Location of the box */
+  z-index: 1; /* Sit on top */ 
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+.base-modal-content {
+  position: relative;
+  background-color: #e4e4e4;
+  margin: auto;   
+  padding: 0px;
+  border-radius: 11px;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+  -webkit-animation-name: animatetop;
+  -webkit-animation-duration: 0.4s;
+  animation-name: animatetop;
+  animation-duration: 0.4s
+  }
+
+.base-modal-header {
+  padding: 0px;
+  border-top-left-radius: 11px;
+  border-top-right-radius: 11px;
+  background-color: lightblue;
+  color: rgb(15, 15, 15);
+  height: 40px;
+  }
+.base-modal-body {
+  padding: 10px;  
+  overflow-y:auto;    
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  background-color: #e4e4e4;
+      
+  }

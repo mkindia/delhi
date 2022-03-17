@@ -1,0 +1,17 @@
+
+<div class="topnav noprint">
+  <a style="position:absolute; font-weight: bold; top:10px; left:10px;" class="noselect"> Spangle </a>
+  {% if user.is_authenticated %}
+  <a id="profilebtn" class="logoutbtn noselect" type="button" > 
+    {% if user.user_img != None and user.user_img != "" %}  
+    <img src="{{user.user_img.url}}" alt="" height="38" width="38"  >
+    {% else %} 
+    <img src="/media/user/default/defaultuser.png" alt="" height="38" width="38"  >  
+    {% endif %} </a>
+  <a id="menuBtn" class="menuBtn noselect">&#9776;</a>
+  {% else %}
+  <a id="loginBtn" type="button" class="loginbtn ancor noselect">Login</a>
+
+  {% endif %}
+
+</div>

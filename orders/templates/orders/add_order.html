@@ -1,0 +1,91 @@
+{% extends 'core/base.html' %}
+{% block title %}neworders{% endblock title %}
+
+{% block main_content %} 
+
+<div  class="basemodal">
+
+    <!-- Modal content -->
+    <div class="base-modal-content col-l-6 col-m-9 col-s-11">
+        <div class="base-modal-header">
+            <h3 id="headertext" style="padding: 5px; text-align: center;">Add Item Orders</h3>
+           
+        </div>            
+        <div class="base-modal-body">           
+            <form method="POST">
+                {% csrf_token %}
+                <div class="col-l-6 col-m-6 col-s-6 col-" style="float:left; padding:2px">
+                    <label for="id_email">Select Consignee</label> 
+                    <input id="datalist_input" type="search" multiple value="" list="consignee_id" required style="text-transform:capitalize;" />
+        <datalist id="consignee_id" style="text-transform:capitalize;">
+             <option data-id="1" value="ps / ps"> </option>>
+             <option data-id="2" value="ps3 / ps3"> </option>>
+             <option data-id="5" value="jt / jt"> </option>>
+             <option data-id="6" value="kailash / jt"> </option>>
+             <option data-id="7" value="tiger / tiger"> </option>>
+        </datalist>
+      
+                    </div>
+               
+                <div class="col-l-6 col-m-6 col-s-6 col-" style="float:left; padding:2px;">
+                    <label for="id_email">Date</label>       
+                    <input type="Date" name="date" class="inputstyle"  required id="id_date">               
+                </div>
+
+                 <div class="col-l-8 col-m-8 col-s-8 col-" style="float:left; padding:2px">
+                    <label for="id_email">Comment</label>       
+                    <input type="text" name="itemname" class="inputstyle" required >
+                </div>
+               
+
+                <div class="col-l-12 col-m-12 col-s-12 col-" style="float: left; padding: 2px;">
+                    <a class="ancor smallbuttonstyleround" href="#" style="text-decoration: none; margin-right: 3px; float: left; margin-top:30px;">Add Consignee &#10009;</a>
+                    <button onclick="item_order()" type="button" class="buttonstyle" style="float:right; margin-top:22px; margin-right: 10px;">Add Order Item</button>
+                   
+                    <a  href="/" class="ancor" style="text-decoration: none; float:right; margin-right:10px; margin-top:30px;" ><i> Exit </i></a>
+                    
+                </div>
+            </form>        
+            
+        
+        </div>
+
+    </div>
+
+  </div>
+
+
+{% endblock main_content%}
+
+
+{% block main_scripts %}
+
+<script>
+function item_order(){
+           
+    let data={ post_id:'Data to post', post_id1:'Data to Psost 2' };
+       
+        let fetchtext = fetch('/orders/order_item/');
+   
+          fetchtext.then(response => {
+                   return response.text() // Convert response to text
+           })
+           .then(data => {
+           //Perform actions with the response data from the view            
+           document.getElementById("loginmodel-body").innerHTML= data;
+           document.getElementById("headertext").innerHTML='PLEASE SIGNIN';
+           loginmodal.style.display = "block";
+           alert('hello')
+         
+           }) 
+
+ }   
+</script>
+
+    {% if messages %}
+        {% for message in messages %}
+        <script>alertmsg('{{message}}',3000)</script>
+        {% endfor %}
+    {% endif %}
+
+{% endblock main_scripts %}

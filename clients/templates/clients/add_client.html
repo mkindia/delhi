@@ -1,0 +1,80 @@
+{% extends 'core/base.html' %}
+{% block title %}add client{% endblock title %}
+
+{% block main_content %} 
+   
+    <div class="basemodal" >
+        <div class="base-modal-content col-l-6 col-m-9 col-s-11">
+          <div class="base-modal-header">
+            <h3 style="padding: 5px; text-align: center;">
+              {% if header %} 
+              {{header}}
+              {% else %}              
+              ADD CLIENT
+            
+              {% endif %}
+            </h3>
+          
+        </div>        
+          <div class= "base-modal-body">
+                        
+                <form method="POST">
+                  {% csrf_token %}
+                  
+                  <div>
+                    {% for field in client %}
+                    <div class="col-l-6 col-m-6 col-s-6 col-" style="float:left; padding:2px;">
+                        {{ field.label_tag }}
+                        
+                        {{ field }}  
+                        {% for error in field.errors %}
+    
+                            <p style="color: red">{{ error }}</p>
+    
+                        {% endfor %}
+                    </div>                     
+                    {% endfor %}
+
+                    {% for field in transport %}
+
+                    <div class="col-l-6 col-m-6 col-s-6 col-" style="float:right; padding:2px">
+                      {{ field.label_tag }} 
+    
+                      {{ field }}
+    
+                      {% for error in field.errors %}
+  
+                          <p style="color: red">{{ error }}</p>
+  
+                      {% endfor %}
+                    </div>
+
+                    {% endfor %}
+                  </div>
+              
+                  
+                                         
+                  <div>
+                    <a class="ancor smallbuttonstyleround" href="#" style="text-decoration: none; margin-right: 3px; float: left; margin-top:30px;">Add Transport &#10009;</a>
+                    <a class="ancor smallbuttonstyleround" href="#" style="text-decoration: none; margin-right: 3px; float: left; margin-top:30px;">Add Station &#10009;</a>
+                    
+                    <button type="submit" class="buttonstyle" style="float:right; margin-top:22px; margin-right: 10px;">Submit</button>
+                    
+                    <a  href="/" class="ancor" style="text-decoration: none; float:right; margin-right:10px; margin-top:30px;" ><i> Exit </i></a>
+                  </div>
+                  
+                </form>
+           </div>
+        </div>
+      </div>
+
+      
+{% endblock main_content%}
+
+{% block main_scripts %}
+    {% if messages %}
+        {% for message in messages %}
+        <script>alertmsg('{{message}}',5000)</script>
+        {% endfor %}
+    {% endif %}
+{% endblock main_scripts %}

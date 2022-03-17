@@ -1,0 +1,38 @@
+{% extends 'core/base.html' %}
+
+{% block title %}home{% endblock title %}
+
+{% block main_content %} 
+
+<div id="home_content" style="position: absolute; left:0; right: 0; background-color:red;">  
+    <h3> For Staff </h3>
+    <form>
+      <input id="datalist_input" type="text" value="" list="datalist_id" required />
+        <datalist id="datalist_id">          
+            {% for clients in client %}   
+             <option data-id="{{clients.id}}" value="{{clients.client}}"></option>>
+            {% endfor %}
+        </datalist>
+
+        <button class="buttonstyle" type="submit" id="check">Check</button>      
+    </form>
+    
+</div>
+
+{% endblock main_content%}
+
+{% block main_scripts %}
+
+<script>  
+  
+  document.getElementById('check').addEventListener('click', function () {
+     
+    itc =  selecteddatalistid('datalist_input','datalist_id');
+   
+    alert (itc)   
+  });
+  
+  
+  </script>
+
+{% endblock main_scripts %}  

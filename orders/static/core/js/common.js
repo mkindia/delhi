@@ -1,4 +1,0 @@
-if (window.location.pathname == '/')
-{   
-
-}

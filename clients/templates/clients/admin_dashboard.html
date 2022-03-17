@@ -1,0 +1,66 @@
+{% extends 'core/base.html' %}
+
+{% block title %}home{% endblock title %}
+
+{% block main_content %} 
+
+
+<div id="home_content" style="position: absolute; left:0; right: 0; background-color:lightblue;">  
+    <h3> For Admin </h3>
+    <form>
+      <input id="datalist_input" type="search" multiple value="" list="datalist_id" required style="text-transform:capitalize;" />
+        <datalist id="datalist_id" style="text-transform:capitalize;">
+              
+           
+            {% for cli in consigne %}
+           
+             <option data-id="{{cli.id}}" value="{{cli.consignee_name}} / {{cli.client_id}}"> </option>>
+            
+             {% endfor %}
+           
+        </datalist>
+
+        <button class="buttonstyle" type="submit" id="check">Check</button>
+        <a type="button" href="whatsapp://send/?phone=919811983738&amp;text=test" id="openWA">Send to WhatsApp</a>
+        
+    </form>
+      <!-- Auto open on WebView and Firefox 
+      <iframe id="launcher" src="whatsapp://send/?phone=62812345678&amp;text=test" style="display: none;"></iframe> -->
+</div>
+<div>
+  <br><br><br> <br><br><br>  <br><br><br>
+  {% include 'clients/multiselectoption.html/' %}
+
+</div>
+{% endblock main_content%}
+
+{% block main_scripts %}
+
+<script> 
+
+
+  
+  document.getElementById('check').addEventListener('click', function () {
+     
+    itc =  selecteddatalistid('datalist_input','datalist_id');
+    if ( itc!=undefined)
+    {
+      alert(itc)
+    }
+    else{
+    alert ("Please Select Valied Value") 
+    }  
+  });
+
+
+  {% if messages %}
+  {% for message in messages %}
+  <script>alert('{{message}}')</script>
+  {% endfor %}
+  {% endif %}
+  
+  
+  </script>
+
+    
+{% endblock main_scripts %}

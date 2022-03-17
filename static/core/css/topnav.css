@@ -1,0 +1,74 @@
+.topnav {
+    width: 99.8%;    
+    height: 45px;
+    top: 0;
+    border-radius: 5px;
+    background-color: rgb(217, 236, 243);
+    position: fixed;
+    padding: 0;
+    z-index: 1;
+    }
+    .username{
+        position:absolute; 
+        top:12px; right:140px;
+        color: darkblue;
+        text-transform: capitalize;
+    }
+    
+    .loginbtn{
+        position:absolute;   
+        right: 10px;
+        font-weight:normal;       
+        margin-top:5px;
+        padding: 5px 10px;
+        background-color:lightblue ;
+        text-decoration: none;
+        border: solid black 1px;
+        border-radius: 6px;
+        color: black;
+    }
+
+    .logoutbtn{
+        position: absolute;   
+        right: 10px;            
+        margin-top:3px; 
+       
+        font-size: 0;
+       
+        text-align: center;
+    }
+
+    img {
+        border-radius: 6px;
+    }
+
+    .logoutbtn:hover{
+        color: rgb(255, 0, 0);
+        cursor: pointer;       
+    }
+
+    .logoutbtn:first-letter{
+        font-size: 16px;
+    }
+
+   .menuBtn{
+        position: absolute;      
+        color: rgb(20, 20, 20);
+        right: 70px;        
+        font-size: 28;       
+        margin-top: 2px;
+            
+    }
+    
+    .menuBtn:hover{
+      
+        color: rgb(255, 0, 0);
+        cursor: pointer;        
+    }
+    
+    @media print {
+        .noprint {
+            visibility: hidden;
+            height: 0;                   
+        }
+      }

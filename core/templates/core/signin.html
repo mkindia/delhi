@@ -1,0 +1,29 @@
+
+
+{% if messages %}{% for message in messages %}
+   <div style="text-align: center; padding: 5px; color: red;">  {{message}} </div>
+{% endfor %}{% endif %}
+<form method="POST" action="signin/">
+   {% csrf_token %}
+   <div style="padding-bottom:10px;">
+    {% for field in fm %}
+      
+        {{ field.label_tag }} 
+      
+      {{ field }}
+      
+        {% for error in field.errors %}
+          <p style="color: red">{{ error }}</p>
+        {% endfor %}
+      
+    {% endfor %}    
+    <div>      
+      <h><i> <small> Forget : </small> </i></h>            
+     <a  href="forget_pwd/" class="ancor" style="text-decoration: none; padding-top: 15px;" ><i> password, </i></a> <span>  </span>
+     <a  href="forgetuname/" class="ancor" style="text-decoration: none; padding-top: 15px;" ><i> username </i></a> <br> <br>
+     <a  href="signup" class="ancor" style="text-decoration: none; padding-top: 10px;" ><i> singnup</i></a>
+     <button id="submituser" type="Submit" onclick="hidesigninmodel()" class="buttonstyle" style="float:right; margin-top: 10px; margin-right:1px;">Submit</button>
+      </div>
+  <div id="iner"></div>
+</div>
+
