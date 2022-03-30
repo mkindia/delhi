@@ -22,36 +22,62 @@
                   {% csrf_token %}
                   
                   <div>
-                    {% for field in client %}
                     <div class="col-l-6 col-m-6 col-s-6 col-" style="float:left; padding:2px;">
-                        {{ field.label_tag }}
-                        
-                        {{ field }}  
-                        {% for error in field.errors %}
-    
-                            <p style="color: red">{{ error }}</p>
-    
-                        {% endfor %}
-                    </div>                     
-                    {% endfor %}
+                    <label for="id_client">Client Name:</label>                    
+                    <input type="text" name="client" class="inputstyle" style="text-transform:capitalize;" required id="id_client">  
+                    
+                </div>                     
+                
+                <div class="col-l-6 col-m-6 col-s-6 col-" style="float:left; padding:2px;">
+                    <label for="id_client_group">Client group:</label>
+                    
+                    <input name="client_group" placeholder="Select Group" type="search"  style="text-transform:capitalize;" list="client_list" required id="id_client_group">
+                    <datalist id="client_list" style="text-transform:capitalize;">
+                   
 
-                    {% for field in transport %}
+                      <option data-id="1" value="1"></option>
 
-                    <div class="col-l-6 col-m-6 col-s-6 col-" style="float:right; padding:2px">
-                      {{ field.label_tag }} 
-    
-                      {{ field }}
-    
-                      {% for error in field.errors %}
-  
-                          <p style="color: red">{{ error }}</p>
-  
-                      {% endfor %}
-                    </div>
+                      <option data-id="2" value="2"></option>
 
-                    {% endfor %}
-                  </div>
+                      <option data-id="3" value="3"></option>
+
+                    </datalist>
+                    
+                </div>                     
+                
+
+                
+
+                <div class="col-l-6 col-m-6 col-s-6 col-" style="float:right; padding:2px">
+                  <label for="id_transport">Transport:</label> 
+
+                  <input name="transport" list="transport_list" placeholder="Select Tranport"  style="text-transform:capitalize;" required id="id_transport">
+                  <datalist id="transport_list">
+                  
+                  <option value="1">k f m</option>
+
+                  </datalist>
+
+                  
+                </div>
+
+                
+
+                <div class="col-l-6 col-m-6 col-s-6 col-" style="float:right; padding:2px">
+                  <label for="id_station">Station:</label> 
+
+                  <input name="station" list="station_list" placeholder="Select Station" class="inputstyle" style="text-transform:capitalize;" required id="id_station">
+                  <datalist id="station_list">
+                  <option value="1">nagpur</option>
+
+                  </datalist>
+
+                  
+                </div>
+
+                
               
+          
                   
                                          
                   <div>
