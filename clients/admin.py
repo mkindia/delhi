@@ -15,6 +15,15 @@ class Client_Group(admin.ModelAdmin):
 class Transport(admin.ModelAdmin):
       list_display=('transport_name',)
 
+@admin.register(State)
+class State(admin.ModelAdmin):
+      list_display=('country_name','state_name',)
+
+@admin.register(Station)
+class Station(admin.ModelAdmin):
+      list_display=('state_name','station_name',)
+
+
 
 @admin.register(Consignee)
 class Consignee(admin.ModelAdmin):

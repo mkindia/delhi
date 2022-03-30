@@ -1,4 +1,3 @@
-from asyncio.windows_events import NULL
 from email.policy import default
 from enum import unique
 from http import client
@@ -60,7 +59,7 @@ class State(models.Model):
 
 class Station(models.Model):
     state_name = models.ForeignKey(State, on_delete=models.CASCADE)
-    station_name = LowerCase("state", max_length=100,blank=True, null=True)
+    station_name = LowerCase("station", max_length=100,blank=True, null=True)
     def __str__(self):
         return self.station_name
 

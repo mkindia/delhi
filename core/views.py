@@ -1,4 +1,3 @@
-from asyncio.windows_events import NULL
 from django.contrib.auth.models import User
 from django.http.response import HttpResponseRedirect
 from django.shortcuts import redirect, render
@@ -31,7 +30,7 @@ def mail_for_verify_user(subject,email,url,message,token):
        recipient_list = [email]
        send_mail(subject=subject,message=message,from_email=from_email,recipient_list=recipient_list)
 
-#@cache_control(no_cache=True, must_revalidate=True, no_store=True)
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def home(request):                          
        if not request.user.is_authenticated:
               return render(request,'core/home.html',{'user_name':'Login'})
@@ -79,6 +78,7 @@ def signup(request):
           
     return render(request,'core/signup.html',{'fm':fm})
 
+
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def signin(request):
         fm=Userauthform    
@@ -111,7 +111,7 @@ def signin(request):
                          
         else:
                
-               return render(request,'core/signin.html',{'fm':fm})
+               return redirect('/')
             
 #@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def user_logout(request):
@@ -278,7 +278,7 @@ def forget_uname(request):
               return redirect('/')
        else :
               return render(request,'core/forget_uname.html',{'header':'Forget Username'})
-
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def change_pass(request):     
        
        if request.user.is_authenticated:

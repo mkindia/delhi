@@ -9,8 +9,8 @@ from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 import json
 import uuid
-from .models import *
-from .forms import *
+from .models import Client,Consignee,Transport,Station
+from .forms import Client_Form,Consignee_Transport_form,Consignee_form
 
 # for sending mail
 def mail_for_verify_user(subject,email,url,message,token):
@@ -38,12 +38,13 @@ def add_client(request):
        client=Client_Form
        consignee_trs=Consignee_Transport_form
        if request.method == 'POST':
-         cn= NULL
-         cli_name=Client.objects.filter(client=request.POST.get('client'))
-         for cin in cli_name:
-                cn = cin.client
-                
-         if cn == NULL:
+         
+         try:
+              cli_name=Client.objects.get(client=request.POST.get('client'))
+              messages.warning(request,'Client All ready exist ' + '[ ' +cli_name.client+ ' ]')
+              return redirect('/clients/add_client/')
+         except :
+              cli_name = None
               client=Client_Form(request.POST)
               consignee_trs=Consignee_Transport_form(request.POST)
               trans_id = Transport.objects.only('id').get(id=int(request.POST.get('transport')))
@@ -53,9 +54,7 @@ def add_client(request):
               consignee=Consignee(client_id=client,consignee_name=request.POST.get('client'),transport=trans_id,station=station_id,is_client=True)             
               consignee.save()              
               messages.success(request,'Client Added Success')        
-         else:
-              messages.warning(request,'Client All ready exist')
-              return redirect('/clients/add_client/')
+        
 
          
          return redirect('/clients/add_client/') 

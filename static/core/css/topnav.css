@@ -17,8 +17,7 @@
     
     .loginbtn{
         position:absolute;   
-        right: 10px;
-        font-weight:normal;       
+        right: 10px;           
         margin-top:5px;
         padding: 5px 10px;
         background-color:lightblue ;

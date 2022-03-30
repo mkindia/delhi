@@ -14,8 +14,7 @@ body {
 }
 .inputstyle,
 input[list] { 
-  color:#535353;
-  font-size: 17px;
+  color:#535353;  
   border-radius:7px;
   padding: 4px;
   height: 33px;
@@ -154,9 +153,8 @@ input[list] {
 
 /* For base Model */
 .basemodal {    
-  position: fixed; /* Stay in place */
-  padding-top:  10px; /* Location of the box */
-  z-index: 1; /* Sit on top */ 
+  position: fixed; /* Stay in place */ 
+  z-index: 1; /* Sit on top */  
   left: 0;
   top: 0;
   width: 100%; /* Full width */
@@ -166,9 +164,10 @@ input[list] {
   background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
 }
 .base-modal-content {
-  position: relative;
+  position: relative;  
   background-color: #e4e4e4;
-  margin: auto;   
+  margin: 0 auto;
+  top:30px; 
   padding: 0px;
   border-radius: 11px;
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);

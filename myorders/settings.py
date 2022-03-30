@@ -136,18 +136,27 @@ USE_L10N = True
 USE_TZ = True
 
 
+# Change the builtin user model to our user model
+AUTH_USER_MODEL = 'core.Custom_User' 
+
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
-AUTH_USER_MODEL = 'core.Custom_User' # Change the builtin user model to our user model
+# is the folder where static files will be stored after using manage.py collectstatic
+#STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles') 
+
+# s the list of folders where Django will search for additional static files aside from the static folder of each app installed.
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')] # by me
 
 STATIC_URL = '/static/'
 
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')] # by me
-MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
+
+#DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Backend Email by me
 

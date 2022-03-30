@@ -1,12 +1,8 @@
-var menubtn = document.getElementById("menuBtn");
-menubtn.onclick = function (event) {
-  menumodal.style.display = "block";
 
-}
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function (event) {
-if (event.target == loginmodal || event.target == menumodal) {
-loginmodal.style.display = "none";
+if (event.target == menumodal) {
+
 menumodal.style.display = "none";
 }
 }
@@ -15,7 +11,7 @@ menumodal.style.display = "none";
 function alertmsg(msg, duration) {
   var el = document.createElement("div");
 
-  el.setAttribute("style", "font-size:22px; font-style: italic; bottom: 0; margin:0 auto; left:10; right:10; margin-bottom:15px; position: absolute;border-radius:8px;color:#333333;border-color:#333333; border-width:1px; border-style: solid;z-index:10000; padding:6px; background-color:#f2f2f2;text-align: center;");
+  el.setAttribute("style", " font-style: italic; margin:50 auto;  left:1; right:1; margin-bottom:15px; position: absolute;border-radius:8px;color:#f0f0f0;border-color:#f0f0f0; border-width:1px; border-style: solid;z-index:10000; padding:6px; background-color:#36486b;text-align: center;");
 
   el.innerHTML = msg.toUpperCase();
   setTimeout(function () {
@@ -42,7 +38,7 @@ for (var i = 0; i < inputs.length; i++) {
     // use the setCustomValidity function of the Validation API
     // to provide an user feedback if the value does not exist in the datalist
     if (optionFound) {
-      this.setCustomValidity("");
+      this.setCustomValidity("");      
     } else {
       this.setCustomValidity("Please select a valid value.");
     }

@@ -8,43 +8,43 @@
   <div class="menuhead">
     <a id="closemenu" class="menucloseBtn noselect" onclick="closemenu()">&#x2716;</a>
     <a class="headtitle noselect" id="menuhead">Menu</a>
-    <button id="backbtn" onclick="showhide1()" class="noselect hide">&#10094;</button>
+    <a id="backbtn" onclick="showhide1()" class="noselect hide">&#10094;</a>
   </div>
   <div id="menuitembody" class="menuitembody">
     {% if user.is_admin or user.is_staff %}
-    <button id="party_menu" class="menuitembtn" onclick="showhide('party_menu','party_menu_items')">Clients</button>
+    <a id="party_menu" class="amenuitembtn" onclick="showhide('party_menu','party_menu_items')">Clients</a>
     {% endif %}
-    <button id="consignee_menu" class="menuitembtn" onclick="showhide('consignee_menu','consignee_menu_items')">Consignees</button>
+    <a id="consignee_menu" class="amenuitembtn" onclick="showhide('consignee_menu','consignee_menu_items')">Consignees</a>
     {% if user.is_staff or user.is_admin %}
-    <button id="items_menu" class="menuitembtn" onclick="showhide('items_menu','items_menu_items')">Items</button>
+    <a id="items_menu" class="amenuitembtn" onclick="showhide('items_menu','items_menu_items')">Items</a>
     {% endif %}
-    <button id="som" class="menuitembtn" onclick="showhide('som','som_item')">Orders</button>
+    <a id="som" class="amenuitembtn" onclick="showhide('som','som_item')">Orders</a>
     {% if user.is_staff or user.is_admin %}
-    <button id="pom" class="menuitembtn" onclick="showhide('pom','pom_item')">Purchase</button>
+    <a id="pom" class="amenuitembtn" onclick="showhide('pom','pom_item')">Purchase</a>
     {% endif %}
   </div>
   <div id="consignee_menu_items" class="showdiv">
     <a href="{% url 'add_consignee' %}" id="add_consignee"  class="asubmenuitem">Add Consignee</a>
-    <button id="edit-party" class="submenuitembtn">Edit Consignees</button>
-    <button id="delete-party" class="submenuitembtn">Delete Consignees</button>
+    <a id="edit-party" class="subamenuitembtn">Edit Consignees</a>
+    <a id="delete-party" class="subamenuitembtn">Delete Consignees</a>
   </div>
   <div id="items_menu_items" class="showdiv">
     <p>mainFrameTwo</p>
   </div>
   <div id="som_item" class="showdiv">
     <a href="{% url 'addorder' %}" id="add_order"  class="asubmenuitem">Add Order</a>
-    <button id="edit-party" class="submenuitembtn">Edit Consignees</button>
-    <button id="delete-party" class="submenuitembtn">Delete Consignees</button>
+    <a id="edit-party" class="subamenuitembtn">Edit Consignees</a>
+    <a id="delete-party" class="subamenuitembtn">Delete Consignees</a>
   </div>
   <div id="party_menu_items" class="showdiv">
     <a href="{% url 'add_client' %}" id="add-party"  class="asubmenuitem">Add Client</a>
-    <button id="edit-party" class="submenuitembtn">Edit Client</button>
+    <a id="edit-party" class="subamenuitembtn">Edit Client</a>
     {% if user.is_staff %}
-    <a href="{% url 'add_client' %}" type="button" id="delete-party" class="asubmenuitem">Delete Client</a>
+    <a href="{% url 'add_client' %}" type="a" id="delete-party" class="asubmenuitem">Delete Client</a>
     {% endif %}
   </div>
   <div id="pom_item" class="showdiv">
-    <button id="apom" class="menuitembtn" onclick="showhide('apom','apom_item')">Add hhhhh Purchase Orders</button>
+    <a id="apom" class="amenuitembtn" onclick="showhide('apom','apom_item')">Add hhhhh Purchase Orders</a>
     <div id="apom_item" class="showdiv" style="top:0">
       <p>Purchases</p>
     </div>
@@ -54,4 +54,24 @@
 
 {% block main_scripts %}
 <script src="{% static 'core/js/menu_page.js' %}"></script>
+
+<script>
+
+ 
+  var menumodal = document.getElementById("menuModal");
+var menubtn = document.getElementById("menuBtn");
+
+window.onclick = function(event) {
+  if (event.target == menumodal) {
+        menumodal.style.display ="none";    
+  }
+  
+}
+
+menubtn.onclick = function(event){  
+  menumodal.style.display = "block";
+}
+
+</script>
+
 {% endblock main_scripts %}

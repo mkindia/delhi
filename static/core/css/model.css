@@ -3,7 +3,7 @@
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
     z-index: 1; /* Sit on top */
-    padding-top:  50px; /* Location of the box */    
+    padding-top:  55px; /* Location of the box */    
     left: 0;
     top: 0;
     width: 100%; /* Full width */
@@ -20,6 +20,7 @@
     z-index: 1; /* Sit on top */
     padding-top:  50px; /* Location of the box */
     padding-right: 10px; /* location right of box */
+    padding-bottom: 10px;
     float: right;
     right: 0;
     top: 0;
@@ -53,9 +54,9 @@
   .Login-modal-content {
     position: relative;
     background-color: #e4e4e4;
-    margin: auto;
+    margin: 10 auto;
     width: 350px;   
-    top: 50;
+    top: 55px;
     border-radius: 11px;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
     -webkit-animation-name: animatetop;
@@ -71,7 +72,7 @@
     right: 5;
     background-color: #ffffff;    
     width: 350px;
-    top: 10;
+    top: 50;
     height: 350px;
     overflow-y: auto;
     border-radius: 11px;
@@ -88,7 +89,7 @@
     background-color: #ffffff;    
     width: 300px;
     top: 50;
-    padding: 10px;
+    padding: 5px;
     text-transform: capitalize;
     border-radius: 11px;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
@@ -140,18 +141,8 @@
   }
   
   .menu-modal-body {    
-    border-radius: 10px;
-   
-    background-color: #e4e4e4;
-   
+    border-radius: 10px;   
+    background-color: #e4e4e4;   
   }
   
-  .modal-body button{
-    right: 40px;
-    font-weight:normal;
-    background-color: lightblue;
-    padding: 8px 30px;
-    border-radius: 5px;
-    margin-top:2px;
-  }
-
+  

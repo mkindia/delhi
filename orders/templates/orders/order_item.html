@@ -1,108 +1,204 @@
 {% extends 'core/base.html' %}
+
 {% block title %}neworders{% endblock title %}
 
-{% block main_content %} 
+{% block main_content %}
 
-<div  class="basemodal">
+<div class="basemodal">
 
     <!-- Modal content -->
     <div class="base-modal-content col-l-6 col-m-9 col-s-11">
         <div class="base-modal-header">
-            <h3 id="headertext" style="padding: 5px; text-align: center;">Add Item Orders</h3>
-           
-        </div>            
-        <div class="base-modal-body">           
-            <form method="POST">
+            <h3 id="headertext" style="padding: 5px; text-align: center;">Add Orders</h3>
+
+        </div>
+        <div class="base-modal-body">
+            <form name="order_form" action="/orders/order_item/" method="POST" onsubmit="validateForm()">
                 {% csrf_token %}
+                                
                 <div class="col-l-6 col-m-6 col-s-6 col-" style="float:left; padding:2px">
-                    <label for="id_email">Item name</label>       
-                    <input id="datalist_input" type="search" multiple value="" placeholder="select item" list="datalist_id" required style="text-transform:capitalize;" />
-        <datalist id="datalist_id" style="text-transform:capitalize;">            
-             <option data-id="1" value="Sinhasan"> </option>>
-             <option data-id="2" value="Pooja Peti"> </option>>
-             <option data-id="5" value="Crusher"> </option>>
-             <option data-id="6" value="Pandan"> </option>>
-             <option data-id="7" value="Jhoola"> </option>>
-        </datalist>          
+                    <label for="item_input">Item name</label>
+                    <input id="item_input" type="search" onchange="item_value('item_input','item_list')"
+                        value="" placeholder="select item" list="item_list" required
+                        style="text-transform:capitalize;" />
+                    <datalist id="item_list" style="text-transform:capitalize;">
+                        <option data-id="1" value="Sinhasan"> </option>
+                        <option data-id="2" value="Pooja Peti"> </option>
+                        <option data-id="5" value="Crusher"> </option>
+                        <option data-id="6" value="Pandan"> </option>
+                        <option data-id="7" value="Jhoola"> </option>
+                    </datalist>
                 </div>
-               
-                <div class="col-l-4 col-m-4 col-s-4 col-10" style="float:left; padding:2px">
-                  
-                    <label for="id_email">Item Price</label>       
-                    <input type="text" name="itemname" class="inputstyle" required id="id_itemname">
-                </div>
-               
-                <div class="col-l-2 col-m-2 col-s-2 col-2" style="float:left; padding:2px;">
-                    <label for="id_email">Per</label>
-                    <input id="datalist_input" type="search" multiple value="Kg." disabled='True' list="per_id" required style="text-transform:capitalize;" />
-                    <datalist id="per_id" style="text-transform:capitalize;">            
-                         <option data-id="1" value="Kg."> </option>>
-                         <option data-id="2" value="Pcs."> </option>>
-                        
-                    </datalist> 
-                 </div>
-               
                 
+                <div class="col-l-4 col-m-4 col-s-4 col-8" style="float:left; padding:2px">
+
+                    <label for="item_price">Item Price</label>
+                    <input type="number" min="1" max="1000" step="any", name="itemprice"  placeholder="Enter Price" class="inputstyle" required
+                        id="item_price">
+                </div>
+                
+                <div class="col-l-2 col-m-2 col-s-2 col-4" style="float:left; padding:2px;">
+                    <label for="per_unit">Per</label>
+                    <input id="per_unit" type="text" value="Kg." disabled='True' list="per_unit_list" required
+                        style="text-transform:capitalize;" />
+                    <datalist id="per_unit_list" style="text-transform:capitalize;">
+                        <option data-id="1" value="Kg."> </option>
+                        <option data-id="2" value="Pcs."> </option>
+
+                    </datalist>
+                </div>
+                
+
                 <div class="col-l-5 col-m-5 col-s-5 col-5" style="float:left; padding:2px">
-                  
-                    <label for="id_email">Item Variants</label>       
-                    <input id="datalist_input" type="search" multiple value="" placeholder="select variant" list="item_variant_id" required style="text-transform:capitalize;" />
-                    <datalist id="item_variant_id" style="text-transform:capitalize;">            
-                         <option data-id="1" value="1 No."> </option>>
-                         <option data-id="2" value="2 No."> </option>>
-                         <option data-id="5" value="3 No."> </option>>
-                         <option data-id="6" value="4 No."> </option>>
-                         <option data-id="7" value="5 No."> </option>>
-                    </datalist>       
+
+                    <label for="item_variant">Item Variants</label>
+                    <input id="item_variant" type="search" value="" placeholder="select variant"
+                        list="item_variant_list" required style="text-transform:capitalize;" />
+                    <datalist id="item_variant_list" style="text-transform:capitalize;">
+                        <option data-id="1" value="1 No."> </option>>
+                        <option data-id="2" value="2 No."> </option>>
+                        <option data-id="5" value="3 No."> </option>>
+                        <option data-id="6" value="4 No."> </option>>
+                        <option data-id="7" value="5 No."> </option>>
+                    </datalist>
+                </div>
+
+                
+
+                <div class="col-l-3 col-m-3 col-s-3 col-3" style="float:left; padding:2px">
+
+                    <label for="qty">Qty.</label>
+                    <input type="number" min="1" max="1000" step="any", name="itemname" placeholder="Enter QTY." class="inputstyle" required
+                        id="qty">
                 </div>
                 
-               
-
-                 <div class="col-l-3 col-m-3 col-s-3 col-3" style="float:left; padding:2px">
-                  
-                    <label for="id_email">Qty.</label>       
-                    <input type="text" name="itemname" class="inputstyle" required id="id_itemname">
-                </div>
                 <div class="col-l-4 col-m-4 col-s-4 col-4" style="float:left; padding: 2px;">
-                    <label for="id_email">Unit</label>
-                    <input id="datalist_input" type="search" multiple value="" placeholder="select unit" list="unit_id" required style="text-transform:capitalize;" />
-                    <datalist id="unit_id" style="text-transform:capitalize;">            
-                         <option data-id="1" value="Kg."> </option>>
-                         <option data-id="2" value="Pcs."> </option>>
-                         <option data-id="5" value="Carton"> </option>>                        
-                    </datalist>       
-               
-                 </div>
+                    <label for="order_unit">Unit</label>
+                    <input id="order_unit" type="search" value="" placeholder="select unit" list="unit_list"
+                        required style="text-transform:capitalize;" />
+                    <datalist id="unit_list" style="text-transform:capitalize;">
+                        <option data-id="1" value="Kg."> </option>>
+                        <option data-id="2" value="Pcs."> </option>>
+                        <option data-id="5" value="Carton"> </option>>
+                    </datalist>
 
-                 <div class="col-l-8 col-m-8 col-s-8 col-" style="float:left; padding:2px">
-                    <label for="id_email">Comment</label>       
-                    <input type="text" name="itemname" class="inputstyle" required >
                 </div>
-               
+             
+                <div class="col-l-8 col-m-8 col-s-8 col-" style="float:left; padding:2px">
+                    <label for="comment">Comment</label>
+                    <input type="text" name="itemname" id="comment" placeholder="About orders" class="inputstyle" required>
+                </div>
 
-                <div class="col-l-12 col-m-12 col-s-12 col-" style="float: left; padding: 2px;">
-                    <a class="ancor smallbuttonstyleround" href="#" style="text-decoration: none; margin-right: 3px; float: left; margin-top:30px;">Add Item &#10009;</a>
-                    <button type="submit" class="buttonstyle" style="float:right; margin-top:22px; margin-right: 10px;">Submit</button>
-                   
-                    <a  onclick="history.back()" type="button" class="ancor" style="text-decoration: none; float:right; margin-right:10px; margin-top:30px;" ><i> Exit </i></a>
-                    
-                </div>
-            </form>        
             
-        
+                <div class="col-l-12 col-m-12 col-s-12 col-" style="float: left; padding: 2px;">
+                    <a class="ancor smallbuttonstyleround" type="button" onclick="dd()"
+                        style="text-decoration: none; margin-right: 3px; float: left; margin-top:30px;">Add Item
+                        &#10009;</a>
+
+                    <button type="submit" class="buttonstyle"
+                        style="float:right; margin-top:22px; margin-right: 10px;">Submit</button>
+
+                    <a  type="button" class="ancor" onclick="history.back()"
+                        style="text-decoration: none; float:right; margin-right:10px; margin-top:30px;"><i> Exit
+                        </i></a>
+
+                </div>
+            </form>
+
+
         </div>
 
     </div>
 
-  </div>
+</div>
 
 
 {% endblock main_content%}
 
+
+
 {% block main_scripts %}
-    {% if messages %}
-        {% for message in messages %}
-        <script>alertmsg('{{message}}',3000)</script>
-        {% endfor %}
-    {% endif %}
+<script>
+   
+    
+    function item_value(input_id, list_id) {
+
+        itc = selecteddatalistid(input_id, list_id);
+        if (itc != undefined) {
+            //alert(itc)  
+        }
+        else {
+            alert('Select Valid item')
+            document.getElementById(input_id).focus();
+        }
+    }
+
+    let con_id="{{con_id.id}}"
+    let cli_id="con_id.client_id_id"
+    function validateForm() {        
+    
+  
+    let    item_id= selecteddatalistid('item_input','item_list');
+    let   item_price=document.getElementById('item_price').value;
+    let    per_unit_id = selecteddatalistid('per_unit','per_unit_list');
+    let   item_variant_id = selecteddatalistid('item_variant','item_variant_list');
+    let    qty=document.getElementById('qty').value;
+    let    order_unit_id = selecteddatalistid('order_unit','unit_list');
+    let    comment=document.getElementById('comment').value;
+       
+        let data={'consignee_id':con_id, 'client_id':cli_id,
+        'item_id':item_id,'item_price':item_price,'per_unit_id':per_unit_id,
+        'item_variant_id':item_variant_id,'qty':qty,'order_unit_id':order_unit_id,
+        'comment':comment};
+       
+        let fetchtext =  fetch('/orders/order_item/',postoption(data));
+  
+         fetchtext.then(async response => {
+            if (!response.ok) {
+                throw Error(response.statusText);
+            }
+                  return await response.json(); // Convert response to json use text for text
+          })
+          .then(data => {
+          //Perform actions with the response data from the view          
+                
+           alert(data.consignee) 
+           con_id=data.consignee;
+         
+          })
+          .catch(err=>{alert(err);})
+
+          if (confirm('add more item for ordrr') == true)
+          {                     
+           document.getElementById('item_input').value="";
+           event.preventDefault(); 
+          }
+          else{location.reload(); window.history.back(-2);}         
+        
+        /*
+        let x = document.forms["order_form"]["consignee"].value;
+        if (x == "") {
+          alert("Name must be filled out");
+          return false;
+        }
+        else
+        {
+            alert(x);
+        } */
+       
+         
+          //window.history.back();
+    }
+
+    function dd()
+    {
+        alert(id);
+    }
+</script>
+
+{% if messages %}
+{% for message in messages %}
+<script>alertmsg('{{message}}', 3000)</script>
+{% endfor %}
+{% endif %}
 {% endblock main_scripts %}

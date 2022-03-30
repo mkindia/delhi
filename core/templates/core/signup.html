@@ -7,14 +7,14 @@
 
 {% block main_content %}
 <div class="basemodal">
-  <div class="base-modal-content col-l-6 col-m-9 col-s-11">
+  <div class="base-modal-content col-l-6 col-m-9 col-s-11 cil-" style="top:40px;">
     <div class="base-modal-header">
       <h3 style="margin-top:10px; padding: 13px; text-align: center;">Please Signup</h3>
      
   </div>        
     <div class= "base-modal-body">
      
-<form method="POST">
+<form method="POST" onsubmit="submitForm()">
    {% csrf_token %}   
     {% for field in fm %}   
     <div class="col-l-6 col-m-6 col-s-6 col-" style="float:left; padding:2px">      
@@ -32,8 +32,8 @@
      
    </div>
       
-     <button type="submit" id="submitbtn" class="buttonstyle" style="float:right; margin-top: 20px; margin-right: 2px;">Submit</button>
-    <a id="signupBtn" class="ancor"  href="{% url 'home' %}" style="float:right; text-decoration: none; margin-right:10px; padding-top: 25px;" >Login</a>
+     <button type="submit" id="submitbtn" class="buttonstyle" [disabled]="Form.valid" style="float:right; margin-top: 20px; margin-right: 2px;">Submit</button>
+    <a id="signupBtn" class="ancor"  href="{% url 'signin' %}" style="float:right; text-decoration: none; margin-right:10px; padding-top: 25px;" >Login</a>
     
 </form>
   </div>
@@ -43,7 +43,21 @@
 
 {% block main_scripts %}
 <script>
-document.getElementById("submitbtn").onclick=function(evt){document.getElementById("loader").style.display='block';}
+
+  function submitForm(){
+
+    if(validationfails){
+
+        return false;
+    }
+    else  {
+        document.form.submit();
+        document.getElementById("submitbtn").onclick=function(evt){document.getElementById("loader").style.display='block';}
+        return true;
+    }
+ }
+
+
 </script>
     
 {% endblock main_scripts %}

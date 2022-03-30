@@ -16,8 +16,7 @@
 }
 
 .showdiv{
-    position:absolute;
-   
+    position:absolute;   
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;     
       margin:0;
@@ -71,15 +70,27 @@
       border-radius: 7px;
       border: 1px solid black;      
     }
-    .menuitembtn:hover
+
+    .amenuitembtn{      
+      text-decoration: none;
+      padding: 4px 15px;
+      display: inline-block;     
+      margin-top: 5px;
+      width: 100%;      
+      border-radius: 7px;
+      border: 1px solid black;
+      color: black;
+      background-color: rgb(248, 244, 239);
+    }
+
+    .amenuitembtn:hover
     {
       color: rgb(255, 208, 0);
       cursor: pointer;
       background-color: rgba(0, 0, 0, 0.904);
     }
   
-    .submenuitembtn{
-      
+    .submenuitembtn{      
       padding: 7px 15px;
       width: 100%;      
       margin-top: 7px;
@@ -152,7 +163,7 @@
         
         }
   
-   .menuitembtn:after {
+   .amenuitembtn:after {
     content: '\0276F';
     color: rgb(104, 103, 103);
     font-weight: bold;

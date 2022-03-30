@@ -2,14 +2,13 @@
 
 {% block title %}home{% endblock title %}
 
-{% block main_content %} 
-
+{% block main_content %}
 
 <div id="home_content" style="position: absolute; left:0; right: 0; background-color:lightblue;">  
     <h3> For Admin </h3>
-    <form>
+    <form >
       <input id="datalist_input" type="search" multiple value="" list="datalist_id" required style="text-transform:capitalize;" />
-        <datalist id="datalist_id" style="text-transform:capitalize;">
+        <datalist id="datalist_id" >
               
            
             {% for cli in consigne %}
@@ -21,7 +20,8 @@
         </datalist>
 
         <button class="buttonstyle" type="submit" id="check">Check</button>
-        <a type="button" href="whatsapp://send/?phone=919811983738&amp;text=test" id="openWA">Send to WhatsApp</a>
+        <!-- %0a for line brak in whatsups -->
+        <a type="button" href="whatsapp://send/?phone=919213427055&amp;text=Hello user %0a{{user}}" id="openWA">Send to WhatsApp</a>
         
     </form>
       <!-- Auto open on WebView and Firefox 
@@ -36,8 +36,23 @@
 
 {% block main_scripts %}
 
-<script> 
 
+
+<script> 
+  var menumodal = document.getElementById("menuModal");
+  var menubtn = document.getElementById("menuBtn");
+  
+  window.onclick = function(event) {
+    if (event.target == menumodal) {
+          menumodal.style.display ="none";    
+    }
+    
+  }
+  
+  menubtn.onclick = function(event){  
+    menumodal.style.display = "block";
+  }
+  
 
   
   document.getElementById('check').addEventListener('click', function () {
@@ -45,10 +60,10 @@
     itc =  selecteddatalistid('datalist_input','datalist_id');
     if ( itc!=undefined)
     {
-      alert(itc)
+      #alert(itc)
     }
     else{
-    alert ("Please Select Valied Value") 
+    #alert ("Please Select Valied Value") 
     }  
   });
 

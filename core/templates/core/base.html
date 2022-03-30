@@ -2,160 +2,143 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">    
-    <link rel="stylesheet" href="{% static 'core/css/topnav.css' %}" />
-    <link rel="stylesheet" href="{% static 'core/css/model.css' %}" />
-    <link rel="stylesheet" href="{% static 'core/css/base.css' %}" />
-    <link rel="stylesheet" href="{% static 'core/css/loader.css' %}" />   
-    {% block page_head %} {% endblock page_head %}
-    <title>{% block title %} {% endblock title %} | orders</title>
-    
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  <title>{% block title %} {% endblock title %} | orders</title>
+  <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}" />
+
+  <link rel="stylesheet" href="{% static 'core/css/topnav.css' %}" />
+  <link rel="stylesheet" href="{% static 'core/css/model.css' %}" />
+  <link rel="stylesheet" href="{% static 'core/css/base.css' %}" />
+  <link rel="stylesheet" href="{% static 'core/css/loader.css' %}" />
+  {% block page_head %} {% endblock page_head %}
+
+
 </head>
 
 <body>
-    {% include 'core/topnavbar.html' %}
-    <div style="position: absolute; top: 45; bottom: 0; left: 1; right: 1; overflow-y: auto; ">
-        {% block main_content %}
-        <img src="default/defaultuser.png" alt="" >
-        {% endblock main_content%}
-    </div>
- 
-    
-      <div  class="basemodal" id="loader" style="background-color: rgba(88, 88, 88, 0.808);" >
-       
-                    
-            <div class="loader">           
-                          
-    
-        </div>
-    
-      
-    
-      </div>
+  {% include 'core/topnavbar.html' %}
+  <div style="position: absolute; top: 45; bottom: 0; left: 1; right: 1; overflow-y: auto; ">
+    {% block main_content %}
+    <img src="default/defaultuser.png" alt="">
+    {% endblock main_content%}
+  </div>
 
-    
-    <script src="{% static 'core/js/model.js' %}"></script>
-    <script src="{% static 'core/js/fetchApi.js' %}"></script>
-    <script src="{% static 'core/js/base.js' %}"></script>
-    
-    <script>
-        document.getElementById("loader").style.display='none';
-        var loginbtn1 = document.getElementById("loginBtn"); //for top nav login btn
-           
-          loginbtn1.onclick = function() 
-           {
-              // alert('hello');
-             loginform();
-               
-           };
-       
-       // for login form access
-         function loginform(){
-           
-            let data={ post_id:'Data to post', post_id1:'Data to Psost 2' };
-               
-                let fetchtext = fetch('/signin/');
-           
-                  fetchtext.then(response => {
-                           return response.text() // Convert response to text
-                   })
-                   .then(data => {
-                   //Perform actions with the response data from the view            
-                   document.getElementById("loginmodel-body").innerHTML= data;
-                   document.getElementById("headertext").innerHTML='PLEASE SIGNIN';
-                   loginmodal.style.display = "block";
-                 
-                   }) 
-       
-         }   
-       
-       </script>
+
+  <div class="basemodal" id="loader" style="background-color: rgba(88, 88, 88, 0.808); display: none;">
+    <div class="loader"></div>
+  </div>
+
+
   
-  {% if user.is_authenticated != True %} 
-  <script> 
-        (function () {  loginform(); })();
-   </script>
-  {% else %}
+  <script src="{% static 'core/js/fetchApi.js' %}"></script>
+  <script src="{% static 'core/js/base.js' %}"></script>
+
+  {% if user.is_authenticated %}
+
   <!--The menu model-->
   <div id="menuModal" class="menumodal">
-  
     <!-- Modal content -->
-    <div class="menu-modal-content">      
-        <div class="menu-modal-body">
-          {% if user.is_authenticated == True %}
-          {% include 'core/menu_page.html' %}
-          {% endif%}
-        </div>
+    <div class="menu-modal-content">
+      <div class="menu-modal-body">
+        {% if user.is_authenticated == True %}
+        {% include 'core/menu_page.html' %}
+        {% endif%}
+      </div>
     </div>
-  
+
   </div>
   <!-- for profile  -->
   <div id="profile-modal" class="profilemodal">
     <div class="profile-modal-content">
-      <div class="menu-modal-body" >
-  
+      <div class="menu-modal-body">
+
         {% if user.is_authenticated == True %}
-        <div style="padding:10px;" >
-        {% if user.user_img.url != None and user.user_img.url != "" %}<img src="{{user.user_img.url}}" alt="profilepic" height="100" width="100" >
-        {% else %}  
-        <img src="media/user/default/defaultuser.png" alt="profilepic" height="100" width="100" >  
-        {% endif %}
-        <div style="float:right; margin-right:10px;">
-        
-        {% if user.user_img.url != None and user.user_img.url != "" %}
-        <a  href="profile_change/delimg/" class="ancor" style="text-decoration: none;" ><small><i> remove image </i></small></a>
-        {% endif %}                 
-        <a href="profile_change/img/" style="text-decoration:none;"><br><small><i>Edit Profile Img </i></small> </a>
-        <br>
-        <br>
-        <br>
-        <h style="text-transform: capitalize; font-weight:bold; margin-top:30px;"> {{user.first_name}} {{user.last_name}} </h>
-      </div>
-       
-          
-          
+        <div>
+          {% if user.user_img.url != None and user.user_img.url != "" %}<img src="{{user.user_img.url}}"
+            alt="profilepic" height="100" width="100">
+          {% else %}
+          <img src="/media/user/default/defaultuser.png" alt="profilepic" height="100" width="100">
+          {% endif %}
+          <div style="float:right; margin-right:10px;">
+
+            {% if user.user_img.url != None and user.user_img.url != "" %}
+            <a href="profile_change/delimg/" class="ancor" style="text-decoration: none;"><i> remove image
+              </i></a>
+            {% endif %}
+            <a href="profile_change/img/" class="ancor" style="text-decoration:none;"><br><i>Edit Profile Img </i> </a>
+            <br>
+            <br>
+
+            <h style="text-transform: capitalize; font-weight:bold;"> {{user.first_name}}
+              {{user.last_name}} </h>
+          </div>
+
+
+
         </div>
-       
+
         <div style=" text-align:center; margin-bottom:10px; ">
-          <a  href="profile_change/details/" class="ancor" style="text-decoration: none; float :left; margin-left:10px; margin-bottom:10px;" > <small>  Manage Profile </small></a>
-          
-          <a  href="changepass/" class="ancor" style="text-decoration: none; margin-left:10;  float:left; margin-bottom:10px;" > <small> Change Password </small></a>
-        
-          <a  href="user_logout/" class="buttonstyle" style="  text-decoration: none; float:right; margin-right:10px;" >Sign Out</a>
+          <a href="profile_change/details/" class="ancor"
+            style="text-decoration: none; float :left; margin-left:10px; margin-bottom:10px;"> <small> Manage Profile
+            </small></a>
+
+          <a href="changepass/" class="ancor"
+            style="text-decoration: none; margin-left:10;  float:left; margin-bottom:10px;"> <small> Change Password
+            </small></a>
+
+          <a href="user_logout/" class="buttonstyle"
+            style="  text-decoration: none; float:right; margin-right:10px;">Sign Out</a>
+          <a id="profile_exit" class="ancor"
+            style="text-decoration: none; float:right; margin-right:10px; margin-top:5px;"><i> Exit </i></a>
+
+
         </div>
-          {% endif%}
+        {% endif%}
       </div>
-  
+
     </div>
   </div>
+
+
   <script>
-  
-  var menubtn = document.getElementById("menuBtn");
-      menubtn.classList.toggle('show');
-  var profilebtn = document.getElementById("profilebtn");
-  
-  profilebtn.onclick = function(event) {
-    document.getElementById("profile-modal").classList.toggle('show');}
-  
-   var profilemodal = document.getElementById("profile-modal");
-   var menumodal = document.getElementById("menuModal");
-   window.onclick = function(event) {
-    if (event.target == profilemodal || event.target == menumodal) {
-     document.getElementById("profile-modal").classList.remove("show");
-     document.getElementById("menuModal").style.display='none';
+    var proclose = document.getElementById("profile_exit");
+    proclose.onclick = function (event) {
+      document.getElementById("profile-modal").classList.remove("show");
     }
-   }
-  
+
+    var profilebtn = document.getElementById("profilebtn");
+
+    profilebtn.onclick = function (event) {
+      document.getElementById("profile-modal").classList.toggle('show');
+    }
+
+
+    var menubtn = document.getElementById("menuBtn");
+    menubtn.classList.toggle('show');
+    var profilebtn = document.getElementById("profilebtn");
+
+    profilebtn.onclick = function (event) {
+      document.getElementById("profile-modal").classList.toggle('show');
+    }
+
+    var profilemodal = document.getElementById("profile-modal");
+    var menumodal = document.getElementById("menuModal");
+    window.onclick = function (event) {
+      if (event.target == profilemodal || event.target == menumodal) {
+        document.getElementById("profile-modal").classList.remove("show");
+        document.getElementById("menuModal").style.display = 'none';
+      }
+    }
+
   </script>
- 
   {% endif %}
-    
 
-{% block main_scripts %} {% endblock main_scripts %}
+  {% block main_scripts %} {% endblock main_scripts %}
 
-     
+
 </body>
 
 </html>
