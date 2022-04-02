@@ -23,6 +23,7 @@
     padding-bottom: 10px;
     float: right;
     right: 0;
+    left: 0;
     top: 0;
     width: 100%; /* Full widt*/
     height: 100%; /* Full height */
@@ -67,7 +68,8 @@
 
   /* menu emodal content*/
   .menu-modal-content {
-    position: absolute;
+    position: relative;
+    margin: 0 auto;
     float: right;
     right: 5;
     background-color: #ffffff;    
@@ -83,7 +85,7 @@
   
   /* profile Modal Content */
   .profile-modal-content {    
-    position: absolute;
+    position: relative;
     float: right;
     right: 5;
     background-color: #ffffff;    

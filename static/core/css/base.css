@@ -64,6 +64,20 @@ input[list] {
     color: red;
 }
 
+.ancorbutton{
+  text-decoration: none;
+  padding: 3px 8px; 
+  border-radius: 5px;
+  border: 1px solid black;
+  color: black;
+  background-color: rgb(185, 226, 238);
+}
+
+.ancorbutton:hover{
+  cursor: pointer;
+    color: red;
+}
+
 .noselect {   
         -webkit-touch-callout: none; /* iOS Safari */
           -webkit-user-select: none; /* Safari */
@@ -153,10 +167,11 @@ input[list] {
 
 /* For base Model */
 .basemodal {    
-  position: fixed; /* Stay in place */ 
-  z-index: 1; /* Sit on top */  
+  position:fixed; /* Stay in place */ 
+  z-index:1; /* Sit on top */  
   left: 0;
   top: 0;
+  bottom: 0;  
   width: 100%; /* Full width */
   height: 100%; /* Full height */
   overflow: auto; /* Enable scroll if needed */

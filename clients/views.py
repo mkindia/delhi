@@ -2,6 +2,7 @@ from django.shortcuts import redirect, render
 from django.http import JsonResponse
 from django.conf import settings
 from django.core.mail import send_mail
+from django.views.decorators.cache import cache_control
 from django.contrib import messages
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
@@ -29,7 +30,7 @@ def mail_for_verify_user(subject,email,url,message,token):
        send_mail(subject=subject,message=message,from_email=from_email,recipient_list=recipient_list)
 
 
-# Create your views here.
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def admin_dashboard(request):
     clients = Client.objects.all()
     return render(request,'clients/admin_dashboard.html/',{'client':clients})
