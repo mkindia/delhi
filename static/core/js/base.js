@@ -11,7 +11,7 @@ menumodal.style.display = "none";
 function alertmsg(msg, duration) {
   var el = document.createElement("div");
 
-  el.setAttribute("style", " font-style: italic; margin:50 auto;  left:1; right:1; margin-bottom:15px; position: absolute;border-radius:8px;color:#f0f0f0;border-color:#f0f0f0; border-width:1px; border-style: solid;z-index:10000; padding:6px; background-color:#36486b;text-align: center;");
+  el.setAttribute("style", " font-style: italic; margin:50 auto;  left:1; right:1; bottom:15px; position: absolute;border-radius:8px;color:#f0f0f0;border-color:#f0f0f0; border-width:1px; border-style: solid;z-index:10000; padding:15px; background-color:#36486b;text-align: center;");
 
   el.innerHTML = msg.toUpperCase();
   setTimeout(function () {

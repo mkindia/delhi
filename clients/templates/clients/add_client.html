@@ -18,7 +18,7 @@
         </div>        
           <div class= "base-modal-body">
                         
-                <form method="POST">
+                <form method="POST" onsubmit="submitdata()">
                   {% csrf_token %}
                   
                   <div>
@@ -31,15 +31,15 @@
                 <div class="col-l-6 col-m-6 col-s-6 col-" style="float:left; padding:2px;">
                     <label for="id_client_group">Client group:</label>
                     
-                    <input name="client_group" placeholder="Select Group" type="search"  style="text-transform:capitalize;" list="client_list" required id="id_client_group">
-                    <datalist id="client_list" style="text-transform:capitalize;">
+                    <input name="client_group" placeholder="Select Group" type="search" style="text-transform:capitalize;" list="group_list" required id="id_client_group">
+                    <datalist id="group_list" style="text-transform:capitalize;">
                    
 
-                      <option data-id="1" value="1"></option>
-
-                      <option data-id="2" value="2"></option>
-
-                      <option data-id="3" value="3"></option>
+                      {% for cli in c_g %}
+           
+                        <option data-id="{{cli.id}}" value="{{cli.group_name}}"> </option>>
+                       
+                        {% endfor %}
 
                     </datalist>
                     
@@ -54,7 +54,11 @@
                   <input name="transport" list="transport_list" placeholder="Select Tranport"  style="text-transform:capitalize;" required id="id_transport">
                   <datalist id="transport_list">
                   
-                  <option value="1">k f m</option>
+                    {% for cli in transport %}
+           
+                    <option data-id="{{cli.id}}" value="{{cli.transport_name}}"> </option>>
+                   
+                    {% endfor %}
 
                   </datalist>
 
@@ -68,7 +72,11 @@
 
                   <input name="station" list="station_list" placeholder="Select Station" class="inputstyle" style="text-transform:capitalize;" required id="id_station">
                   <datalist id="station_list">
-                  <option value="1">nagpur</option>
+                    {% for cli in station %}
+           
+                    <option data-id="{{cli.id}}" value="{{cli.station_name}}"> </option>>
+                   
+                    {% endfor %}
 
                   </datalist>
 
@@ -98,9 +106,24 @@
 {% endblock main_content%}
 
 {% block main_scripts %}
-    {% if messages %}
-        {% for message in messages %}
-        <script>alertmsg('{{message}}',5000)</script>
-        {% endfor %}
-    {% endif %}
+{% if messages %}
+{% for message in messages %}
+<script>alertmsg('{{message}}',5000)</script>
+{% endfor %}
+{% endif %}
+<script>
+
+function submitdata(){
+let g_id=selecteddatalistid('id_client_group','group_list')
+let t_id=selecteddatalistid('id_transport','transport_list')
+let s_id=selecteddatalistid('id_station','station_list')
+document.getElementById('id_client_group').value=g_id
+document.getElementById('id_transport').value=t_id
+document.getElementById('id_station').value=s_id
+
+alert(g_id+t_id+s_id)
+}
+
+</script>
+   
 {% endblock main_scripts %}

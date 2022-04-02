@@ -1,3 +1,4 @@
+from http import client
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.views.decorators.cache import cache_control
@@ -14,15 +15,25 @@ def add_order(request):
 
             tr = consignee.replace(" ","").split("/")
             try:
-                con_id = Consignee.objects.get(consignee_name=tr[0])               
+                con_id = Consignee.objects.get(consignee_name=tr[0])  
+                print(con_id )             
                
             except:
                 tr_id=None
             
            
             return render(request,'orders/order_item.html/',{'consignee':consignee,'con_id':con_id})
+        try:    
+            client=Client.objects.filter(user_id=request.user)
+            consigne = Consignee.objects.all()
+            return render(request,'orders/add_order.html',{'clients':client,'consignes':consigne})
+        except:
+            client=None
+            consigne=None
+            
+            return render(request,'orders/add_order.html')
 
-        return render(request,'orders/add_order.html')
+
     else :
         return redirect('/')
         

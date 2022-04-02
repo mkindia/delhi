@@ -19,11 +19,12 @@
                     <input id="consignee_input" name="consignee_input" placeholder="Select Consignee" type="search"  value="" list="consignee_id" required
                         style="text-transform:capitalize;" />
                     <datalist id="consignee_id" style="text-transform:capitalize;">
-                        <option data-id="1" value="ps / ps"> </option>>
-                        <option data-id="2" value="ps3 / ps3"> </option>>
-                        <option data-id="5" value="jt / jt"> </option>>
-                        <option data-id="6" value="kailash / jt"> </option>>
-                        <option data-id="7" value="tiger / tiger"> </option>>
+                        
+                        {% for cli in consignes %}
+           
+                        <option data-id="{{cli.id}}" value="{{cli.consignee_name}} / {{cli.client_id}}"> </option>>
+                       
+                        {% endfor %}
                     </datalist>
 
                 </div>

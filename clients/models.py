@@ -26,7 +26,7 @@ class Client(models.Model) :
     user_id = models.ManyToManyField(Custom_User)
     client = LowerCase(max_length=100, unique=True)
     client_group = models.ForeignKey(Client_Group,on_delete=models.SET_NULL,null=True,blank=True)
-    business_name = models.CharField(max_length=150)
+    business_name = models.CharField(max_length=150,blank=True, null=True)
     address_1 = models.CharField("address line1", max_length=128, blank=True, null=True)
     address_2 = models.CharField("address line2", max_length=128, blank=True, null=True)
     address_3 = models.CharField("address line3", max_length=128, blank=True, null=True)
