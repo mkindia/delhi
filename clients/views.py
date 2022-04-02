@@ -90,6 +90,9 @@ def add_client(request):
 def add_consignee(request):
 
        if request.user.is_authenticated:
+              client=Client.objects.filter(user_id=request.user.id)
+              station=Station.objects.all()
+              trns=Transport.objects.all() 
                      
               if request.method == 'POST':
               
@@ -104,9 +107,8 @@ def add_consignee(request):
                             messages.error(request,'consignee already exists.')          
 
 
-       
-              consignee_form =  Consignee_form
+                           
 
-              return render(request,'clients/add_consignee.html/',{'trans_form':consignee_form})
+              return render(request,'clients/add_consignee.html/',{'clients':client,'stations':station,'transports':trns})
        else:
               return redirect('/')

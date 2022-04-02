@@ -1,68 +1,134 @@
 {% extends 'core/base.html' %}
 {% block title %}add client{% endblock title %}
 
-{% block main_content %} 
-   
-    <div class="basemodal" >
-        <div class="base-modal-content col-l-6 col-m-9 col-s-11">
-          <div class="base-modal-header">
-            <h3 style=" padding: 5px; text-align: center;">
-              {% if header %} 
-              {{header}}
-              {% else %}              
-              ADD CONSIGNEE
-            
-              {% endif %}
-            </h3>
-          
-        </div>        
-          <div class= "base-modal-body">
-                        
-                <form method="POST">
-                  {% csrf_token %}
-                  
-                  <div>
-                   
-                    {% for field in trans_form %}
+{% block main_content %}
 
-                    <div class="col-l-6 col-m-6 col-s-6 col-" style="float:right; padding:2px">
-                      {{ field.label_tag }} 
-    
-                      {{ field }}
-    
-                      {% for error in field.errors %}
-  
-                          <p style="color: red">{{ error }}</p>
-  
-                      {% endfor %}
-                    </div>
+<div class="basemodal">
+  <div class="base-modal-content col-l-6 col-m-9 col-s-11">
+    <div class="base-modal-header">
+      <h3 style=" padding: 5px; text-align: center;">
+        {% if header %}
+        {{header}}
+        {% else %}
+        ADD CONSIGNEE
 
-                    {% endfor %}
-                  </div>
-              
-                  
-                                         
-                  <div>
-                    <a class="ancor smallbuttonstyleround" href="#" style="text-decoration: none; margin-right: 3px; float: left; margin-top:30px;">Add Transport &#10009;</a>
-                    <a class="ancor smallbuttonstyleround" href="#" style="text-decoration: none; margin-right: 3px; float: left; margin-top:30px;">Add Station &#10009;</a>
-                    
-                    <button type="submit" class="buttonstyle" style="float:right; margin-top:22px; margin-right: 10px;">Submit</button>
-                    
-                    <a  href="/" class="ancor" style="text-decoration: none; float:right; margin-right:10px; margin-top:30px;" ><i> Exit </i></a>
-                  </div>
-                  
-                </form>
-           </div>
+        {% endif %}
+      </h3>
+
+    </div>
+    <div class="base-modal-body">
+
+      <form name="Consignee_form" method="POST" onsubmit="submitdata()"> 
+        {% csrf_token %}
+
+        <div>
+
+          <div class="col-l-6 col-m-6 col-s-6 col-" style="float:right; padding:2px">
+            <label for="id_client_id">Client:</label>
+
+            <input name="client_id"  list="client_list" class="inputstyle" placeholder="Select Client" style="text-transform:capitalize;" required id="id_client_id">
+            <datalist id="client_list" >
+              {% for cli in clients %}
+           
+              <option data-id="{{cli.id}}" value="{{cli.client}}"> </option>>
+             
+              {% endfor %}
+            </datalist>
+
+
+          </div>
+
+
+
+          <div class="col-l-6 col-m-6 col-s-6 col-" style="float:right; padding:2px">
+            <label for="id_consignee_name">Consignee Name:</label>
+
+            <input type="text" name="consignee_name" placeholder="Enter Consignee Name" class="inputstyle" style="text-transform:capitalize;" required
+              id="id_consignee_name">
+
+
+          </div>
+
+
+
+          <div class="col-l-6 col-m-6 col-s-6 col-" style="float:right; padding:2px">
+            <label for="id_transport">Transport:</label>
+
+            <input name="transport" list="transport_list" class="inputstyle" placeholder="Select Transport" style="text-transform:capitalize;" required id="id_transport">
+            <datalist id="transport_list">
+              {% for cli in transports %}
+           
+              <option data-id="{{cli.id}}" value="{{cli.transport_name}}"> </option>>
+             
+              {% endfor %}
+
+            </datalist>
+
+
+          </div>
+
+
+
+          <div class="col-l-6 col-m-6 col-s-6 col-" style="float:right; padding:2px">
+            <label for="id_station">Station:</label>
+
+            <input name="station" list="station_list" class="inputstyle" placeholder="Select Station" style="text-transform:capitalize;" required id="id_station">
+            <datalist id="station_list">
+              {% for cli in stations %}
+           
+              <option data-id="{{cli.id}}" value="{{cli.station_name}}"> </option>>
+             
+              {% endfor %}
+
+            </datalist>
+
+
+          </div>
         </div>
-      </div>
 
-      
+
+
+        <div>
+          <a class="ancor smallbuttonstyleround" href="#"
+            style="text-decoration: none; margin-right: 3px; float: left; margin-top:30px;">Add Transport &#10009;</a>
+          <a class="ancor smallbuttonstyleround" href="#"
+            style="text-decoration: none; margin-right: 3px; float: left; margin-top:30px;">Add Station &#10009;</a>
+
+          <button type="submit" class="buttonstyle"
+            style="float:right; margin-top:22px; margin-right: 10px;">Submit</button>
+
+          <a href="/" class="ancor" style="text-decoration: none; float:right; margin-right:10px; margin-top:30px;"><i>
+              Exit </i></a>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>
+
+
 {% endblock main_content%}
 
 {% block main_scripts %}
-    {% if messages %}
-        {% for message in messages %}
-        <script>alertmsg('{{message}}',5000)</script>
-        {% endfor %}
-    {% endif %}
+{% if messages %}
+{% for message in messages %}
+<script>alertmsg('{{message}}', 5000)</script>
+{% endfor %}
+{% endif %}
+
+<script>
+
+  function submitdata(){
+  let c_id=selecteddatalistid('id_client_id','client_list')
+  let t_id=selecteddatalistid('id_transport','transport_list')
+  let s_id=selecteddatalistid('id_station','station_list')
+  document.getElementById('id_client_id').value=c_id
+  document.getElementById('id_transport').value=t_id
+  document.getElementById('id_station').value=s_id
+  
+  alert(c_id+t_id+s_id)
+  }
+  
+  </script>
+
 {% endblock main_scripts %}
