@@ -1,3 +1,4 @@
+
 {% extends 'core/base.html' %}
 
 {% block title %}edit profile{% endblock title %}
@@ -20,7 +21,7 @@
               {% if user.user_img != None and user.user_img != "" %}   
               <img src="{{user.user_img.url}}" alt="" height="100" width="100" > 
               {% else %}  
-              <img src="{% static 'media/user/default/defaultuser.png' %}" alt="" height="100" width="100"  >  
+              <img src="/media/user/default/defaultuser.png" alt="" height="100" width="100"  >  
               {% endif %}                     
             </div>
             {% endif %}

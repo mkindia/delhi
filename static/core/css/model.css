@@ -73,9 +73,9 @@
     float: right;
     right: 5;
     background-color: #ffffff;    
-    width: 350px;
+    width: 300px;
     top: 50;
-    height: 350px;
+    height: 240px;
     overflow-y: auto;
     border-radius: 11px;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);

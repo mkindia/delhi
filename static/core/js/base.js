@@ -9,14 +9,20 @@ menumodal.style.display = "none";
 
 // for alert message
 function alertmsg(msg, duration) {
-  var el = document.createElement("div");
-
-  el.setAttribute("style", " font-style: italic; margin:50 auto;  left:1; right:1; bottom:15px; position: absolute;border-radius:8px;color:#f0f0f0;border-color:#f0f0f0; border-width:1px; border-style: solid;z-index:10000; padding:15px; background-color:#36486b;text-align: center;");
+  var msgdiv=document.createElement("div");
+  var el = msgdiv.appendChild(document.createElement("div"));
+ // msgdiv.className="basemodal";
+ // el.className="base-modal-body";
+    msgdiv.setAttribute("style", "   z-index: 999999; top:0;  left:0; right:0; bottom:0; position:absolute;  background-color: rgb(0,0,0);background-color: rgba(0,0,0,0.4); text-align: center;");
+  el.setAttribute("style", "  margin: 0 auto; bottom:15px; width:90%;  font-style: italic;  left:0; right:0; position:absolute; border-radius:8px;color:#f0f0f0;border-color:#f0f0f0; border-width:1px; border-style: solid; padding:15px; background-color:#36486b;text-align: center;");
 
   el.innerHTML = msg.toUpperCase();
   setTimeout(function () {
       el.parentNode.removeChild(el);
+      msgdiv.parentNode.removeChild(msgdiv);
   }, duration);
+  
+  document.body.appendChild(msgdiv);
   document.body.appendChild(el);
 }
 

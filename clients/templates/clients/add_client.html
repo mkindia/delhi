@@ -2,21 +2,19 @@
 {% block title %}add client{% endblock title %}
 
 {% block main_content %} 
-   
-    <div class="basemodal"  >
-        <div class="base-modal-content col-l-6 col-m-9 col-s-11" >
+    
+    <div class="basemodal">
+        <div class="base-modal-content col-l-6 col-m-9 col-s-11" style="margin-top: 5px;" >
           <div class="base-modal-header">
-            <h3 style="padding: 5px; text-align: center;">
-              {% if header %} 
-              {{header}}
-              {% else %}              
+            <h style="position: relative; font-weight: bold; margin:0; top: 25%; -ms-transform: translateY(-50%);transform: translateY(-50%);" >
+                   
               ADD CLIENT
             
-              {% endif %}
-            </h3>
+             
+            </h>
           
-        </div>        
-          <div class= "base-modal-body">
+          </div>        
+              <div class= "base-modal-body">
                         
                 <form method="POST" onsubmit="submitdata()">
                   {% csrf_token %}
@@ -26,7 +24,7 @@
                     <label for="id_client">Client Name:</label>                    
                     <input type="text" name="client" class="inputstyle" style="text-transform:capitalize;" required id="id_client">  
                     
-                </div>                     
+                  </div>                     
                 
                 <div class="col-l-6 col-m-6 col-s-6 col-" style="float:left; padding:2px;">
                     <label for="id_client_group">Client group:</label>
@@ -98,9 +96,9 @@
                   </div>
                   
                 </form>
-           </div>
+              </div>
         </div>
-      </div>
+    </div>
 
       
 {% endblock main_content%}
