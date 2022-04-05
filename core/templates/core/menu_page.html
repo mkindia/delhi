@@ -25,20 +25,20 @@
   </div>
   <div id="consignee_menu_items" class="showdiv">
     <a href="{% url 'add_consignee' %}" id="add_consignee"  class="asubmenuitem">Add Consignee</a>
-    <a id="edit-party" class="subamenuitembtn">Edit Consignees</a>
-    <a id="delete-party" class="subamenuitembtn">Delete Consignees</a>
+    <a id="edit-party" class="asubmenuitem">Edit Consignees</a>
+    <a id="delete-party" class="asubmenuitem">Delete Consignees</a>
   </div>
   <div id="items_menu_items" class="showdiv">
     <p>mainFrameTwo</p>
   </div>
   <div id="som_item" class="showdiv">
     <a href="{% url 'addorder' %}" id="add_order"  class="asubmenuitem">Add Order</a>
-    <a id="edit-party" class="subamenuitembtn">Edit Consignees</a>
-    <a id="delete-party" class="subamenuitembtn">Delete Consignees</a>
+    <a id="edit-party" class="asubmenuitem">Edit Consignees</a>
+    <a id="delete-party" class="asubmenuitem">Delete Consignees</a>
   </div>
   <div id="party_menu_items" class="showdiv">
     <a href="{% url 'add_client' %}" id="add-party"  class="asubmenuitem">Add Client</a>
-    <a id="edit-party" class="subamenuitembtn">Edit Client</a>
+    <a id="edit-party" class="asubmenuitem">Edit Client</a>
     {% if user.is_staff %}
     <a href="{% url 'add_client' %}" type="a" id="delete-party" class="asubmenuitem">Delete Client</a>
     {% endif %}

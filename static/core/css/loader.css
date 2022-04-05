@@ -7,9 +7,12 @@
   border-bottom: 7px solid rgb(255, 255, 0);  
   width: 70px;
   height: 70px;
-  top:35%;
+  top:40%;
   left:45%;
-  
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+  -ms-transform: translateX(-50%);
+  transform: translateX(-45%);
   z-index: 1;
   -webkit-animation: spin 2s linear infinite;
   animation: spin 2s linear infinite;

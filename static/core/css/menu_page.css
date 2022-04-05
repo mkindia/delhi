@@ -60,15 +60,7 @@
     .backbtn:hover{
       color: rgba(255, 0, 0, 0.877);
     }
-    .menuitembtn{      
-      padding: 7px 15px;
-      width: 100%;      
-      margin-top: 7px;
-      font-weight: bold;
-      border-radius: 7px;
-      border: 1px solid black;      
-    }
-
+   
     .amenuitembtn{      
       text-decoration: none;
       padding: 4px 15px;
@@ -88,15 +80,7 @@
       background-color: rgba(0, 0, 0, 0.904);
     }
   
-    .submenuitembtn{      
-      padding: 7px 15px;
-      width: 100%;      
-      margin-top: 7px;
-      font-weight: bold;
-      border-radius: 7px;
-      border: 1px solid black;    
-     
-    }
+    
 
     .asubmenuitem{
       text-decoration: none;
@@ -140,8 +124,7 @@
     .headtitle{
       position: relative;
       top: 12px;    
-      font-weight:bold; 
-      font-size: 18px; 
+      font-weight:bold;       
       background-color: transparent;
       border: 0px;
        margin:0; 
@@ -163,9 +146,7 @@
   
    .amenuitembtn:after {
     content: '\0276F';
-    color: rgb(104, 103, 103);
-    font-size: 14px;
-    font-weight: normal;
+    color: rgb(104, 103, 103);   
     float: right;
     margin-left: 5px;
   }
@@ -177,7 +158,7 @@
     top:12px;
     float: right;       
     right: 15px; 
-    font-size: 20px;
+   font-weight: bold;
     color: gray;    
   }
   .menucloseBtn:hover{

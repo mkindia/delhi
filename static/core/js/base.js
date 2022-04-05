@@ -13,8 +13,8 @@ function alertmsg(msg, duration) {
   var el = msgdiv.appendChild(document.createElement("div"));
  // msgdiv.className="basemodal";
  // el.className="base-modal-body";
-    msgdiv.setAttribute("style", "   z-index: 999999; top:0;  left:0; right:0; bottom:0; position:absolute;  background-color: rgb(0,0,0);background-color: rgba(0,0,0,0.4); text-align: center;");
-  el.setAttribute("style", "  margin: 0 auto; bottom:15px; width:90%;  font-style: italic;  left:0; right:0; position:absolute; border-radius:8px;color:#f0f0f0;border-color:#f0f0f0; border-width:1px; border-style: solid; padding:15px; background-color:#36486b;text-align: center;");
+    msgdiv.setAttribute("style", "   z-index: 999998; top:0;  left:0; right:0; bottom:0; position:absolute; background-color: rgba(0,0,0,0.2); text-align: center;");
+  el.setAttribute("style", "  margin: 0 auto; z-index: 999999; bottom:15px; width:90%;  font-style: italic;  left:0; right:0; position:absolute; border-radius:8px;color:#f0f0f0;border-color:#f0f0f0; border-width:1px; border-style: solid; padding:15px; background-color:#36486b;text-align: center;");
 
   el.innerHTML = msg.toUpperCase();
   setTimeout(function () {
