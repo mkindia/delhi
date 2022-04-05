@@ -109,11 +109,6 @@
 {% endblock main_content%}
 
 {% block main_scripts %}
-{% if messages %}
-{% for message in messages %}
-<script>alertmsg('{{message}}', 5000)</script>
-{% endfor %}
-{% endif %}
 
 <script>
 

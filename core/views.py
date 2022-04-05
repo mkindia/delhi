@@ -32,17 +32,20 @@ def mail_for_verify_user(subject,email,url,message,token):
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def home(request):                          
-       if not request.user.is_authenticated:
+       if not request.user.is_authenticated:            
               return render(request,'core/home.html',{'user_name':'Login'})
        else:
               
               clients=Client.objects.filter(user_id=request.user)
               consignes = Consignee.objects.all()
               if request.user.is_admin :
+                     messages.success(request,'Wellcome ' +' '+request.user.first_name + ' ' + request.user.last_name)
                      return render(request,'clients/admin_dashboard.html',{'client':clients,'consigne':consignes})
               if request.user.is_staff :
+                     messages.success(request,'Wellcome ' +' '+ request.user.first_name +' '+ request.user.last_name)
                      return render(request,'core/staff_dashboard.html',{'client':clients})
-              else  :                     
+              else  :
+                     messages.success(request,'Wellcome ' +' '+ request.user.first_name +' '+ request.user.last_name)              
                      return render(request,'clients/client_dashboard.html',{'client':clients})
 
 #@cache_control(no_cache=True, must_revalidate=True, no_store=True)
