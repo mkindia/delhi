@@ -70,7 +70,8 @@
 {% block main_scripts %}
 
 <script>
-   
+
+    document.getElementById("id_date").valueAsDate = new Date();
      function validateForm(event) {
 
         consignee_id = selecteddatalistid('consignee_input', 'consignee_id');
@@ -102,6 +103,7 @@
         
     }   
 </script>
+
 
 {% if messages %}
 {% for message in messages %}

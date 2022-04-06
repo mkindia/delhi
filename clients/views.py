@@ -45,12 +45,10 @@ def add_client(request):
        
               if request.method == 'POST':
               
-                     try:
-                            
+                     try:                            
                             cli_name=Client.objects.get(client=request.POST.get('client').lower())             
-                            messages.warning(request,'Client All ready exist ' + '[ ' +cli_name.client+ ' ]')
-                     
-                            return redirect('/clients/add_client/')
+                            messages.warning(request,'Client All ready exist ' + '[ ' +cli_name.client+ ' ]')                     
+                            #return redirect('/clients/add_client/')
                      except :
                             cli_name = None
                             try:
@@ -78,7 +76,7 @@ def add_client(request):
                                    return render(request,'clients/add_client.html/',{'c_g':c_g,'transport':trns,'station':station})                             
 
                      
-                     return redirect('/clients/add_client/',{'c_g':c_g,'station':station,'transport':trns}) 
+                     
                      
               
                      

@@ -39,13 +39,13 @@ def home(request):
               clients=Client.objects.filter(user_id=request.user)
               consignes = Consignee.objects.all()
               if request.user.is_admin :
-                     messages.success(request,'Wellcome ' +' '+request.user.first_name + ' ' + request.user.last_name)
-                     return render(request,'clients/admin_dashboard.html',{'client':clients,'consigne':consignes})
+                    
+                     return render(request,'clients/admin_dashboard.html',{'client':clients,'consigne':consignes,'orders':'Pandan/2 @120/Pcs.%0asinhasn 2no. : 150 Pcs. @320/Kg.'})
               if request.user.is_staff :
-                     messages.success(request,'Wellcome ' +' '+ request.user.first_name +' '+ request.user.last_name)
+                    
                      return render(request,'core/staff_dashboard.html',{'client':clients})
               else  :
-                     messages.success(request,'Wellcome ' +' '+ request.user.first_name +' '+ request.user.last_name)              
+                            
                      return render(request,'clients/client_dashboard.html',{'client':clients})
 
 #@cache_control(no_cache=True, must_revalidate=True, no_store=True)
@@ -96,7 +96,8 @@ def signin(request):
                              if vuser is not None:
                                  login(request, vuser)
                                  request.session['accesskey'] = 'accesskey'
-                                 if request.user.is_admin:
+                                 messages.success(request,'Wellcome ' +'[ '+ request.user.first_name + ' ' + request.user.last_name + ' ]')
+                                 if request.user.is_admin:                                        
                                         return redirect('/')
                                  elif request.user.is_staff:
                                         return redirect('/')
@@ -137,7 +138,7 @@ def account_verify(request,token):
                             cu.is_active=True
                             af.save()
                             cu.save()
-                            messages.success(request,"Account Verified Success Please Login"+ str(af.email))           
+                            messages.success(request,"Account Verified Success Please Login "+'[ '+ str(af.email) + ' ]')           
                             return redirect('/')
               else :
                      

@@ -1,4 +1,6 @@
 from django.db import models
+
+
 from clients.models import *
 from items.models import *
 
@@ -13,8 +15,9 @@ class LowerCase(models.CharField):
 class Consignee_Order(models.Model):
     client=models.ForeignKey(Client,on_delete=models.CASCADE)
     consignee=models.ForeignKey(Consignee,on_delete=models.CASCADE)
-    order_date=models.DateTimeField(auto_now_add=True,null=True,blank=True)
-    des =LowerCase(max_length=200)
+    create_date=models.DateField(auto_now_add=True,null=True,blank=True)
+    date = models.DateField(("Date"),null=True,blank=True)
+    des =LowerCase(max_length=200,null=True,blank=True)
     
 class Item_Order(models.Model):
     order=models.ForeignKey(Consignee_Order,on_delete=models.CASCADE)
