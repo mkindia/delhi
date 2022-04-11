@@ -24,7 +24,7 @@ class Client_Group(models.Model):
 
 class Client(models.Model) :
     user_id = models.ManyToManyField(Custom_User)
-    client = LowerCase(max_length=100, unique=True)
+    client_name = LowerCase(max_length=100, unique=True)
     client_group = models.ForeignKey(Client_Group,on_delete=models.SET_NULL,null=True,blank=True)
     business_name = models.CharField(max_length=150,blank=True, null=True)
     address_1 = models.CharField("address line1", max_length=128, blank=True, null=True)
@@ -40,7 +40,13 @@ class Client(models.Model) :
     client_des = models.CharField(max_length=150,blank=True,null=True)
     date_joined = models.DateTimeField(auto_now_add=True, blank=True ,null=True)
     def __str__(self):
-        return str (self.client )
+        return str (self.client_name )
+
+class Client_Token(models.Model):
+    client_id = models.ForeignKey(Client, on_delete=models.CASCADE)   
+    token = models.CharField(max_length=250)
+    is_verified = models.BooleanField(default=False)
+    date_varified = models.DateTimeField(auto_now_add=True, blank=True,null=True)
 
 class Transport(models.Model):
     transport_name = LowerCase(max_length=100)

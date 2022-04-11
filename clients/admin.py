@@ -5,7 +5,7 @@ from clients.models import *
 # Register your models here.
 @admin.register(Client)
 class Client(admin.ModelAdmin):
-      list_display = ('id','client')
+      list_display = ('id','client_name')
 
 @admin.register(Client_Group)
 class Client_Group(admin.ModelAdmin):

@@ -67,7 +67,7 @@ class UsersCreationForm(UserCreationForm):
   email=forms.EmailField(label='Email',widget=forms.EmailInput(attrs={'class':'inputstyle'}))
   first_name=forms.CharField(widget=forms.TextInput(attrs={'class':'inputstyle','text-transform':'capitalize'}))
   last_name=forms.CharField(widget=forms.TextInput(attrs={'class':'inputstyle'})) 
-  phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
+  phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must be in the format: '9999999999'. Up to 15 digits.")
   phone_number = forms.CharField(validators=[phone_regex], max_length=16,widget=forms.TextInput(attrs={'class':'inputstyle'}))
   
   class Meta:

@@ -46,8 +46,8 @@ def add_client(request):
               if request.method == 'POST':
               
                      try:                            
-                            cli_name=Client.objects.get(client=request.POST.get('client').lower())             
-                            messages.warning(request,'Client All ready exist ' + '[ ' +cli_name.client+ ' ]')                     
+                            cli_name=Client.objects.get(client_name=request.POST.get('client').lower())             
+                            messages.warning(request,'Client All ready exist ' + '[ ' +cli_name.client_name+ ' ]')                     
                             #return redirect('/clients/add_client/')
                      except :
                             cli_name = None
@@ -62,7 +62,7 @@ def add_client(request):
                                    s_id=request.POST.get('station')
                                    s_inst=Station.objects.only('id').get(id=s_id)
                                    
-                                   client=Client.objects.create(client=request.POST.get('client'),client_group=g_inst)
+                                   client=Client.objects.create(client_name=request.POST.get('client'),client_group=g_inst)
                             
                                    client.user_id.add(request.user.id)
 
@@ -84,6 +84,13 @@ def add_client(request):
               return render(request,'clients/add_client.html/',{'c_g':c_g,'transport':trns,'station':station})
 
        else :
+              return redirect('/')
+
+def genrate_client_token(request):
+       if request.user.is_authenticated:
+              client=Client.objects.filter(user_id=request.user.id)
+              return render(request,'clients/genrate_client_token.html',{'clients':client})
+       else:
               return redirect('/')
 
 def add_consignee(request):

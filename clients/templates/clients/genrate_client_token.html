@@ -1,0 +1,78 @@
+{% extends 'core/base.html' %}
+{% block title %}benrate token{% endblock title %}
+
+{% block main_content %} 
+    
+    <div class="basemodal">
+        <div class="base-modal-content col-l-6 col-m-9 col-s-11" style="margin-top: 5px;" >
+          <div class="base-modal-header">
+            <h style="position: relative; font-weight: bold; margin:0; top: 25%; -ms-transform: translateY(-50%);transform: translateY(-50%);" >
+                   
+              Genrate Token
+            
+             
+            </h>
+          
+          </div>        
+              <div class= "base-modal-body">
+                        
+                <form method="POST" onsubmit="submitdata()">
+                  {% csrf_token %}
+                  
+                               
+                
+                <div class="col-l-6 col-m-6 col-s-6 col-" style="float:left; padding:2px;">
+                    <label for="id_client">Select Client:</label>
+                    
+                    <input name="client" placeholder="Select Client" type="search" style="text-transform:capitalize;" list="client_list" required id="id_client">
+                    <datalist id="client_list" >
+                   
+
+                      {% for cli in clients %}
+           
+                        <option data-id="{{cli.id}}" value="{{cli.client_name}}"> </option>
+                       
+                        {% endfor %}
+
+                    </datalist>
+                    
+                </div>           
+                
+                <div class="col-l-6 col-m-6 col-s-6 col-" style="float:left; padding:2px;">
+                    <label for="id_status">Status:</label>
+                    
+                    <input name="status" id="id_status" placeholder="Select Client" class="inputstyle" value="token is : " type="search" style="text-transform:capitalize;" disabled="true">
+                   
+                    
+                </div>          
+                
+                  <div>
+                   
+                    <button type="submit" class="buttonstyle" style="float:right; margin-top:22px; margin-right: 10px;">Submit</button>
+                    
+                    <a  href="/" class="ancor" style="text-decoration: none; float:right; margin-right:10px; margin-top:30px;" ><i> Exit </i></a>
+                  </div>
+                  
+                </form>
+              </div>
+        </div>
+    </div>
+
+      
+{% endblock main_content%}
+
+{% block main_scripts %}
+{% if messages %}
+{% for message in messages %}
+<script>alertmsg('{{message}}',5000)</script>
+{% endfor %}
+{% endif %}
+<script>
+
+function submitdata(){
+
+}
+
+</script>
+   
+{% endblock main_scripts %}

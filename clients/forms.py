@@ -10,7 +10,7 @@ class Client_Form(forms.ModelForm):
 
     class Meta:        
         model = Client
-        fields = ['client','client_group']
+        fields = ['client_name','client_group']
 
         #widgets ={'client_group':forms.Select(attrs={'class':'inputstyle','text-transform':'capitalize'})}
 

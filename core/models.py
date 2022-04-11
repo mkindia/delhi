@@ -1,11 +1,10 @@
 
 from multiprocessing.connection import Client
-from unittest.util import _MAX_LENGTH
 from django.contrib.auth.models import BaseUserManager,AbstractBaseUser
 from django.db import models
 from django.core.validators import RegexValidator
 from django.contrib.auth.validators import UnicodeUsernameValidator
-from django.utils import timezone
+
 
 # for input data in lowercase
 class LowerCase(models.CharField):

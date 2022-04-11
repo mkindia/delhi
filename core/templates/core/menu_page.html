@@ -42,6 +42,7 @@
     {% if user.is_staff %}
     <a href="{% url 'add_client' %}" type="a" id="delete-party" class="asubmenuitem">Delete Client</a>
     {% endif %}
+    <a id="edit-party" href="{% url 'genrate_client_token' %}" class="asubmenuitem">Genrate Client Token</a>
   </div>
   <div id="pom_item" class="showdiv">
     <a id="apom" class="amenuitembtn" onclick="showhide('apom','apom_item')">Add hhhhh Purchase Orders</a>
