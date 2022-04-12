@@ -48,7 +48,8 @@ def order_item(request):
             
             print(data)
             print(con_id)
-            data={'consignee':con_id}
+            data={'client':con_id}
+            print(data)
             return JsonResponse(data)
                        
         else :

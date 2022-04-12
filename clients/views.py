@@ -1,3 +1,4 @@
+
 from django.shortcuts import redirect, render
 from django.http import JsonResponse
 from django.conf import settings
@@ -10,7 +11,7 @@ import json
 import uuid
 
 from core.models import Custom_User
-from .models import Client, Client_Group,Consignee,Transport,Station
+from .models import Client, Client_Group, Client_Token,Consignee,Transport,Station
 from .forms import Client_Form,Consignee_Transport_form,Consignee_form
 
 # for sending mail
@@ -88,6 +89,34 @@ def add_client(request):
 
 def genrate_client_token(request):
        if request.user.is_authenticated:
+
+              if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                     data = json.loads(request.body.decode("utf-8"))
+                     c_id = data['client_id']
+                    
+                     
+                     try:
+                            c_inst= Client_Token.objects.get(client_id=c_id)
+                            data={'client':c_inst.id,'token':'Token is : '+ c_inst.token}
+                            print(c_inst)
+                            return JsonResponse(data)
+                     except:
+                            c_inst=None
+                            data={'token':'Token : Not Genrated'}
+                            return JsonResponse(data)
+                           
+              
+              if request.method == 'POST':
+                     client=request.POST.get('client')
+                     try:
+                            c_f= Client_Token.objects.get(client_id=client)
+                            messages.warning(request,'Client Has Already Token '+'[ '+ c_f.token +' ]')
+                     except:
+                            c_f=None
+                            c_inst= Client.objects.only('id').get(id=client)                                               
+                            c_token=Client_Token.objects.create(client_id=c_inst,token=uuid.uuid4())
+                            messages.success(request,'Token Genrated')
+                    
               client=Client.objects.filter(user_id=request.user.id)
               return render(request,'clients/genrate_client_token.html',{'clients':client})
        else:

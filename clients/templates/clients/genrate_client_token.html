@@ -16,7 +16,7 @@
           </div>        
               <div class= "base-modal-body">
                         
-                <form method="POST" onsubmit="submitdata()">
+                <form method="POST"  onsubmit="submitdata()">
                   {% csrf_token %}
                   
                                
@@ -41,14 +41,14 @@
                 <div class="col-l-6 col-m-6 col-s-6 col-" style="float:left; padding:2px;">
                     <label for="id_status">Status:</label>
                     
-                    <input name="status" id="id_status" placeholder="Select Client" class="inputstyle" value="token is : " type="search" style="text-transform:capitalize;" disabled="true">
+                    <input name="status" id="id_status" placeholder="Select Client" class="inputstyle" value="" type="search" style="text-transform:capitalize; font-weight: bold;" disabled="true">
                    
                     
                 </div>          
                 
                   <div>
                    
-                    <button type="submit" class="buttonstyle" style="float:right; margin-top:22px; margin-right: 10px;">Submit</button>
+                    <button type="submit" id="genrate" class="buttonstyle" style="float:right; margin-top:22px; margin-right: 10px;">Submit</button>
                     
                     <a  href="/" class="ancor" style="text-decoration: none; float:right; margin-right:10px; margin-top:30px;" ><i> Exit </i></a>
                   </div>
@@ -62,14 +62,48 @@
 {% endblock main_content%}
 
 {% block main_scripts %}
-{% if messages %}
-{% for message in messages %}
-<script>alertmsg('{{message}}',5000)</script>
-{% endfor %}
-{% endif %}
+
 <script>
 
+document.getElementById("id_client").addEventListener("change", myFunction);
+document.getElementById("genrate").disabled = true;
+
+
+function myFunction() {
+  let c_id=selecteddatalistid('id_client','client_list');
+
+  let data={'client_id':c_id};
+       
+        let fetchtext =  fetch('/clients/genrate_client_token',postoption(data));
+  
+         fetchtext.then(async response => {
+            if (!response.ok) {
+                throw Error(response.statusText);
+            }
+                  return await response.json(); // Convert response to json use text for text
+          })
+          .then(data => {
+          //Perform actions with the response data from the view          
+          document.getElementById('id_status').value = data.token
+
+          if(data.token == 'Token : Not Genrated')
+          {
+            document.getElementById('genrate').disabled = false;
+          }
+          else{
+            document.getElementById('genrate').disabled = true;
+          }
+          // alert(data.token)          
+         
+          })
+          .catch(err=>{ if ( err == "Error: Internal Server Error" ){alert("Wrong Client");}else{ alert(err);}})
+  
+        }
 function submitdata(){
+
+  
+  let c_id=selecteddatalistid('id_client','client_list');
+  document.getElementById('id_client').value=c_id;
 
 }
 
