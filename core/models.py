@@ -3,7 +3,8 @@ from multiprocessing.connection import Client
 from django.contrib.auth.models import BaseUserManager,AbstractBaseUser
 from django.db import models
 from django.core.validators import RegexValidator
-from django.contrib.auth.validators import UnicodeUsernameValidator
+from django.contrib.auth.validators import UnicodeUsernameValidator 
+
 
 
 # for input data in lowercase
@@ -66,9 +67,7 @@ class Custom_User(AbstractBaseUser):
     email=models.EmailField(blank=True, null=True, verbose_name='email address',max_length=255,unique=True,)
     first_name=LowerCase(blank=True, null=True,max_length=150, verbose_name='first name')
     last_name=LowerCase(blank=True, null=True,max_length=150, verbose_name='last name')
-    user_img = models.ImageField(upload_to='user', blank=True, null=True)
-    phoneNumberRegex = RegexValidator(regex = r"^\+?1?\d{9,15}$")
-    phone_number = models.CharField(validators = [phoneNumberRegex], null=True, blank=True,  max_length = 16, verbose_name='phone no', unique = True)   
+    user_img = models.ImageField(upload_to='user', blank=True, null=True)       
     password = models.CharField(max_length=150)
     is_admin = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)

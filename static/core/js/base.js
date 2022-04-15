@@ -1,11 +1,4 @@
 
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function (event) {
-if (event.target == menumodal) {
-
-menumodal.style.display = "none";
-}
-}
 
 // for alert message
 function alertmsg(msg, duration) {

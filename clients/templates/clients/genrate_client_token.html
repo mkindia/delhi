@@ -48,9 +48,11 @@
                 
                   <div>
                    
-                    <button type="submit" id="genrate" class="buttonstyle" style="float:right; margin-top:22px; margin-right: 10px;">Submit</button>
+                    <button type="submit" id="genrate" class="buttonstyle" style="float:right;display: none; margin-top:22px; margin-right: 10px;">Genrate Token</button>
                     
                     <a  href="/" class="ancor" style="text-decoration: none; float:right; margin-right:10px; margin-top:30px;" ><i> Exit </i></a>
+                    <a  href="#"  id="email" class="ancor" style="text-decoration: none; display: none; float:right; margin-right:10px; margin-top:30px;" ><i> Send By Email </i></a>
+                    <a type="button" id="whatsup" class="ancor" style="text-decoration: none; display: none; float:right; margin-right:10px; margin-top:30px;" ><i> Send By Whatsapp </i></a>
                   </div>
                   
                 </form>
@@ -66,7 +68,17 @@
 <script>
 
 document.getElementById("id_client").addEventListener("change", myFunction);
-document.getElementById("genrate").disabled = true;
+
+document.getElementById("whatsup").addEventListener("click",whatsapp);
+
+function whatsapp(){
+  let token=document.getElementById("id_status").value;
+  let wn = prompt('WhatsApp No.');
+  if (wn){
+  window.open("whatsapp://send/?phone="+wn+"&amp;text=Hello user  %0a"+token);
+  }
+}
+
 
 
 function myFunction() {
@@ -86,12 +98,23 @@ function myFunction() {
           //Perform actions with the response data from the view          
           document.getElementById('id_status').value = data.token
 
-          if(data.token == 'Token : Not Genrated')
+          if(data.token != 'Token : Not Genrated')
           {
-            document.getElementById('genrate').disabled = false;
+            document.getElementById('genrate').style.display = 'none';
+            var email = document.getElementById('email');
+                email.style.display="block";
+            var whatsup = document.getElementById('whatsup');
+                whatsup.style.display="block";
+                       
           }
           else{
-            document.getElementById('genrate').disabled = true;
+            document.getElementById('genrate').style.display='block';
+            var email = document.getElementById('email');
+                email.style.display="none";
+            var whatsup = document.getElementById('whatsup');
+                whatsup.style.display="none";
+           
+            
           }
           // alert(data.token)          
          

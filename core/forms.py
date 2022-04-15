@@ -27,12 +27,10 @@ class UserProfile_changeform(forms.ModelForm):
   email=forms.EmailField(label='Email',widget=forms.EmailInput(attrs={'class':'inputstyle'}))
   first_name=forms.CharField(widget=forms.TextInput(attrs={'class':'inputstyle','text-transform':'capitalize'}))
   last_name=forms.CharField(widget=forms.TextInput(attrs={'class':'inputstyle'})) 
-  phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: '9999999999'. 10 digits Only.")
-  phone_number = forms.CharField(max_length=10, required=False, validators=[phone_regex],widget=forms.NumberInput(attrs={'class':'inputstyle'}))
-
+ 
   class Meta:
     model = Custom_User
-    fields = ['first_name','last_name','email','phone_number']
+    fields = ['first_name','last_name','email']
    
 class UserDetailsform(forms.ModelForm):
   class Meta:
@@ -67,12 +65,10 @@ class UsersCreationForm(UserCreationForm):
   email=forms.EmailField(label='Email',widget=forms.EmailInput(attrs={'class':'inputstyle'}))
   first_name=forms.CharField(widget=forms.TextInput(attrs={'class':'inputstyle','text-transform':'capitalize'}))
   last_name=forms.CharField(widget=forms.TextInput(attrs={'class':'inputstyle'})) 
-  phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must be in the format: '9999999999'. Up to 15 digits.")
-  phone_number = forms.CharField(validators=[phone_regex], max_length=16,widget=forms.TextInput(attrs={'class':'inputstyle'}))
-  
+    
   class Meta:
     model =  Custom_User
-    fields = ('user_name','email','first_name','last_name', 'phone_number')
+    fields = ('user_name','email','first_name','last_name')
 
     def clean_password2(self):
         # Check that the two password entries match

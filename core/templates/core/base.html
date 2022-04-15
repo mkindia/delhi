@@ -116,13 +116,13 @@
     
     var proclose = document.getElementById("profile_exit");
     proclose.onclick = function (event) {
-      document.getElementById("profile-modal").classList.remove("show");
+      document.getElementById("profile-modal").style.display="none";
     }
 
     var profilebtn = document.getElementById("profilebtn");
 
     profilebtn.onclick = function (event) {
-      document.getElementById("profile-modal").classList.toggle('show');
+      document.getElementById("profile-modal").style.display="block"
     }
 
 
@@ -131,15 +131,15 @@
     var profilebtn = document.getElementById("profilebtn");
 
     profilebtn.onclick = function (event) {
-      document.getElementById("profile-modal").classList.toggle('show');
+      document.getElementById("profile-modal").style.display="block";
     }
 
     var profilemodal = document.getElementById("profile-modal");
     var menumodal = document.getElementById("menuModal");
     window.onclick = function (event) {
       if (event.target == profilemodal || event.target == menumodal) {
-        document.getElementById("profile-modal").classList.remove("show");
-        document.getElementById("menuModal").style.display = 'none';
+        document.getElementById("profile-modal").style.display="none";
+       
       }
     }
 
