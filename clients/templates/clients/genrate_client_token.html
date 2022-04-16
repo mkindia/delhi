@@ -41,7 +41,7 @@
                 <div class="col-l-6 col-m-6 col-s-6 col-" style="float:left; padding:2px;">
                     <label for="id_status">Status:</label>
                     
-                    <input name="status" id="id_status" placeholder="Select Client" class="inputstyle" value="" type="search" style="text-transform:capitalize; font-weight: bold;" disabled="true">
+                    <input name="status" id="id_status" placeholder="Select Client" class="inputstyle" value="" type="search" style="text-transform:capitalize; font-weight: bold; color:black" disabled="true">
                    
                     
                 </div>          
@@ -51,8 +51,9 @@
                     <button type="submit" id="genrate" class="buttonstyle" style="float:right;display: none; margin-top:22px; margin-right: 10px;">Genrate Token</button>
                     
                     <a  href="/" class="ancor" style="text-decoration: none; float:right; margin-right:10px; margin-top:30px;" ><i> Exit </i></a>
-                    <a  href="#"  id="email" class="ancor" style="text-decoration: none; display: none; float:right; margin-right:10px; margin-top:30px;" ><i> Send By Email </i></a>
-                    <a type="button" id="whatsup" class="ancor" style="text-decoration: none; display: none; float:right; margin-right:10px; margin-top:30px;" ><i> Send By Whatsapp </i></a>
+                    <a  type="button" id="email" class="ancor" style="text-decoration: none; display: none; float:right; margin-right:10px; margin-top:30px;" ><i> Email </i></a>
+                    <a type="button" id="whatsup" class="ancor" style="text-decoration: none; display: none; float:right; margin-right:10px; margin-top:30px;" ><i> Whatsapp, </i></a>
+                    <label id="sendby" style="text-decoration: none; display: none; float:right; margin-right:10px; margin-top:30px;">Send BY:</label>
                   </div>
                   
                 </form>
@@ -64,18 +65,37 @@
 {% endblock main_content%}
 
 {% block main_scripts %}
-
+<script src="https://smtpjs.com/v3/smtp.js"></script>
 <script>
-
 document.getElementById("id_client").addEventListener("change", myFunction);
 
 document.getElementById("whatsup").addEventListener("click",whatsapp);
 
+document.getElementById("email").addEventListener("click",sendmail);
+
+function sendmail()
+{
+  let token=document.getElementById("id_status").value;
+  let sendmail = prompt('Enter Email address');
+  if(sendmail){
+        alert("hi")
+        Email.send({       
+              SecureToken: '196b57c0-c730-404c-9326-a53fe2ebc1e0',
+              To: sendmail,
+              From: "mail@spangle.in",
+              Subject: "your token is : ",
+              Body: "Your Token is : "+token,
+            })
+              .then(function (message) {
+                alert("mail sent successfully")
+              });
+      }
+}
 function whatsapp(){
   let token=document.getElementById("id_status").value;
   let wn = prompt('WhatsApp No.');
   if (wn){
-  window.open("whatsapp://send/?phone="+wn+"&amp;text=Hello user  %0a"+token);
+  window.open("whatsapp://send/?phone="+wn+"&amp;text=Token is: "+token);
   }
 }
 
@@ -105,6 +125,8 @@ function myFunction() {
                 email.style.display="block";
             var whatsup = document.getElementById('whatsup');
                 whatsup.style.display="block";
+            var sendby = document.getElementById('sendby');
+                sendby.style.display="block";
                        
           }
           else{
@@ -113,7 +135,8 @@ function myFunction() {
                 email.style.display="none";
             var whatsup = document.getElementById('whatsup');
                 whatsup.style.display="none";
-           
+            var sendby = document.getElementById('sendby');
+                sendby.style.display="none";
             
           }
           // alert(data.token)          
