@@ -41,7 +41,7 @@
                 <div class="col-l-6 col-m-6 col-s-6 col-" style="float:left; padding:2px;">
                     <label for="id_status">Status:</label>
                     
-                    <input name="status" id="id_status" placeholder="Select Client" class="inputstyle" value="" type="search" style="text-transform:capitalize; font-weight: bold; color:black" disabled="true">
+                    <input name="status" id="id_status" placeholder="Select Client" class="inputstyle" value="" type="search" style="text-transform:capitalize; background-color: aliceblue; font-weight: bold; color:black" disabled="true">
                    
                     
                 </div>          
@@ -50,10 +50,10 @@
                    
                     <button type="submit" id="genrate" class="buttonstyle" style="float:right;display: none; margin-top:22px; margin-right: 10px;">Genrate Token</button>
                     
-                    <a  href="/" class="ancor" style="text-decoration: none; float:right; margin-right:10px; margin-top:30px;" ><i> Exit </i></a>
-                    <a  type="button" id="email" class="ancor" style="text-decoration: none; display: none; float:right; margin-right:10px; margin-top:30px;" ><i> Email </i></a>
-                    <a type="button" id="whatsup" class="ancor" style="text-decoration: none; display: none; float:right; margin-right:10px; margin-top:30px;" ><i> Whatsapp, </i></a>
-                    <label id="sendby" style="text-decoration: none; display: none; float:right; margin-right:10px; margin-top:30px;">Send BY:</label>
+                    <a  href="/" class="buttonstyle" style="text-decoration: none; float:right; margin-right:10px; margin-top:30px;" ><i>Exit</i></a>
+                    <a  type="button" id="email" class="ancor" style="text-decoration: none; display: none; float:right; margin-right:5px; margin-top:30px;" ><small><i>Email</i></small></a>
+                    <a type="button" id="whatsup" class="ancor" style="text-decoration: none; display: none; float:right;margin-right:5px; margin-top:30px;" ><small><i>Whatsapp,</i></small></a>
+                    <label id="sendby" style="text-decoration: none; display: none; float:right; margin-right:5px; margin-top:30px;"><i>Send Token By:</i></label>
                   </div>
                   
                 </form>
@@ -77,8 +77,7 @@ function sendmail()
 {
   let token=document.getElementById("id_status").value;
   let sendmail = prompt('Enter Email address');
-  if(sendmail){
-        alert("hi")
+  if(sendmail){       
         Email.send({       
               SecureToken: '196b57c0-c730-404c-9326-a53fe2ebc1e0',
               To: sendmail,
@@ -95,7 +94,7 @@ function whatsapp(){
   let token=document.getElementById("id_status").value;
   let wn = prompt('WhatsApp No.');
   if (wn){
-  window.open("whatsapp://send/?phone="+wn+"&amp;text=Token is: "+token);
+  window.open("whatsapp://send/?phone=91"+wn+"&text=Token is: "+token);
   }
 }
 

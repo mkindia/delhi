@@ -135,13 +135,12 @@
     }
 
     var profilemodal = document.getElementById("profile-modal");
-    var menumodal = document.getElementById("menuModal");
-    window.onclick = function (event) {
-      if (event.target == profilemodal || event.target == menumodal) {
-        document.getElementById("profile-modal").style.display="none";
        
-      }
+    window.addEventListener("click", function(event) {
+    if (event.target == profilemodal) {
+      profilemodal.style.display = "none";
     }
+});
 
   </script>
   {% endif %}
