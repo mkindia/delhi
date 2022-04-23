@@ -51,8 +51,8 @@
                     <button type="submit" id="genrate" class="buttonstyle" style="float:right;display: none; margin-top:22px; margin-right: 10px;">Genrate Token</button>
                     
                     <a  href="/" class="buttonstyle" style="text-decoration: none; float:right; margin-right:10px; margin-top:30px;" ><i>Exit</i></a>
-                    <a  type="button" id="email" class="ancor" style="text-decoration: none; display: none; float:right; margin-right:5px; margin-top:30px;" ><small><i>Email</i></small></a>
-                    <a type="button" id="whatsup" class="ancor" style="text-decoration: none; display: none; float:right;margin-right:5px; margin-top:30px;" ><small><i>Whatsapp,</i></small></a>
+                    <a  type="button" id="email" onclick="c_prompt.render('Send E-Mail','Enter E-Mail Address','sendmail')" class="ancor" style="text-decoration: none; display: none; float:right; margin-right:5px; margin-top:30px;" ><small><i>Email</i></small></a>
+                    <a type="button" id="whatsup" onclick="c_prompt.render('Send Whatsapp','Enter Whatsapp No.','whatsapp')" class="ancor" style="text-decoration: none; display: none; float:right;margin-right:5px; margin-top:30px;" ><small><i>Whatsapp,</i></small></a>
                     <label id="sendby" style="text-decoration: none; display: none; float:right; margin-right:5px; margin-top:30px;"><i>Send Token By:</i></label>
                   </div>
                   
@@ -69,32 +69,28 @@
 <script>
 document.getElementById("id_client").addEventListener("change", myFunction);
 
-document.getElementById("whatsup").addEventListener("click",whatsapp);
-
-document.getElementById("email").addEventListener("click",sendmail);
-
-function sendmail()
+function sendmail(val)
 {
   let token=document.getElementById("id_status").value;
-  let sendmail = prompt('Enter Email address');
+ 
   if(sendmail){       
         Email.send({       
               SecureToken: '196b57c0-c730-404c-9326-a53fe2ebc1e0',
-              To: sendmail,
+              To: val,
               From: "mail@spangle.in",
               Subject: "your token is : ",
               Body: "Your Token is : "+token,
             })
               .then(function (message) {
-                alert("mail sent successfully")
+                c_alert.render('Mail Messasge','mail sent successfully',2000);
               });
       }
 }
-function whatsapp(){
+function whatsapp(val){
   let token=document.getElementById("id_status").value;
-  let wn = prompt('WhatsApp No.');
-  if (wn){
-  window.open("whatsapp://send/?phone=91"+wn+"&text=Token is: "+token);
+  
+  if (val){
+  window.open("https://wa.me/91"+val+"/?text=Token is: "+token);
   }
 }
 

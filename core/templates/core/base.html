@@ -37,9 +37,10 @@
   <script src="{% static 'core/js/fetchApi.js' %}"></script>
   <script src="{% static 'core/js/base.js' %}"></script>
 
+  
   {% if messages %}
   {% for message in messages %}
-  <script>alertmsg('{{message}}', 5000)</script>
+  <script>c_alert.render('Message','{{message}}', 5000)</script>
   {% endfor %}
   {% endif %}
 
