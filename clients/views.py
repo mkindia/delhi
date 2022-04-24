@@ -97,7 +97,7 @@ def genrate_client_token(request):
                      
                      try:
                             c_inst= Client_Token.objects.get(client_id=c_id)
-                            data={'client':c_inst.id,'token':c_inst.token}
+                            data={'client':c_inst.id,'token':c_inst.token,'securetoken':'196b57c0-c730-404c-9326-a53fe2ebc1e0'}
                             print(c_inst)
                             return JsonResponse(data)
                      except:

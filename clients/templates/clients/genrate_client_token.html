@@ -67,21 +67,25 @@
 {% block main_scripts %}
 <script src="https://smtpjs.com/v3/smtp.js"></script>
 <script>
+
+var secureToken = '' ;
 document.getElementById("id_client").addEventListener("change", myFunction);
 
 function sendmail(val)
 {
   let token=document.getElementById("id_status").value;
- 
-  if(sendmail){       
+  
+  if(sendmail){
+        document.getElementById('loader').style.display='block';   
         Email.send({       
-              SecureToken: '196b57c0-c730-404c-9326-a53fe2ebc1e0',
+              SecureToken: secureToken,
               To: val,
               From: "mail@spangle.in",
               Subject: "your token is : ",
               Body: "Your Token is : "+token,
             })
               .then(function (message) {
+                document.getElementById('loader').style.display='none';   
                 c_alert.render('Mail Messasge','mail sent successfully',2000);
               });
       }
@@ -111,7 +115,9 @@ function myFunction() {
           })
           .then(data => {
           //Perform actions with the response data from the view          
-          document.getElementById('id_status').value = data.token
+          document.getElementById('id_status').value = data.token ;
+
+          secureToken = data.securetoken;
 
           if(data.token != 'Token : Not Genrated')
           {
