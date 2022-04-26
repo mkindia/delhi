@@ -112,11 +112,13 @@ function CustomAlert() {
       maindiv.appendChild(content);
 
   var cont_id =document.getElementById('content');
+  
   var d_header = document.createElement("div");
       d_header.id='header';
-     // el.setAttribute("style", "  margin: 0 auto; z-index: 999999; top:47px; width:350px; padding:17px; height:100px; font-style: italic;  left:0; right:0; position:absolute; border-radius:8px;color:#f0f0f0;border-color:#f0f0f0; border-width:1px; border-style: solid; background-color:#36486b; opacity: 0.9; text-align: center; box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19); -webkit-animation-name: animatetop;  -webkit-animation-duration: 0.4s;  animation-name: animatetop;  animation-duration: 0.4s");
+      d_header.style='background-color: #e4e4e4;';    
       d_header.className='base-modal-header';      
       cont_id.appendChild(d_header);
+
   var d_header_id= document.getElementById('header');
   var d_header_h = document.createElement('h');
       d_header_h.style='position: relative; font-weight: bold; margin:0; top: 25%; -ms-transform: translateY(-50%);transform: translateY(-50%);';
@@ -126,7 +128,7 @@ function CustomAlert() {
   var d_body=document.createElement("div");
       d_body.id='d_body';
       d_body.className='base-modal-body col-l-12 col-m-12 col-s-12'
-      d_body.setAttribute("style", "margin-top:10px; margin-bottom:20px;"); 
+      d_body.setAttribute("style", "margin-top:10px; margin-bottom:20px;  text-align: center;"); 
       d_body.innerHTML=dialog;
       cont_id.appendChild(d_body);
 

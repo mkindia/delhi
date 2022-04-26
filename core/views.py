@@ -260,14 +260,10 @@ def forget_pwd(request):
               else: 
                      cu_id = Custom_User.objects.only('id').get(user_name=uname)
                      ver_obj=Password_Change(user_id=cu_id,email=uemail,token=token)                     
-                     #ver_obj.save()
-                     #mail_for_verify_user('Recover Your Password',uemail,'pass_change','Please click on link to new password',token)                    
-                    #messages.info(request,"Please check your registered Email ")
-                     request.session.flush()
-                     request.session.clear_expired()
-                     return render(request,'core/email.html',{'subject':'Recover Your Password','message':'http://127.0.0.1:8000/pass_change/','secureToken':'196b57c0-c730-404c-9326-a53fe2ebc1e0','token':token,'to':uemail})
-
-                    # return redirect('/')
+                     ver_obj.save()
+                     mail_for_verify_user('Recover Your Password',uemail,'pass_change','Please click on link to new password',token)                    
+                     messages.info(request,"Please check your registered Email ")                    
+                     return redirect('/')
               
        else:
               return render(request,'core/forget_pwd.html',{'header':'Forget Password'})

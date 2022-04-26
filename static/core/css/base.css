@@ -52,30 +52,27 @@ input[list] {
  background-color: #a1a1a1;
 }
 
-.buttonstyle {   
-    background-color: rgb(185, 226, 238);
-    padding: 6px 16px;
-    border-radius: 7px;
-    color: black;
+.buttonstyle {
+    text-decoration: none;    
+    border-radius: 5px;   
+   padding: 2px 6px; 
     border: 1px solid black;   
 }
 .buttonstyle:hover{
     cursor: pointer;
+    border: 1px solid red; 
     color: red;
 }
 
 .ancorbutton{
-  text-decoration: none;
-  padding: 3px 8px; 
-  border-radius: 5px;
-  border: 1px solid black;
-  color: black;
-  background-color: rgb(185, 226, 238);
+  text-decoration: none;  
+   
 }
 
 .ancorbutton:hover{
   cursor: pointer;
     color: red;
+   
 }
 
 .noselect {   
@@ -181,7 +178,7 @@ input[list] {
 }
 .base-modal-content {
   position: relative;  
-  background-color: #e4e4e4;
+  background-color: #f5f5f5; 
   margin: 0 auto;
   top:0px;  
   padding: 0px;  
@@ -198,23 +195,20 @@ input[list] {
   padding: 0px;
   border-top-left-radius: 11px;
   border-top-right-radius: 11px;
-  background-color: lightblue;
+  background-color: #e4e4e4;
   color: rgb(15, 15, 15);
   text-align: center;  
-  height: 40px;
+  height: 35px;
   }
 .base-modal-body {
   padding: 5px;  
-  overflow-y:auto;    
-  border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
-  background-color: #e4e4e4;
-      
+  overflow-y:auto;     
+  background-color: #f5f5f5; 
   }
 
 .base-modal-footer{
   height: 40px; 
-  background-color: #e4e4e4;
+  background-color: #f5f5f5;   
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
   bottom: 0;
