@@ -133,13 +133,12 @@ def add_consignee(request):
               
                      
                      con=Consignee_form(request.POST)
-                     if con.is_valid():                     
-                            #cons_name=con.cleaned_data['consignee_name']
-                            #cli_id=con.cleaned_data['client_id']
+                     if con.is_valid():         
+                          
                             con.save()
-                            messages.error(request,'consignee add success')      
+                            messages.error(request,'Consignee add success')      
                      else:
-                            messages.error(request,'consignee already exists.')          
+                            messages.error(request,'Consignee already exists.')          
 
 
                            

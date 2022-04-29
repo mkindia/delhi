@@ -15,7 +15,7 @@
 
         </div>
         <div class="base-modal-body">
-            <form name="order_form" action="/orders/order_item/" method="POST" onsubmit="validateForm()">
+            <form name="order_form" id="order-item-form" action="/orders/order_item/" method="POST" onsubmit="validateForm()">
                 {% csrf_token %}
                                 
                 <div class="col-l-6 col-m-6 col-s-6 col-" style="float:left; padding:2px">
@@ -76,7 +76,7 @@
                 
                 <div class="col-l-4 col-m-4 col-s-4 col-4" style="float:left; padding: 2px;">
                     <label for="order_unit">Unit</label>
-                    <input id="order_unit" type="text" value="" placeholder="select unit" list="unit_list"
+                    <input id="order_unit" type="search" value="" placeholder="select unit" list="unit_list"
                         required style="text-transform:capitalize;" />
                     <datalist id="unit_list" style="text-transform:capitalize;">
                         <option data-id="1" value="Kg."> </option>>
@@ -86,9 +86,9 @@
 
                 </div>
              
-                <div class="col-l-8 col-m-8 col-s-8 col-" style="float:left; padding:2px">
-                    <label for="comment">Comment</label>
-                    <input type="text" name="itemname" id="comment" placeholder="About orders" class="inputstyle" required>
+                <div class="col-l-12 col-m-12 col-s-12 col-" style="float:left; padding:2px;">
+                    <label for="id_email">Comment</label>
+                    <input type="text" name="itemname" style="background-color: aliceblue; opacity: .7;"  placeholder="About Orders" class="inputstyle">
                 </div>
 
             
@@ -97,19 +97,20 @@
                         style="text-decoration: none; margin-right: 3px; float: left; margin-top:30px;">Add Item
                         &#10009;</a>
 
-                    <button type="submit" class="buttonstyle"
-                        style="float:right; margin-top:22px; margin-right: 10px;">Submit</button>
-
-                    <a  type="button" class="ancor" onclick="history.back()"
-                        style="text-decoration: none; float:right; margin-right:10px; margin-top:30px;"><i> Exit
-                        </i></a>
-
+                   
                 </div>
             </form>
 
 
         </div>
+        <div class="base-modal-footer">
+        <a  type="button" class="buttonstyle" onclick="history.back()"
+            style="text-decoration: none; float:right; margin-right:10px;"><i> Exit
+            </i></a>
+            <button type="submit" class="buttonstyle" form="order-item-form"
+            style="float:right; margin-right: 10px;">Submit</button>
 
+        </div>
     </div>
 
 </div>

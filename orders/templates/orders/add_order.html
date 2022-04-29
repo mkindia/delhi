@@ -9,12 +9,12 @@
     <div class="base-modal-content col-l-6 col-m-9 col-s-11" style="margin-top:5px;">
         <div class="base-modal-header">
             <h style="position: relative; font-weight: bold; margin:0; top: 25%; -ms-transform: translateY(-50%);transform: translateY(-50%);" >
-                Add Item Orders
+                Select Consignee
             </h>
 
         </div>
         <div class="base-modal-body">
-            <form method="POST">
+            <form method="POST" id="add-order-form">
                 {% csrf_token %}
                 <div class="col-l-6 col-m-6 col-s-6 col-" style="float:left; padding:2px">
                     <label for="id_email">Select Consignee</label>
@@ -38,7 +38,7 @@
 
                 <div class="col-l-12 col-m-12 col-s-12 col-" style="float:left; padding:2px;">
                     <label for="id_email">Comment</label>
-                    <input type="text" name="itemname" style="color:yellow;  background-color:rgb(0, 0, 0); opacity: .7;"  placeholder="About Orders" class="inputstyle" required>
+                    <input type="text" name="itemname" style="background-color: aliceblue; opacity: .7;"  placeholder="About Orders" class="inputstyle">
                 </div>
 
 
@@ -46,19 +46,22 @@
                     <a class="ancor smallbuttonstyleround" href="#"
                         style="text-decoration: none; margin-right: 3px; float: left; margin-top:30px;">Add Consignee
                         &#10009;</a>
-                    <button  type="submit" class="buttonstyle"
-                        style="float:right; margin-top:22px; margin-right: 10px;">Add Order Item</button>
+                   
 
-                    <a  class="ancor" onclick="history.back(-3)"
-                        style="text-decoration: none; float:right; margin-right:10px; margin-top:30px;"><i> Exit
-                        </i></a>
+                   
 
                 </div>
             </form>
 
 
         </div>
-
+        <div class="base-modal-footer">
+            <a  class="buttonstyle" onclick="history.back(-3)"
+            style="text-decoration: none; float:right; margin-right:10px;"><i> Exit
+            </i></a>
+            <button  type="submit" class="buttonstyle" form="add-order-form"
+            style="float:right; margin-right: 10px;">Add Order Item</button>
+        </div>
     </div>
 
 </div>

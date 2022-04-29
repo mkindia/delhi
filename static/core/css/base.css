@@ -17,7 +17,7 @@ input[list] {
   color:#535353;  
   border-radius:7px;
   padding: 4px;
-  height: 33px;
+  font-size: 17px; 
   width: 100%;  
   -webkit-appearance: none;
   appearance: none;
@@ -55,8 +55,10 @@ input[list] {
 .buttonstyle {
     text-decoration: none;    
     border-radius: 5px;   
-   padding: 2px 6px; 
-    border: 1px solid black;   
+    padding: 2px 6px; 
+    border: 1px solid black;
+    font-size: 17px;
+    background-color: white;
 }
 .buttonstyle:hover{
     cursor: pointer;

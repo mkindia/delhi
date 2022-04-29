@@ -13,7 +13,7 @@ import uuid
 import json
 from .forms import *
 from .models import *
-from clients.models import Client,Consignee
+from clients.models import Client, Client_Token,Consignee
 import os
 
 # for sending mail
@@ -56,28 +56,29 @@ def signup(request):
     if request.method == "POST":           
            fm = UsersCreationForm(request.POST)
            if fm.is_valid():                     
-
                      try:
                             c=request.POST.get('client')
-                            uv=User_Verification.objects.get(client_id=c)
-                            messages.error(request,'Invalid Client')
-                     except:                            
-                            try:   
-                                   cid=Client.objects.get(id = c)
+                            uv=Client_Token.objects.get(token=c)
+                            if(uv.is_verified):
+                                   messages.error(request,'User Allready Created for this Token')
+                            else:
+                                   uv.is_verified=True
+                                   uv.save()
+                                   cid=Client.objects.get(id = uv.client_id_id)
                                    nu=fm.save()
                                    cid.user_id.add(nu)
                                    token=uuid.uuid4()
-                                   ver_obj=User_Verification(user_id=nu,client_id=c,email=nu.email,token=token)
-                                   ver_obj.save()              
+                                   ver_obj=User_Verification(user_id=nu,client_id=uv.client_id_id,email=nu.email,token=token)
+                                   ver_obj.save()         
                                    mail_for_verify_user('Verify Your account',nu.email,'account_verify','Hi Click on Link To Verify Your Account',token)
                                    messages.success(request,'Account Verify mail Sent to'+' '+ nu.email)  
                                    request.session.flush()
                                    request.session.clear_expired()
                                    return redirect('/')
-                            except:
-                                   cid=None
-                                   messages.error(request,'Client_id Not Valid Plese Fill Valid id')
-                            
+                     except:
+                                   uv=None
+                                   messages.error(request,'Invalid Token')                     
+                                   
                
            
           

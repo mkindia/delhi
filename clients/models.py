@@ -71,8 +71,8 @@ class Consignee(models.Model):
     error_messages={
             'unique': "A consignee already exists.",
         },)
-    station=models.ForeignKey(Station,on_delete=models.CASCADE)
-    transport=models.ForeignKey(Transport,on_delete=models.CASCADE)            
+    station=models.ForeignKey(Station,on_delete=models.SET_NULL,null=True,blank=True)
+    transport=models.ForeignKey(Transport,on_delete=models.SET_NULL,null=True,blank=True)            
     private_marka = models.CharField(max_length=100,null=True,blank=True)
     is_client = models.BooleanField(default=False) 
     
