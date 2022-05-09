@@ -1,8 +1,10 @@
-from array import array
+
 from http import client
+from pyexpat.errors import messages
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.views.decorators.cache import cache_control
+from django.contrib import messages
 from clients.models import Client, Consignee 
 import json
 
@@ -17,7 +19,7 @@ def add_order(request):
             tr = consignee.replace(" ","").split("/")
             try:
                 con_id = Consignee.objects.get(consignee_name=tr[0])                           
-               
+                         
             except:
                 con_id=None
             
@@ -47,15 +49,23 @@ def order_item(request):
         if request.headers.get('x-requested-with') == 'XMLHttpRequest':
             data = json.loads(request.body.decode("utf-8"))
             con_id = data['consignee_id']
+            order_id=data['order_id']
+            
             
             print(data)
             print(con_id)
-            data={'client':con_id}
-            print(data)
+            if order_id ==None:
+                data={'order_id':'New-568'}                
+            else:
+                data={'order_id':'previous-order'}                
+           
             return JsonResponse(data)
                        
         else :
-           return render(request,'orders/order_item.html/')
+            
+            client=Client.objects.filter(user_id=request.user)           
+            consigne = Consignee.objects.filter(client_id__in=client)
+            return render(request,'orders/order_item.html/',{'clients':client,'consignes':consigne})
     
     else :
 

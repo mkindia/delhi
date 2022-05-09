@@ -144,8 +144,12 @@ function CustomAlert() {
   {
   
   setTimeout(function () {
-
-        document.getElementById('maindiv').parentNode.removeChild(maindiv);
+    var element =  document.getElementById('maindiv');
+    if (typeof(element) != 'undefined' && element != null)
+    {
+      document.getElementById('maindiv').parentNode.removeChild(maindiv);
+    }
+      
     }, duration);
   }
     

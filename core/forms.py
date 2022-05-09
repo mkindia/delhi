@@ -1,4 +1,6 @@
 
+from ast import pattern
+from logging import PlaceHolder
 from django import forms
 from django.contrib.auth import models
 from django.core.validators import RegexValidator
@@ -65,10 +67,10 @@ class UsersCreationForm(UserCreationForm):
   email=forms.EmailField(label='Email',widget=forms.EmailInput(attrs={'class':'inputstyle'}))
   first_name=forms.CharField(widget=forms.TextInput(attrs={'class':'inputstyle','text-transform':'capitalize'}))
   last_name=forms.CharField(widget=forms.TextInput(attrs={'class':'inputstyle'})) 
-    
+  phone_number=forms.IntegerField(widget=forms.NumberInput(attrs={'class':'inputstyle', 'type':"tel", 'pattern':'[7-9]{1}[0-9]{9}','placeHolder':'10 digit mobile no.'}))  
   class Meta:
     model =  Custom_User
-    fields = ('user_name','email','first_name','last_name')
+    fields = ('user_name','email','first_name','last_name','phone_number')
 
     def clean_password2(self):
         # Check that the two password entries match

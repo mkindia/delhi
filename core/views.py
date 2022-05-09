@@ -57,7 +57,7 @@ def signup(request):
            fm = UsersCreationForm(request.POST)
            if fm.is_valid():                     
                      try:
-                            c=request.POST.get('client')
+                            c=request.POST.get('token')
                             uv=Client_Token.objects.get(token=c)
                             if(uv.is_verified):
                                    messages.error(request,'User Allready Created for this Token')

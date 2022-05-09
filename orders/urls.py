@@ -2,7 +2,7 @@ from os import name
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
-from .views import *
+from .views import add_order,order_item
 
 urlpatterns = [
     path('add_order/',add_order, name='addorder'),

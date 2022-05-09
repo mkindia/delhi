@@ -14,7 +14,7 @@
   </div>        
     <div class= "base-modal-body">
      
-<form method="POST" onsubmit="submitForm()">
+<form method="POST" id="signup-form" onsubmit="submitForm()">
    {% csrf_token %}   
     {% for field in fm %}   
     <div class="col-l-6 col-m-6 col-s-6 col-" style="float:left; padding:2px">      
@@ -27,17 +27,17 @@
     {% endfor %}
 
     <div class="col-l-6 col-m-6 col-s-6 col-" style="float:left; padding:2px">      
-      <label for="id_client_id">Client_ID:</label>     
-      <input type="text" name="client" class="inputstyle" required id="id_client_id">      
+      <label for="id_client_id">Token:</label>     
+      <input type="text" name="token" class="inputstyle" required id="id_token">      
      
    </div>
-      
-     <button type="submit" id="submitbtn" class="buttonstyle" [disabled]="Form.valid" style="float:right; margin-top: 20px; margin-right: 2px;">Submit</button>
-    <a id="signupBtn" class="ancor"  href="{% url 'signin' %}" style="float:right; text-decoration: none; margin-right:10px; padding-top: 25px;" >Login</a>
+  
     
 </form>
   </div>
-  <div class="base-modal-footer" style="height: 10px;">
+  <div class="base-modal-footer">        
+    <button type="submit" id="submitbtn" form="signup-form" class="buttonstyle" [disabled]="Form.valid" style="float:right; margin-right: 10px;">Submit</button>
+    <a id="signupBtn" class="ancor"  href="{% url 'signin' %}" style="float:right; text-decoration: none; margin-right:10px;" >Login</a>
   </div>
 </div>
 </div>

@@ -67,6 +67,8 @@ class Custom_User(AbstractBaseUser):
     email=models.EmailField(blank=True, null=True, verbose_name='email address',max_length=255,unique=True,)
     first_name=LowerCase(blank=True, null=True,max_length=150, verbose_name='first name')
     last_name=LowerCase(blank=True, null=True,max_length=150, verbose_name='last name')
+    phoneNumberRegex = RegexValidator(regex = r"^\+?1?\d{9,15}$")
+    phone_number = models.CharField(validators = [phoneNumberRegex], null=True, blank=True,  max_length = 16, unique = True)
     user_img = models.ImageField(upload_to='user', blank=True, null=True)       
     password = models.CharField(max_length=150)
     is_admin = models.BooleanField(default=False)

@@ -31,8 +31,7 @@ class Client(models.Model) :
     zipcode = models.CharField("zipcode", max_length=10, default="", blank=True, null=True)
     email=models.EmailField(blank=True, null=True, verbose_name='email address',max_length=255,unique=True)   
     phoneNumberRegex = RegexValidator(regex = r"^\+?1?\d{9,15}$")
-    phone_number = models.CharField(validators = [phoneNumberRegex], null=True, blank=True,  max_length = 16, unique = True)
-    whatsapp_number = models.CharField(validators = [phoneNumberRegex], null=True, blank=True,  max_length = 16, unique = True)
+    phone_number = models.CharField(validators = [phoneNumberRegex], null=True, blank=True,  max_length = 16, unique = True)   
     client_des = models.CharField(max_length=150,blank=True,null=True)
     date_joined = models.DateTimeField(auto_now_add=True, blank=True ,null=True)
     def __str__(self):

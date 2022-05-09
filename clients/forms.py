@@ -2,7 +2,7 @@ from dataclasses import field, fields
 from pyexpat import model
 from django import forms
 
-from .models import *
+from .models import Client_Group,Client,Client_Token,Consignee,Transport,Station
 
 class Client_Form(forms.ModelForm):
     client=forms.CharField(label='Client Name',widget=forms.TextInput(attrs={'class':'inputstyle', 'style':'text-transform:capitalize;'}))
