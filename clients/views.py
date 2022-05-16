@@ -36,6 +36,7 @@ def admin_dashboard(request):
     clients = Client.objects.all()
     return render(request,'clients/admin_dashboard.html/',{'client':clients})
 
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def add_client(request):
 
        if request.user.is_authenticated:
@@ -51,28 +52,32 @@ def add_client(request):
                             messages.warning(request,'Client All ready exist ' + '[ ' +cli_name.client_name+ ' ]')                     
                             #return redirect('/clients/add_client/')
                      except :
+                            print('frist error')
                             cli_name = None
                             try:
                                           
                                    g_id=request.POST.get('client_group')
+                                   
                                    g_inst=Client_Group.objects.only('id').get(id=g_id)         
                                    
                                    t_id=request.POST.get('transport')
+                                   
                                    t_inst=Transport.objects.only('id').get(id=t_id)
 
                                    s_id=request.POST.get('station')
                                    s_inst=Station.objects.only('id').get(id=s_id)
-                                   
-                                   client=Client.objects.create(client_name=request.POST.get('client'),client_group=g_inst)
+                                  
+                                   #client=Client.objects.create(client_name=request.POST.get('client'),client_group=g_inst)
                             
-                                   client.user_id.add(request.user.id)
+                                   #client.user_id.add(request.user.id)
 
-                                   consignee=Consignee.objects.create(client_id=client,consignee_name=request.POST.get('client'),transport=t_inst,station=s_inst,is_client=True)             
+                                   #consignee=Consignee.objects.create(client_id=client,consignee_name=request.POST.get('client'),transport=t_inst,station=s_inst,is_client=True)             
                                    #consignee.save()    
-                                          
-                                   messages.success(request, 'Client Added Success')        
+                                   
+                                   messages.success(request, 'Client Added Success')                                   
+                                   return redirect('/')                                       
                             except :
-
+                                   print('errror')
                                    messages.warning(request,'Data_error')
                                    return render(request,'clients/add_client.html/',{'c_g':c_g,'transport':trns,'station':station})                             
 
@@ -81,12 +86,13 @@ def add_client(request):
                      
               
                      
-                     
+            
               return render(request,'clients/add_client.html/',{'c_g':c_g,'transport':trns,'station':station})
 
        else :
               return redirect('/')
 
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def genrate_client_token(request):
        if request.user.is_authenticated:
 
@@ -122,23 +128,33 @@ def genrate_client_token(request):
        else:
               return redirect('/')
 
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def add_consignee(request):
 
        if request.user.is_authenticated:
               client=Client.objects.filter(user_id=request.user.id)
               station=Station.objects.all()
               trns=Transport.objects.all() 
-                     
+              Con=False
               if request.method == 'POST':
-              
                      
-                     con=Consignee_form(request.POST)
-                     if con.is_valid():         
-                          
-                            con.save()
-                            messages.error(request,'Consignee add success')      
-                     else:
-                            messages.error(request,'Consignee already exists.')          
+                     cli=Consignee.objects.filter(client_id=request.POST.get('client_id'))
+
+                     for cl in cli:                            
+                            if cl.consignee_name == request.POST.get('consignee_name'):
+                                  Con=True
+                                  messages.error(request,'Consignee already exists.')
+                                  return render(request,'clients/add_consignee.html/',{'clients':client,'stations':station,'transports':trns})
+                           
+                     if Con == False:
+
+                            con=Consignee_form(request.POST)
+                            if con.is_valid():         
+                                   
+                                   con.save()
+                                   messages.error(request,'Consignee add success')      
+                            else:
+                                   messages.error(request,'Consignee already exists.')          
 
 
                            

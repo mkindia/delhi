@@ -1,6 +1,6 @@
 {% extends 'core/base.html' %}
 
-{% block title %}home{% endblock title %}
+{% block title %}admin{% endblock title %}
 
 {% block main_content %}
 
@@ -36,17 +36,56 @@
   <br><br><br>
   <button onclick="c_prompt.render('Aleart Box','Hello World','changeText')">CustomePromot</button>
   <button onclick="c_alert.render('Aleart Box','Hello World',2000)">CustomeAlert</button>
-  {% include 'clients/dtar.html/' %}
-  
-</div>
+  <button onclick="fetchHtml('/clients/add_client')">getpage</button>
+  <button style="position: absolute; z-index: 999999;" onclick="hide()">hide</button>
 
+  <div>
+   
+  <div id="showpage">
+   
+  </div>
   
-
+   </div>
 {% endblock main_content%}
+
 
 {% block main_scripts %}
 
 <script>
+
+function hide(){
+  document.getElementById('showpage').style.display='none';
+}
+
+function fetchHtml(page) {
+
+ fetch(page)
+  .then((response) => {
+    return response.text();
+  })
+  .then((html) => {
+    document.getElementById('showpage').innerHTML = html ;
+    document.getElementById('showpage').style.display='block';
+    var scripts = document.getElementById("showpage").querySelectorAll("script");
+    for (var i = 0; i < scripts.length; i++) {
+    if (scripts[i].innerText) {
+      eval(scripts[i].innerText);
+    } else {
+      fetch(scripts[i].src).then(function (data) {
+        data.text().then(function (r) {
+          eval(r);
+        })
+      });
+
+    }
+    // To not repeat the element
+    scripts[i].parentNode.removeChild(scripts[i]);
+   
+  }
+  });
+ 
+}
+
 
 function changeText(val){ 
 	alert(val);
@@ -83,6 +122,9 @@ function doStuff(val){
     }
   });
 
+
 </script>
 
+
 {% endblock main_scripts %}
+

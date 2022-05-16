@@ -5,21 +5,59 @@
 {% block main_content %} 
 
 
+<div id="showpage">
+
+</div>   
+
+<!--
 {% if user.is_authenticated and user.is_staff %}
 
 {% include 'core/staff_dashboard.html' %}
 
 {% elif user.is_authenticated and user.is_admin %}
 
+
 {% include 'clients/admin_dashboard.html' %}
- 
+
 {% elif user.is_authenticated %}
 {% include 'clients/client_dashboard.html' %}
 {% endif%}
-
+-->
 
 {% endblock main_content%}
 
 {% block main_scripts %}
-   
+   <script>
+    function submit(){alert('hi')}
+   //let sin= document.getElementById('loginBtn').onblur = fetchHtml('signin/');
+  
+    function fetchHtml(page) {
+
+fetch(page)
+  .then((response) => {
+    return response.text();
+  })
+  .then((html) => {
+    document.getElementById('showpage').innerHTML = html;    
+    var scripts = document.getElementById("showpage").querySelectorAll("script");
+    for (var i = 0; i < scripts.length; i++) {
+      if (scripts[i].innerText) {
+        eval(scripts[i].innerText);
+      } else {
+        fetch(scripts[i].src).then(function (data) {
+          data.text().then(function (r) {
+            eval(r);
+          })
+        });
+
+      }
+      // To not repeat the element
+      scripts[i].parentNode.removeChild(scripts[i]);
+
+    }
+  });
+
+}
+
+   </script>
 {% endblock main_scripts %}

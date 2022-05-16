@@ -17,7 +17,7 @@
     </div>
     <div class="base-modal-body">
 
-      <form name="Consignee_form" method="POST" onsubmit="submitdata()"> 
+      <form name="Consignee_form" id="consignee_form" method="POST" onsubmit="submitdata()"> 
         {% csrf_token %}
 
         <div>
@@ -87,20 +87,22 @@
 
 
 
-        <div>
-          <a class="ancor smallbuttonstyleround" href="#"
-            style="text-decoration: none; margin-right: 3px; float: left; margin-top:30px;">Add Transport &#10009;</a>
-          <a class="ancor smallbuttonstyleround" href="#"
-            style="text-decoration: none; margin-right: 3px; float: left; margin-top:30px;">Add Station &#10009;</a>
-
-          <button type="submit" class="buttonstyle"
-            style="float:right; margin-top:22px; margin-right: 10px;">Submit</button>
-
-          <a href="/" class="ancor" style="text-decoration: none; float:right; margin-right:10px; margin-top:30px;"><i>
-              Exit </i></a>
-        </div>
+       
 
       </form>
+    </div>
+    <div class="base-modal-footer">
+      <!---
+        <a class="ancor smallbuttonstyleround" href="#"
+        style="text-decoration: none; margin-right: 3px; float: left; margin-top:30px;">Add Transport &#10009;</a>
+      <a class="ancor smallbuttonstyleround" href="#"
+        style="text-decoration: none; margin-right: 3px; float: left; margin-top:30px;">Add Station &#10009;</a>
+      -->
+      <button type="submit" class="buttonstyle" form="consignee_form" 
+        style="float:right; margin-right: 10px;">Submit</button>
+
+      <a href="/" class="ancor" style="text-decoration: none; float:right; margin-right:10px;"><i>
+          Exit </i></a>
     </div>
   </div>
 </div>

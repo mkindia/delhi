@@ -20,7 +20,7 @@
                 </div>
                 <div style="float:right">
                     <a  href="/" class="ancor" style="text-decoration: none; float:left; margin-right:10px; margin-top:30px;" ><i> Exit </i></a>
-                    <button type="submit" class="buttonstyle" style="float:right; margin-top:22px; margin-right: 10px;">Submit</button>
+                    <button type="submit" class="buttonstyle" id="fp_submit" style="float:right; margin-top:22px; margin-right: 10px;">Submit</button>
                    
                 </div>
             </form>        
@@ -37,7 +37,8 @@
 
 {% endblock main_content%}
 
-
 {% block main_scripts %}
-    
+   <script>
+       document.getElementById('fp_submit').addEventListener('click',function dd(){document.getElementById('loader').style.display='block'})
+   </script>
 {% endblock main_scripts %}

@@ -1,6 +1,6 @@
 {% extends 'core/base.html' %}
 
-{% block title %}home{% endblock title %}
+{% block title %}signin{% endblock title %}
 
 {% block main_content %}
 
@@ -13,7 +13,7 @@
       {% if messages %}{% for message in messages %}
       <div style="text-align: center; padding: 5px; color: red;"> {{message}} </div>
       {% endfor %}{% endif %}
-      <form method="POST">
+      <form method="POST" id="singin">
         {% csrf_token %}
        
           {% for field in fm %}
@@ -43,7 +43,7 @@
       <div style="float:right; margin-right: 10px;">
         <a href="/" class="ancor"
           style="text-decoration: none; float:left; margin-right:10px;"><i> Exit </i></a>
-        <button id="submituser" type="Submit" onclick="hidesigninmodel()" class="buttonstyle"
+        <button id="submituser" formaction="signin/" form="singin" type="Submit" class="buttonstyle"
           style="float:right; margin-right:1px;">Submit</button>
       </div>
     </div>
@@ -55,12 +55,7 @@
 {% block main_scripts %}
 
 <script>
-  var loginmodal = document.getElementById("loginModal");
-var loginbtn = document.getElementById("loginBtn");
-
-  loginbtn.onclick = function(event) {  
- loginmodal.style.display = "block";
-}
+ 
 </script>
 
 {% endblock main_scripts %}

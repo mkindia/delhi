@@ -21,27 +21,30 @@
 
 <body>
   {% include 'core/topnavbar.html' %}
-  <div style="position:fixed; top: 45px; bottom: 1px;  left: 1px; right: 1px; overflow-y: auto;  background-color: rgb(0,0,0); background-color: rgba(0,0,0,0.1);" >
+
+
+  <div
+    style="position:fixed; top: 45px; bottom: 1px;  left: 1px; right: 1px; overflow-y: auto;  background-color: rgb(0,0,0); background-color: rgba(0,0,0,0.1);">
     {% block main_content %}
-    
-    {% endblock main_content%}
+
+    {% endblock main_content %}
   </div>
 
 
-  <div id="loader" style="position:absolute; z-index:999999; top:0; bottom:0; left:0;right:0; background-color: rgba(88, 88, 88, 0.808);display:none;">
+  <div id="loader"
+    style="position:absolute; z-index:999999; top:0; bottom:0; left:0;right:0; background-color: rgba(88, 88, 88, 0.808);display:none;">
     <div class="loader"></div>
   </div>
 
-  
-  
-  {% if messages %}
-  {% for message in messages %}
-  <script>c_alert.render('Message','{{message}}', 5000)</script>
-  {% endfor %}
-  {% endif %}
+
+
+
+  <script src="{% static 'core/js/base.js' %}"></script>
+
+
 
   {% if user.is_authenticated %}
-
+  <script src="{% static 'core/js/fetchApi.js' %}"></script>
   <!--The menu model-->
   <div id="menuModal" class="menumodal">
     <!-- Modal content -->
@@ -88,15 +91,14 @@
           <a href="/profile_change/details/" class="ancor"
             style="text-decoration: none; float :left; margin-left:10px; margin-bottom:10px;"> <small> Manage Profile
             </small></a>
-            
+
           <a href="/changepass/" class="ancor"
             style="text-decoration: none; margin-left:10px;  float:left; margin-bottom:10px;"> <small> Change Password
             </small></a>
 
-          <a href="/user_logout/" type="button" class="buttonstyle"
-            style="float:right; margin-right:10px;">Signout</a>
-          <a id="profile_exit" class="buttonstyle"
-            style="text-decoration: none; float:right; margin-right:10px;"><i> Exit </i></a>
+          <a href="/user_logout/" type="button" class="buttonstyle" style="float:right; margin-right:10px;">Signout</a>
+          <a id="profile_exit" class="buttonstyle" style="text-decoration: none; float:right; margin-right:10px;"><i>
+              Exit </i></a>
 
 
         </div>
@@ -106,24 +108,17 @@
     </div>
   </div>
 
-  
-  
-  
-  
-  <script src="{% static 'core/js/fetchApi.js' %}"></script>
-  <script src="{% static 'core/js/base.js' %}"></script>
-
   <script>
-    
+   
     var proclose = document.getElementById("profile_exit");
     proclose.onclick = function (event) {
-      document.getElementById("profile-modal").style.display="none";
+      document.getElementById("profile-modal").style.display = "none";
     }
 
     var profilebtn = document.getElementById("profilebtn");
 
     profilebtn.onclick = function (event) {
-      document.getElementById("profile-modal").style.display="block"
+      document.getElementById("profile-modal").style.display = "block"
     }
 
 
@@ -132,21 +127,29 @@
     var profilebtn = document.getElementById("profilebtn");
 
     profilebtn.onclick = function (event) {
-      document.getElementById("profile-modal").style.display="block";
+      document.getElementById("profile-modal").style.display = "block";
     }
 
     var profilemodal = document.getElementById("profile-modal");
-       
-    window.addEventListener("click", function(event) {
-    if (event.target == profilemodal) {
-      profilemodal.style.display = "none";
-    }
-});
 
+    window.addEventListener("click", function (event) {
+      if (event.target == profilemodal) {
+        profilemodal.style.display = "none";
+      }
+    });
+
+    
   </script>
   {% endif %}
 
   {% block main_scripts %} {% endblock main_scripts %}
+
+
+  {% if messages %}
+  {% for message in messages %}
+  <script>c_alert.render('Message', '{{message}}', 5000)</script>
+  {% endfor %}
+  {% endif %}
 
 
 </body>

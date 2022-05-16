@@ -1,8 +1,9 @@
 {% extends 'core/base.html' %}
-{% block title %}add client{% endblock title %}
 
-{% block main_content %} 
-    
+{% block title %}admin{% endblock title %}
+
+{% block main_content %}
+
     <div class="basemodal">
         <div class="base-modal-content col-l-6 col-m-9 col-s-11" style="margin-top: 5px;" >
           <div class="base-modal-header">
@@ -16,7 +17,7 @@
           </div>        
               <div class= "base-modal-body">
                         
-                <form method="POST" id="client-form" onsubmit="submitdata()">
+                <form method="POST" action="clients/add_client/"  id="client-form">
                   {% csrf_token %}
                   
                   <div>
@@ -80,33 +81,29 @@
 
                   
                 </div>
-
-                
-              
-          
-                  
-                                         
+                                   
                   <div>
                     <a class="ancor smallbuttonstyleround" href="#" style="text-decoration: none; margin-right: 3px; float: left; margin-top:30px;">Add Transport &#10009;</a>
                     <a class="ancor smallbuttonstyleround" href="#" style="text-decoration: none; margin-right: 3px; float: left; margin-top:30px;">Add Station &#10009;</a>                   
                   </div>
-                  
+                
                 </form>
               </div>             
         </div>
         <div class="base-modal-footer">
-          <button type="submit" class="buttonstyle" form="client-form" style="float:right; margin-right: 10px;">Submit</button>
+          <button type="submit" id="ac_submit"  class="buttonstyle" form="client-form" style="float:right; margin-right: 10px;">Submit</button>
               
-          <a  href="/" class="ancor" style="text-decoration: none; float:right; margin-right:10px;" ><i> Exit </i></a>
+          <a type="button" class="ancor" onclick="history.back()" return false; style="text-decoration: none; float:right; margin-right:10px;" ><i> Exit </i></a>
         </div>
     </div>
 
-      
-{% endblock main_content%}
+    {% endblock main_content%}
+
 
 {% block main_scripts %}
-<script>
 
+<script>
+document.getElementById('ac_submit').addEventListener('click',submitdata);
 function submitdata(){
 let g_id=selecteddatalistid('id_client_group','group_list')
 let t_id=selecteddatalistid('id_transport','transport_list')
@@ -117,7 +114,5 @@ document.getElementById('id_station').value=s_id
 
 alert(g_id+t_id+s_id)
 }
-
 </script>
-   
 {% endblock main_scripts %}

@@ -10,7 +10,7 @@
     {% endif %} </a>
   <a id="menuBtn" class="menuBtn noselect">&#9776;</a>
   {% else %}
-  <a id="loginBtn" href="{%url 'signin' %}" type="button" style="float: right; margin-top: 13px; margin-right: 10px;" class="ancorbutton noselect"> Login </a>
+  <a id="loginBtn" onclick="fetchHtml('signin/')" type="button" style="float: right; margin-top: 13px; margin-right: 10px;" class="ancorbutton noselect"> Login </a>
 
   {% endif %}
 

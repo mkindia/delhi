@@ -9,291 +9,335 @@
     <!-- Modal content -->
     <div class="base-modal-content col-l-6 col-m-9 col-s-11" style="margin-top:5px;">
         <div class="base-modal-header">
-            <h style="position: relative; font-weight: bold; margin:0; top: 25%; -ms-transform: translateY(-50%);transform: translateY(-50%);" >
+            <h
+                style="position: relative; font-weight: bold; margin:0; top: 25%; -ms-transform: translateY(-50%);transform: translateY(-50%);">
                 Add Orders
             </h>
 
         </div>
-        <div class="base-modal-body"> 
-            <form name="order_form" id="order-item-form"  method="POST" onsubmit="event.preventDefault(); addRow()">
+        <div class="base-modal-body">
+            <form name="order_form" id="order-item-form" method="POST">
                 {% csrf_token %}
                 <div id="Con_div">
-                <div class="col-l-6 col-m-6 col-s-6 col-7" style="float:left; padding:2px;">
-                    <label for="id_email">Select Consignee</label>
-                    <input id="consignee_input" name="consignee_input" placeholder="Select Consignee" type="search"  value="" list="consignee_id" required
-                        style="text-transform:capitalize;" />
-                    <datalist id="consignee_id" style="text-transform:capitalize;">
-                        
-                        {% for cli in consignes %}
-           
-                        <option data-id="{{cli.id}}" value="{{cli.consignee_name}} / {{cli.client_id}}"> </option>>
-                       
-                        {% endfor %}
-                    </datalist>
+                    <div class="col-l-6 col-m-6 col-s-6 col-7" style="float:left; padding:2px;">
+                        <label for="id_email">Select Consignee</label>
+                        <input id="consignee_input" name="consignee_input" placeholder="Select Consignee" type="search"
+                            value="" list="consignee_id" required style="text-transform:capitalize;" />
+                        <datalist id="consignee_id" style="text-transform:capitalize; ">
 
-                </div>
-                
-                <div class="col-l-6 col-m-6 col-s-6 col-5" style="float:left; padding:1px;">
-                    <label for="id_email">Date</label>
-                    <input type="Date" name="date" class="inputstyle" required id="id_date">
-                </div>
-                </div>        
-                <div class="col-l-6 col-m-6 col-s-5 col-7" style="float:left; padding:2px">
-                    <label for="item_input">Item name</label>
-                    <input id="item_input" type="search" onchange="item_value('item_input','item_list')"
-                        value="" placeholder="select item" list="item_list" required
-                        style="text-transform:capitalize;" />
-                    <datalist id="item_list" style="text-transform:capitalize;">
-                        <option data-id="1" value="Sinhasan"> </option>
-                        <option data-id="2" value="Pooja Peti"> </option>
-                        <option data-id="5" value="Crusher"> </option>
-                        <option data-id="6" value="Pandan"> </option>
-                        <option data-id="7" value="Jhoola"> </option>
-                    </datalist>
-                </div>
-                
-                <div class="col-l-4 col-m-4 col-s-4 col-5" style="float:left; padding:2px">
+                            {% for cli in consignes %}
 
-                    <label for="item_variant">Item Variants</label>
-                    <input id="item_variant" type="search" value="" placeholder="select variant"
-                        list="item_variant_list" required style="text-transform:capitalize;" />
-                    <datalist id="item_variant_list" style="text-transform:capitalize;">
-                        <option data-id="1" value="1 No."> </option>
-                        <option data-id="2" value="2 No."> </option>
-                        <option data-id="5" value="3 No."> </option>
-                        <option data-id="6" value="4 No."> </option>
-                        <option data-id="7" value="5 No."> </option>
-                    </datalist>
+                            <option data-id="{{cli.id}}" value="{{cli.consignee_name}} / {{cli.client_id}}"> </option>>
 
-                   
-                </div>
-                
-                <div class="col-l-2 col-m-2 col-s-3 col-6" style="float:left; padding:2px;">
-                    <label for="item_price">Item Price</label>
-                    <input type="number" min="1" max="1000" step="any", name="itemprice"  placeholder="Enter Price" class="inputstyle" required
-                        id="item_price">
-                   
+                            {% endfor %}
+                        </datalist>
+
+                    </div>
+
+                    <div class="col-l-6 col-m-6 col-s-6 col-5" style="float:left; padding:1px;">
+                        <label for="id_email">Date</label>
+                        <input type="Date" name="date" class="inputstyle" required id="id_date">
+                    </div>
                 </div>
 
-                <div class="col-l-5 col-m-5 col-s-5 col-6" style="float:left; padding:2px">
-                    <label for="per_unit">Per</label>
-                    <input id="per_unit" type="text" value="Kg." disabled='True' list="per_unit_list" required
-                        style="text-transform:capitalize;" />
-                    <datalist id="per_unit_list" style="text-transform:capitalize;">
-                        <option data-id="1" value="Kg."> </option>
-                        <option data-id="2" value="Pcs."> </option>
 
-                    </datalist>
-                </div>
-                   
-                
-
-                
-
-                <div class="col-l-3 col-m-3 col-s-3 col-6" style="float:left; padding:2px">
-
-                    <label for="qty">Qty.</label>
-                    <input type="number" min="1" max="1000" step="any", name="itemname" placeholder="Enter QTY." class="inputstyle" required
-                        id="qty">
-                </div>
-                
-                <div class="col-l-4 col-m-4 col-s-4 col-6" style="float:left; padding: 2px;">
-                    <label for="order_unit">Unit</label>
-                    <input id="order_unit" type="search" value="" placeholder="select unit" list="unit_list"
-                        required style="text-transform:capitalize;" />
-                    <datalist id="unit_list" style="text-transform:capitalize;">
-                        <option data-id="1" value="Kg."> </option>>
-                        <option data-id="2" value="Pcs."> </option>>
-                        <option data-id="5" value="Carton"> </option>>
-                    </datalist>
-
-                </div>
-             
                 <div class="col-l-12 col-m-12 col-s-12 col-" style="float:left; padding:2px;">
                     <label for="id_email">Comment</label>
-                    <input type="text" name="itemname" id="comment" style="background-color: aliceblue; opacity: .7;"  placeholder="About Orders" class="inputstyle">
+                    <input type="text" name="itemname" id="comment" style="background-color: aliceblue; opacity: .7;"
+                        placeholder="About Orders" class="inputstyle">
                 </div>
 
-                <button type="submit" id="additemtolist" class="buttonstyle" form="order-item-form"
-                style="float:right; margin-right: 10px; margin-bottom: 10px;">Add Item</button> 
-           
 
-                <div id="orders_div" class="col-l-12 col-m-12 col-s-12 col-" style="float:left; padding:2px;">
-                    <table id="myTable" style="width: 100%; border-radius: 5px;" border="1px">
+
+
+                <div id="orders_div" class="col-l-12 col-m-12 col-s-12 col-"
+                    style="float:left; border-radius: 5px; padding:2px; height: 100px; overflow-y: auto;">
+                    <table id="myTable" style="width: 100%;  border-radius: 5px;" border="ipx;">
                         <tr style="font-size: 12px;">
                             <th>SN.</th>
                             <th>Item Name</th>
                             <th>Varient</th>
                             <th>Price</th>
-                            <th>Per</th>                           
+                            <th>Per</th>
                             <th>Qty.</th>
-                            <th>Unit</th>                          
+                            <th>Unit</th>
                             <th>...</th>
                         </tr>
-                       
-                       
+                        <tbody></tbody>
                     </table>
                 </div>
-            
+
+
                 <div class="col-l-12 col-m-12 col-s-12 col-" style="float: left; padding: 2px;">
-                   
-                    <a class="ancor smallbuttonstyleround" type="button" onclick="dd()"
-                        style="text-decoration: none; margin-right: 3px; float: left; margin-top:30px;">Add Item
-                        &#10009;</a>                   
+                    <!--
+                    <a class="ancor smallbuttonstyleround" type="button" id="order_ac"
+                        style="text-decoration: none; margin-right: 3px; float: left; margin-top:30px;">Add Client
+                        &#10009;</a>     -->
+
                 </div>
 
-              
+
             </form>
 
 
         </div>
         <div class="base-modal-footer">
-        <a  type="button" class="buttonstyle" onclick="history.back()"
-            style="text-decoration: none; float:right; margin-right:10px;"><i> Exit
-            </i></a>
-            <button type="button" onclick="addRow()" id="submit" class="buttonstyle" form="order-item-form"
-            style="float:right; margin-right: 10px;">Submit</button>
+
+            <a type="button" class="buttonstyle" onclick="history.back()"
+                style="text-decoration: none; float:right; margin-right:10px;"><i> Exit
+                </i></a>
+            <button id="submit" class="buttonstyle" form="order-item-form"
+                style="float:right; margin-right: 10px;">Submit</button>
+            <button type="button" id="select_item" class="buttonstyle"
+                style="float:right; margin-right: 5px; background-color: aquamarine;">select item</button>
 
         </div>
     </div>
 
 </div>
+<div>
+    <div class="basemodal" id="item_modal" style="position: absolute; display: none;">
+        <div class="base-modal-content col-l-6 col-m-9 col-s-11" style="margin-top:5px;">
+            <div class="base-modal-header">
+                <h
+                    style="position: relative; font-weight: bold; margin:0; top: 25%; -ms-transform: translateY(-50%);transform: translateY(-50%);">
+                    Add Items
+                </h>
+            </div>
+            <div class="base-modal-body">
+                <form name="item_form" id="item-form" method="POST">
+                    <div class="col-l-6 col-m-6 col-s-5 col-7" style="float:left; padding:2px">
+                        <label for="item_input">Item name</label>
+                        <input id="item_input" type="search" value="" placeholder="select item" list="item_list"
+                            required style="text-transform:capitalize;" />
+                        <datalist id="item_list" style="text-transform:capitalize;">
+                            <option data-id="1" value="Sinhasan"> </option>
+                            <option data-id="2" value="Pooja Peti"> </option>
+                            <option data-id="5" value="Crusher"> </option>
+                            <option data-id="6" value="Pandan"> </option>
+                            <option data-id="7" value="Jhoola"> </option>
+                        </datalist>
+                    </div>
+
+                    <div class="col-l-4 col-m-4 col-s-4 col-5" style="float:left; padding:2px">
+
+                        <label for="item_variant">Item Variants</label>
+                        <input id="item_variant" type="search" value="" placeholder="select variant"
+                            list="item_variant_list" required style="text-transform:capitalize;" />
+                        <datalist id="item_variant_list" style="text-transform:capitalize;">
+                            <option data-id="1" value="1 No."> </option>
+                            <option data-id="2" value="2 No."> </option>
+                            <option data-id="5" value="3 No."> </option>
+                            <option data-id="6" value="4 No."> </option>
+                            <option data-id="7" value="5 No."> </option>
+                        </datalist>
 
 
-{% endblock main_content%}
+                    </div>
+
+                    <div class="col-l-2 col-m-2 col-s-3 col-6" style="float:left; padding:2px;">
+                        <label for="item_price">Item Price</label>
+                        <input type="number" min="1" max="1000" step="any" , name="itemprice" placeholder="Enter Price"
+                            class="inputstyle" required id="item_price">
+
+                    </div>
+
+                    <div class="col-l-5 col-m-5 col-s-5 col-6" style="float:left; padding:2px">
+                        <label for="per_unit">Per</label>
+                        <input id="per_unit" type="text" value="Kg." disabled='True' list="per_unit_list" required
+                            style="text-transform:capitalize;" />
+                        <datalist id="per_unit_list" style="text-transform:capitalize;">
+                            <option data-id="1" value="Kg."> </option>
+                            <option data-id="2" value="Pcs."> </option>
+
+                        </datalist>
+                    </div>
+
+
+                    <div class="col-l-3 col-m-3 col-s-3 col-6" style="float:left; padding:2px">
+
+                        <label for="qty">Qty.</label>
+                        <input type="number" min="1" max="1000" step="any" , name="itemname" placeholder="Enter QTY."
+                            class="inputstyle" required id="qty">
+                    </div>
+
+                    <div class="col-l-4 col-m-4 col-s-4 col-6" style="float:left; padding: 2px;">
+                        <label for="order_unit">Unit</label>
+                        <input id="order_unit" type="search" value="" placeholder="select unit" list="unit_list"
+                            required style="text-transform:capitalize;" />
+                        <datalist id="unit_list" style="text-transform:capitalize;">
+                            <option data-id="1" value="Kg."> </option>
+                            <option data-id="2" value="Pcs."> </option>
+                            <option data-id="5" value="Carton"> </option>
+                        </datalist>
+
+                    </div>
+                </form>
+            </div>
+            <div class="base-modal-footer">
+                <button type="button" id="exit_item" class="buttonstyle"
+                    style="float:right; margin-right: 10px; margin-bottom: 10px;">Exit</button>
+                <button class="buttonstyle" form="item-form" id="add_item"
+                    style="float:right; margin-right: 10px; margin-bottom: 10px;">Add Item</button>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+    <div id="showpage1">
+
+    </div>
+
+
+    {% endblock main_content%}
 
 
 
-{% block main_scripts %}
-<script>
+    {% block main_scripts %}
+    <script>
 
-    
-   
-   document.getElementById("id_date").valueAsDate = new Date();
-    
-    function item_value(input_id, list_id) {
-
-        itc = selecteddatalistid(input_id, list_id);
-        if (itc != undefined) {
-            //alert(itc)  
+        function reindex() {
+            const ids = document.querySelectorAll("tr > td:nth-child(1)");
+            ids.forEach((e, i) => { e.innerText = (i + 1) });
         }
-        else {
-            alert('Select Valid item')
-            document.getElementById(input_id).focus();
-        }
-    }
 
-    let   order_id=null;
+        function onAddItems(e) {
+
+            e.preventDefault();
+            const item_name = document.getElementById('item_input').value;
+            const item_variant_name = document.getElementById('item_variant').value;
+            const per = document.getElementById('per_unit').value;
+            const item_price = document.getElementById('item_price').value;
+            const item_qty = document.getElementById('qty').value;
+            const order_qty = document.getElementById('order_unit').value;
+
+            tbodyEl.innerHTML += `
+    <tr>
+        <td style="text-align: center; font-size: 12px;"> </td> 
+        <td style="text-align: center; font-size: 12px;"> ${item_name}</td>    
+        <td style="text-align: center; font-size: 12px;"> ${item_variant_name}</td>    
+        <td style="text-align: center; font-size: 12px;"> ${per}</td>     
+        <td style="text-align: center; font-size: 12px;"> ${item_price}</td>    
+        <td style="text-align: center; font-size: 12px;"> ${item_qty}</td>   
+        <td style="text-align: center; font-size: 12px;"> ${order_qty}</td>    
+        <td style="text-align: center; font-size: 12px;"><button class="deleteBtn">X</button></td> 
+    </tr>
     
-    async  function  validateForm() 
-    {
-    let   con_id=selecteddatalistid('consignee_input','consignee_id');
-   
-    let   item_id= selecteddatalistid('item_input','item_list');
-    let   item_price=document.getElementById('item_price').value;
-    
-    let   per_unit_id = selecteddatalistid('per_unit','per_unit_list');
-    let   item_variant_id = selecteddatalistid('item_variant','item_variant_list');
-    
-    let   qty=document.getElementById('qty').value;
-   
-    let    order_unit_id = selecteddatalistid('order_unit','unit_list');
-    let    comment=document.getElementById('comment').value;
-    
-  
-    
-        let data={'order_id':order_id,'consignee_id':con_id,
-        'item_id':item_id,'item_price':item_price,'per_unit_id':per_unit_id,
-        'item_variant_id':item_variant_id,'qty':qty,'order_unit_id':order_unit_id,
-        'comment':comment};
-     
-        await fetch('/orders/order_item/',postoption(data))
-          .then(response => {
-            if (!response.ok) {
-                throw Error(response.statusText);
-            }
-                  return response.json(); // Convert response to json use text for text
-          })
-          .then(data => {
-          //Perform actions with the response data from the view          
-          
-           order_id=data.order_id;
-                   
-          })
-          .catch(err=>{alert(err);})
-          
-          if (confirm('add more item for order') == true)
-          {
-            document.getElementById('Con_div').style.display = 'none';
-            textareatext.style.display='block';
-            document.getElementById('orders').innerHTML+=document.getElementById('item_input').value + '\n';
-            document.getElementById('id_date').disabled = true;            
-            document.getElementById('item_input').value="";          
+    `;
+
+            reindex();
             return false;
-                 
-         
-          }
-          else{location.reload(); return true; }         
-        
-    }
+        }
 
-    function deleteRow(r) {
-    var i = r.parentNode.parentNode.rowIndex;
-    document.getElementById("myTable").deleteRow(i);
-    reindex();
-}
+        function onDeleteRow(e) {
+            if (!e.target.classList.contains('deleteBtn')) {
+                return;
+            }
+            const btn = e.target;
+            btn.closest('tr').remove();
+            reindex();
+        }
 
-function reindex() {
-  const ids = document.querySelectorAll("tr > td:nth-child(1)");
-  ids.forEach( (e, i) => { e.innerText=(i+1) } );
-}
 
-function addRow() {
-   
-    var   item_name = document.getElementById('item_input').value;
-    var   item_variant_name = document.getElementById('item_variant').value;
-    var   per=document.getElementById('per_unit').value;
-    var   item_price=document.getElementById('item_price').value;
-    var   item_qty=document.getElementById('qty').value;
-    var   order_qty = document.getElementById('order_unit').value; 
-    var table = document.getElementsByTagName("table")[0];
-    
-    // delete button
-    var button = document.createElement("button");
-    button.innerHTML = "X";
-    button.setAttribute("onclick", "deleteRow(this)");
-    
-    var newRow = table.insertRow(-1);
-        newRow.style='font-size: 12px;';
-    var cell1 = newRow.insertCell(0);
-        cell1.style='font-size: 12px;';
-    var cell2 = newRow.insertCell(1);
-        cell2.style='font-size: 12px;';
-    var cell3 = newRow.insertCell(2);
-        cell3.style='font-size: 12px;';
-    var cell4 = newRow.insertCell(3) 
-        cell4.style='font-size: 12px;';
-    var cell5 = newRow.insertCell(4);
-        cell5.style='font-size: 12px;';
-    var cell6 = newRow.insertCell(5);
-        cell6.style='font-size: 12px;'; 
-    var cell7 = newRow.insertCell(6);
-        cell7.style='font-size: 12px;';
-    var cell8 = newRow.insertCell(7);   
-        cell8.style='font-size: 12px;';
+        const formEl = document.getElementById('item-form');
+        const tbodyEl = document.querySelector('tbody');
+        const tableEl = document.querySelector('table');
+        formEl.addEventListener('submit', onAddItems);
+        tableEl.addEventListener('click', onDeleteRow);
 
-    cell2.innerHTML = item_name;
-    cell3.innerHTML = item_variant_name;
-    cell4.innerHTML = item_price;
-    cell5.innerHTML = per;
-    cell6.innerHTML = item_qty;
-    cell7.innerHTML = order_qty;
-    cell8.appendChild( button );
-    
-     reindex();
+        document.getElementById('select_item').addEventListener('click', additem);
+        document.getElementById('exit_item').addEventListener('click', exit_item);
 
-     return false;
-}
+        function fetchHtml(page) {
+            fetch(page)
+                .then((response) => {
+                    return response.text();
+                })
+                .then((html) => {
+                    document.getElementById('showpage1').innerHTML = html;
+                    var scripts = document.getElementById("showpage1").querySelectorAll("script");
+                    for (var i = 0; i < scripts.length; i++) {
+                        if (scripts[i].innerText) {
+                            eval(scripts[i].innerText);
+                        } else {
+                            fetch(scripts[i].src).then(function (data) {
+                                data.text().then(function (r) {
+                                    eval(r);
+                                })
+                            });
 
-</script>
-{% endblock main_scripts %}
+                        }
+                        // To not repeat the element
+                        scripts[i].parentNode.removeChild(scripts[i]);
+                    }
+                });
+        }
+
+        function additem() {
+            document.getElementById('item_modal').style.display = 'block';
+        }
+        function exit_item() {
+            document.getElementById('item_modal').style.display = 'none';
+        }
+
+        document.getElementById("id_date").valueAsDate = new Date();
+
+
+        const submitorder = document.getElementById('order-item-form');
+        submitorder.addEventListener('submit',validateForm)
+        let order_id = null;
+
+        async function validateForm() {
+            let con_id = selecteddatalistid('consignee_input', 'consignee_id');
+
+            let item_id = selecteddatalistid('item_input', 'item_list');
+            let item_price = document.getElementById('item_price').value;
+
+            let per_unit_id = selecteddatalistid('per_unit', 'per_unit_list');
+            let item_variant_id = selecteddatalistid('item_variant', 'item_variant_list');
+
+            let qty = document.getElementById('qty').value;
+
+            let order_unit_id = selecteddatalistid('order_unit', 'unit_list');
+            let comment = document.getElementById('comment').value;
+
+
+
+            let data = {
+                'order_id': order_id, 'consignee_id': con_id,
+                'item_id': item_id, 'item_price': item_price, 'per_unit_id': per_unit_id,
+                'item_variant_id': item_variant_id, 'qty': qty, 'order_unit_id': order_unit_id,
+                'comment': comment
+            };
+
+            await fetch('/orders/order_item/', postoption(data))
+                .then(response => {
+                    if (!response.ok) {
+                        throw Error(response.statusText);
+                    }
+                    return response.json(); // Convert response to json use text for text
+                })
+                .then(data => {
+                    //Perform actions with the response data from the view          
+
+                    order_id = data.order_id;
+
+                })
+                .catch(err => { alert(err); })
+
+
+
+        }
+
+        // var table1 = document.getElementById("myTable").rows.length;
+        // alert(table1);
+
+
+
+
+
+    </script>
+    {% endblock main_scripts %}

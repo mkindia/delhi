@@ -50,7 +50,7 @@ def home(request):
                             
                      return render(request,'clients/client_dashboard.html',{'client':clients})
 
-#@cache_control(no_cache=True, must_revalidate=True, no_store=True)
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def signup(request): 
     fm=UsersCreationForm
     if request.method == "POST":           
@@ -120,15 +120,14 @@ def signin(request):
                
                return redirect('/')
             
-#@cache_control(no_cache=True, must_revalidate=True, no_store=True)
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def user_logout(request):
     logout(request)
     request.session.flush()
     request.session.clear_expired()
     return redirect('/')
                                                                                   
-#@cache_control(no_cache=True, must_revalidate=True, no_store=True)
-
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def account_verify(request,token):      
        af=User_Verification.objects.filter(token=token).first()
        if af != None:
@@ -238,6 +237,11 @@ def forget_pwd(request):
                             for udetail in getuser:
                                    uemail=udetail.email
                                    uid=udetail.id
+                                   uverify=udetail.is_active
+                            if not uverify:
+                                   messages.info(request,'User Not Verified Please Check mail')
+                                   return render(request,'core/forget_pwd.html',{'header':'Forget Password'})
+                                          
               else:                     
                      messages.info(request,'User Not Found')
                      return render(request,'core/forget_pwd.html',{'header':'Forget Password'})
@@ -308,6 +312,6 @@ def change_pass(request):
                      
               return render(request,'errorpage.html',{'type':'Page Not Found'})
 
-#@cache_control(no_cache=True, must_revalidate=True, no_store=True)
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def errorpage(request,errortype):
        return render(request,'error/errorpage.html',{'type':errortype})

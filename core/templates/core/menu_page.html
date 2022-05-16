@@ -40,7 +40,7 @@
     <a href="{% url 'add_client' %}" id="add-party"  class="asubmenuitem">Add Client</a>
     <a id="edit-party" class="asubmenuitem">Edit Client</a>
     {% if user.is_staff %}
-    <a href="{% url 'add_client' %}" type="a" id="delete-party" class="asubmenuitem">Delete Client</a>
+    <a href="{% url 'add_client' %}"  id="delete-party" class="asubmenuitem">Delete Client</a>
     {% endif %}
     <a id="edit-party" href="{% url 'genrate_client_token' %}" class="asubmenuitem">Genrate Client Token</a>
   </div>
@@ -57,8 +57,12 @@
 <script src="{% static 'core/js/menu_page.js' %}"></script>
 
 <script>
+/*
+const buttons = [].slice.call(document.getElementsByClassName('asubmenuitem'))
+buttons.forEach(button => {
+  button.addEventListener('click', e => document.getElementById('menuModal').style.display='none')
+})*/
 
- 
   var menumodal = document.getElementById("menuModal");
 var menubtn = document.getElementById("menuBtn");
 

@@ -9,7 +9,7 @@ from clients.models import Client, Consignee
 import json
 
 # Create your views here.
-@cache_control(no_cache=True, must_revalidate=True, no_store=True)
+#@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def add_order(request):
     if request.user.is_authenticated:
         
