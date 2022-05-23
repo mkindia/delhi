@@ -1,6 +1,7 @@
 
+
 from django.shortcuts import redirect, render
-from django.http import JsonResponse
+from django.http import JsonResponse , HttpResponseRedirect
 from django.conf import settings
 from django.core.mail import send_mail
 from django.views.decorators.cache import cache_control
@@ -9,6 +10,7 @@ from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 import json
 import uuid
+
 
 from core.models import Custom_User
 from .models import Client, Client_Group, Client_Token,Consignee,Transport,Station
@@ -36,26 +38,51 @@ def admin_dashboard(request):
     clients = Client.objects.all()
     return render(request,'clients/admin_dashboard.html/',{'client':clients})
 
-@cache_control(no_cache=True, must_revalidate=True, no_store=True)
+#@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def add_client(request):
 
        if request.user.is_authenticated:
+
+
+              if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                     data = json.loads(request.body.decode("utf-8"))
+                     c_name = data['c_name']
+                     print(data['g_id'])
+
+                     clientsall=[]
+                     for cli in Client.objects.all():
+                            clientsall.append({'id':cli.id,'name':cli.client_name})
+                   
+                     data={'clients':clientsall}
+                     return JsonResponse(data)
+              
      
               c_g = Client_Group.objects.all()
               station=Station.objects.all()
-              trns=Transport.objects.all() 
-       
-              if request.method == 'POST':
+              trns=Transport.objects.all()
               
+              if request.method == 'POST':
+
+                     next = request.POST.get('next', '/')
+                     print(next +'hello')
                      try:                            
                             cli_name=Client.objects.get(client_name=request.POST.get('client').lower())             
-                            messages.warning(request,'Client All ready exist ' + '[ ' +cli_name.client_name+ ' ]')                     
+                            messages.warning(request,'Client All ready exist ' + '[ ' +cli_name.client_name+ ' ]')
+                            
+                                  
                             #return redirect('/clients/add_client/')
+                           
+                            
+                            if next == '' or next == None :                                 
+                             #      return HttpResponseRedirect(next)
+                                   return redirect('/clients/add_client/')
+                            else :
+                                  return redirect(next) 
                      except :
                             print('frist error')
                             cli_name = None
                             try:
-                                          
+                                 
                                    g_id=request.POST.get('client_group')
                                    
                                    g_inst=Client_Group.objects.only('id').get(id=g_id)         
@@ -74,8 +101,13 @@ def add_client(request):
                                    #consignee=Consignee.objects.create(client_id=client,consignee_name=request.POST.get('client'),transport=t_inst,station=s_inst,is_client=True)             
                                    #consignee.save()    
                                    
-                                   messages.success(request, 'Client Added Success')                                   
-                                   return redirect('/')                                       
+                                   messages.success(request, 'Client Added Success')   
+                                   if next == '' or next == None :                                
+                             
+                                          return redirect('/clients/add_client/')
+                                   else :
+                                          return redirect(next)                                 
+                                                                        
                             except :
                                    print('errror')
                                    messages.warning(request,'Data_error')
@@ -85,21 +117,21 @@ def add_client(request):
                      
                      
               
-                     
+              else:       
             
-              return render(request,'clients/add_client.html/',{'c_g':c_g,'transport':trns,'station':station})
+                     return render(request,'clients/add_client.html/',{'c_g':c_g,'transport':trns,'station':station})
 
        else :
               return redirect('/')
 
-@cache_control(no_cache=True, must_revalidate=True, no_store=True)
+#@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def genrate_client_token(request):
        if request.user.is_authenticated:
 
               if request.headers.get('x-requested-with') == 'XMLHttpRequest':
                      data = json.loads(request.body.decode("utf-8"))
                      c_id = data['client_id']
-                    
+                     
                      
                      try:
                             c_inst= Client_Token.objects.get(client_id=c_id)
@@ -128,7 +160,7 @@ def genrate_client_token(request):
        else:
               return redirect('/')
 
-@cache_control(no_cache=True, must_revalidate=True, no_store=True)
+#@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def add_consignee(request):
 
        if request.user.is_authenticated:

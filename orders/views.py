@@ -41,7 +41,7 @@ def add_order(request):
     else :
         return redirect('/')
         
-@cache_control(no_cache=True, must_revalidate=True, no_store=True)
+#@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def order_item(request):
     
     if request.user.is_authenticated:
@@ -50,14 +50,18 @@ def order_item(request):
             data = json.loads(request.body.decode("utf-8"))
             con_id = data['consignee_id']
             order_id=data['order_id']
+            clientsall=[]
+
             
+            for cli in Client.objects.all():
+                clientsall.append({'id':cli.id,'name':cli.client_name})
             
-            print(data)
-            print(con_id)
+            #print(data)
+            #print(con_id)
             if order_id ==None:
-                data={'order_id':'New-568'}                
+                data={'clients':clientsall}           
             else:
-                data={'order_id':'previous-order'}                
+                data={'clients':clientsall}             
            
             return JsonResponse(data)
                        

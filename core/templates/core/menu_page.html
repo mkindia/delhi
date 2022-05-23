@@ -24,7 +24,7 @@
     {% endif %}
   </div>
   <div id="consignee_menu_items" class="showdiv">
-    <a href="{% url 'add_consignee' %}" id="add_consignee"  class="asubmenuitem">Add Consignee</a>
+    <a href="{% url 'add_consignee' %}" id="add_consignee" onclick="menumodelHide()" class="asubmenuitem">Add Consignee</a>
     <a id="edit-party" class="asubmenuitem">Edit Consignees</a>
     <a id="delete-party" class="asubmenuitem">Delete Consignees</a>
   </div>
@@ -32,12 +32,12 @@
     <p>mainFrameTwo</p>
   </div>
   <div id="som_item" class="showdiv">
-    <a href="{% url 'orderitem' %}" id="add_order"  class="asubmenuitem">Add Order</a>
+    <a href="{% url 'orderitem' %}" id="add_order" onclick="menumodelHide()" class="asubmenuitem">Add Order</a>
     <a id="edit-party" class="asubmenuitem">Edit Consignees</a>
     <a id="delete-party" class="asubmenuitem">Delete Consignees</a>
   </div>
   <div id="party_menu_items" class="showdiv">
-    <a href="{% url 'add_client' %}" id="add-party"  class="asubmenuitem">Add Client</a>
+    <a href="{% url 'add_client' %}" id="add-party" onclick="menumodelHide()" class="asubmenuitem">Add Client</a>
     <a id="edit-party" class="asubmenuitem">Edit Client</a>
     {% if user.is_staff %}
     <a href="{% url 'add_client' %}"  id="delete-party" class="asubmenuitem">Delete Client</a>
@@ -63,8 +63,12 @@ buttons.forEach(button => {
   button.addEventListener('click', e => document.getElementById('menuModal').style.display='none')
 })*/
 
+
+
   var menumodal = document.getElementById("menuModal");
 var menubtn = document.getElementById("menuBtn");
+
+function menumodelHide(){ menumodal.style.display="none";}
 
 window.onclick = function(event) {
   if (event.target == menumodal) {

@@ -169,7 +169,7 @@ var c_alert = new CustomAlert();
 
 
 // for input list  datalist  validation
-var inputs = document.querySelectorAll("input[list]");
+var inputs = document.querySelectorAll("input[list]"); //input[list] for all input type thar have list
 for (var i = 0; i < inputs.length; i++) {
   // When the value of the input changes…
   inputs[i].addEventListener("change", function () {

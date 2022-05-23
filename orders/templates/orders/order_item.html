@@ -1,7 +1,39 @@
 {% extends 'core/base.html' %}
-
+{% load static %}
 {% block title %}neworders{% endblock title %}
 
+{% block page_head %} 
+<style>
+    #myTable {
+      font-family: Arial, Helvetica, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+      font-size: 12px;
+      text-align: center;
+     
+    }
+    
+    #myTable td, #customers th {
+      border: 1px solid #ddd;
+      padding: 2px;
+    }
+    
+    #myTable tr:nth-child(even){background-color: #f2f2f2;}
+    /*
+    #myTable tr:hover {background-color: #ddd;}
+    */
+    #myTable th {
+      padding-top: 6px;
+      padding-bottom: 6px;    
+      font-size: 12px;
+      text-align: center;
+      background-color: #047eaa;
+      color: white;
+    }
+    </style>
+{% endblock page_head %}
+
+    
 {% block main_content %}
 
 <div class="basemodal">
@@ -18,18 +50,20 @@
         <div class="base-modal-body">
             <form name="order_form" id="order-item-form" method="POST">
                 {% csrf_token %}
+                <input type="hidden" name="next" value="{{ request.path }}">
                 <div id="Con_div">
                     <div class="col-l-6 col-m-6 col-s-6 col-7" style="float:left; padding:2px;">
                         <label for="id_email">Select Consignee</label>
                         <input id="consignee_input" name="consignee_input" placeholder="Select Consignee" type="search"
                             value="" list="consignee_id" required style="text-transform:capitalize;" />
                         <datalist id="consignee_id" style="text-transform:capitalize; ">
-
+                            <!--
                             {% for cli in consignes %}
 
                             <option data-id="{{cli.id}}" value="{{cli.consignee_name}} / {{cli.client_id}}"> </option>>
 
                             {% endfor %}
+                            -->
                         </datalist>
 
                     </div>
@@ -51,8 +85,9 @@
 
 
                 <div id="orders_div" class="col-l-12 col-m-12 col-s-12 col-"
-                    style="float:left; border-radius: 5px; padding:2px; height: 100px; overflow-y: auto;">
-                    <table id="myTable" style="width: 100%;  border-radius: 5px;" border="ipx;">
+                    style="float:left; border-radius: 5px; padding:2px; height: 150px; overflow-y: auto;">
+                    <table id="myTable">
+                       <thead>
                         <tr style="font-size: 12px;">
                             <th>SN.</th>
                             <th>Item Name</th>
@@ -60,20 +95,36 @@
                             <th>Price</th>
                             <th>Per</th>
                             <th>Qty.</th>
-                            <th>Unit</th>
-                            <th>...</th>
+                            <th>Order Unit</th>
+                            <th>&#8942;</th>
                         </tr>
+                       </thead>
                         <tbody></tbody>
                     </table>
                 </div>
 
+                
+                <div class="col-l-12 col-m-12 col-s-12 col-" style="float: left; padding: 2px;">
+                    
+                    <a class="ancor smallbuttonstyleround" href="{% url 'add_client' %}?next={{ request.path|urlencode }}" type="button" id="order_ac"
+                        style="text-decoration: none; margin-right: 3px; float: left; margin-top:30px;">Add Client
+                        &#10009;</a> 
+
+                </div>
+                
+                <div class="col-l-12 col-m-12 col-s-12 col-" style="float: left; padding: 2px;">
+                    <button id="count">oteritems</button>
+                    
+                </div>
 
                 <div class="col-l-12 col-m-12 col-s-12 col-" style="float: left; padding: 2px;">
-                    <!--
-                    <a class="ancor smallbuttonstyleround" type="button" id="order_ac"
-                        style="text-decoration: none; margin-right: 3px; float: left; margin-top:30px;">Add Client
-                        &#10009;</a>     -->
+                    <button id="optionbtn">addopt</button>
+                    
+                </div>
 
+                <div class="col-l-12 col-m-12 col-s-12 col-" style="float: left; padding: 2px;">
+                    <button id="atri">arti</button>
+                    
                 </div>
 
 
@@ -187,7 +238,7 @@
 </div>
 
 
-    <div id="showpage1">
+    <div id="showpage1" style="position: absolute; z-index: 999999;">
 
     </div>
 
@@ -197,7 +248,57 @@
 
 
     {% block main_scripts %}
+    <script src="{% static 'core/js/fetchApi.js' %}"></script>
     <script>
+        var jsonArr = [];
+        document.getElementById('count').addEventListener('click',count);
+        document.getElementById('optionbtn').addEventListener('click',addopt)
+        document.getElementById('atri').addEventListener('click',atri);
+
+        function atri(e){
+            e.preventDefault();
+            let con_id = selecteddatalistid('consignee_input', 'consignee_id');
+            alert(con_id);
+        }
+
+        function count(e){
+            e.preventDefault();
+            var table = document.getElementById('myTable');
+            
+            for(var i =1,row;row = table.rows[i];i++){
+                         var col = row.cells;
+                var jsonObj = {
+                    item_name : col[1].innerHTML.trim(),
+                    item_variant : col[2].innerHTML.trim(),
+                    item_price : col[3].innerHTML.trim(),
+                    per : col[4].innerHTML.trim(),
+                    qty : col[5].innerHTML.trim(),
+                    unit : col[6].innerHTML.trim()
+                    }
+
+                jsonArr.push(jsonObj);
+        }
+        console.log(jsonArr);
+        }
+
+
+    function addopt(e){
+        e.preventDefault();
+        var list = jsonArr;
+        
+        var sel = document.getElementById('consignee_id');
+        for(var i = 0; i < list.length; i++) {
+           // alert(list[i]['item_price']);
+         var opt = document.createElement('option');
+                opt.setAttribute("data-id",list[i]['item_price']);
+
+                 //opt.data-id = [i]['item_name'];
+                 opt.value = list[i]['item_name'];
+                 sel.appendChild(opt);
+}
+
+
+    }
 
         function reindex() {
             const ids = document.querySelectorAll("tr > td:nth-child(1)");
@@ -208,19 +309,22 @@
 
             e.preventDefault();
             const item_name = document.getElementById('item_input').value;
+            //const item_id = selecteddatalistid('item_input', 'item_list');
             const item_variant_name = document.getElementById('item_variant').value;
+            //const item_variant_id = selecteddatalistid('item_variant', 'item_variant_list');
             const per = document.getElementById('per_unit').value;
+            //const per_unit_id = selecteddatalistid('per_unit', 'per_unit_list');
             const item_price = document.getElementById('item_price').value;
             const item_qty = document.getElementById('qty').value;
             const order_qty = document.getElementById('order_unit').value;
 
             tbodyEl.innerHTML += `
     <tr>
-        <td style="text-align: center; font-size: 12px;"> </td> 
-        <td style="text-align: center; font-size: 12px;"> ${item_name}</td>    
+        <td style="text-align: center; font-size: 12px;"> </td>      
+        <td style="text-align: center; font-size: 12px;"> ${item_name}</td>            
         <td style="text-align: center; font-size: 12px;"> ${item_variant_name}</td>    
-        <td style="text-align: center; font-size: 12px;"> ${per}</td>     
-        <td style="text-align: center; font-size: 12px;"> ${item_price}</td>    
+        <td style="text-align: center; font-size: 12px;"> ${item_price}</td>          
+        <td style="text-align: center; font-size: 12px;"> ${per}</td>    
         <td style="text-align: center; font-size: 12px;"> ${item_qty}</td>   
         <td style="text-align: center; font-size: 12px;"> ${order_qty}</td>    
         <td style="text-align: center; font-size: 12px;"><button class="deleteBtn">X</button></td> 
@@ -288,9 +392,11 @@
 
         const submitorder = document.getElementById('order-item-form');
         submitorder.addEventListener('submit',validateForm)
-        let order_id = null;
+        
 
-        async function validateForm() {
+        async function validateForm(e) {
+          
+            e.preventDefault();
             let con_id = selecteddatalistid('consignee_input', 'consignee_id');
 
             let item_id = selecteddatalistid('item_input', 'item_list');
@@ -307,7 +413,7 @@
 
 
             let data = {
-                'order_id': order_id, 'consignee_id': con_id,
+                'order_id':25, 'consignee_id': con_id,
                 'item_id': item_id, 'item_price': item_price, 'per_unit_id': per_unit_id,
                 'item_variant_id': item_variant_id, 'qty': qty, 'order_unit_id': order_unit_id,
                 'comment': comment
@@ -323,13 +429,20 @@
                 .then(data => {
                     //Perform actions with the response data from the view          
 
-                    order_id = data.order_id;
-
+                 
+                    for (i=0;i<data.clients.length;i++)
+                    {
+                       alert(data.clients[i].name)
+                       
+                    }
+                   
+                   
+                  //console.log(data);
                 })
                 .catch(err => { alert(err); })
 
-
-
+              
+        
         }
 
         // var table1 = document.getElementById("myTable").rows.length;

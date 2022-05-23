@@ -1,4 +1,5 @@
 {% extends 'core/base.html' %}
+{% load static %}
 {% block title %}benrate token{% endblock title %}
 
 {% block main_content %} 
@@ -49,7 +50,7 @@
                   <div>
                     <label id="sendby" style="text-decoration: none; display: none; float: left; margin-right:5px; margin-top:30px;"><small>Send Token By:</small></label>
                     <a  type="button" id="email" onclick="c_prompt.render('Send E-Mail','Enter E-Mail Address','sendmail')" class="ancor" style="text-decoration: none; display: none; float: left; margin-right:5px; margin-top:30px;" ><small><i>Email,</i></small></a>
-                    <a type="button" id="whatsup" onclick="c_prompt.render('Send Whatsapp','Enter Whatsapp No.','whatsapp')" class="ancor" style="text-decoration: none; display: none; float: left; margin-right:5px; margin-top:30px;" ><small><i>Whatsapp</i></small></a>
+                    <a type="button" id="whatsup"  class="ancor" style="text-decoration: none; display: none; float: left; margin-right:5px; margin-top:30px;" ><small><i>Whatsapp</i></small></a>
                     
                   </div>
                   
@@ -67,12 +68,13 @@
 {% endblock main_content%}
 
 {% block main_scripts %}
+<script src="{% static 'core/js/fetchApi.js' %}"></script>
 <script src="https://smtpjs.com/v3/smtp.js"></script>
 <script>
 
 var secureToken = '' ;
 document.getElementById("id_client").addEventListener("change", myFunction);
-
+document.getElementById('whatsup').addEventListener('click',whatsappacc);
 function sendmail(val)
 {
   let token=document.getElementById("id_status").value;
@@ -92,6 +94,13 @@ function sendmail(val)
               });
       }
 }
+
+function whatsappacc(){
+
+c_prompt.render('Send Whatsapp','Enter 10 digit Whatsapp No.','whatsapp');
+
+}
+
 function whatsapp(val){
   let token=document.getElementById("id_status").value;
   
