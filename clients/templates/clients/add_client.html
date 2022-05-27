@@ -47,7 +47,7 @@
 
                 
 
-                <div class="col-l-6 col-m-6 col-s-6 col-" style="float:right; padding:2px">
+                <div class="col-l-6 col-m-6 col-s-6 col-" style="float:left; padding:2px">
                   <label for="id_transport">Transport:</label> 
 
                   <input name="transport" list="transport_list" placeholder="Select Tranport"  style="text-transform:capitalize;" required id="id_transport">
@@ -66,7 +66,7 @@
 
                 
 
-                <div class="col-l-6 col-m-6 col-s-6 col-" style="float:right; padding:2px">
+                <div class="col-l-6 col-m-6 col-s-6 col-" style="float:left; padding:2px">
                   <label for="id_station">Station:</label> 
 
                   <input name="station" list="station_list" placeholder="Select Station" class="inputstyle" style="text-transform:capitalize;" required id="id_station">
@@ -78,15 +78,24 @@
                     {% endfor %}
 
                   </datalist>
-
-                  
+                                    
                 </div>
-                                   
+
+                <div class="col-l-6 col-m-6 col-s-6 col-" style="float:left; padding:2px">
+                  <label for="id_station">Whatsapp No.:</label> 
+
+                  <input name="whatsapp" pattern="[7-9]{1}[0-9]{9}" placeholder="Enter 10 digit Whatsapp No." class="inputstyle" style="text-transform:capitalize;" required id="id_whatsapp">
+                 
+                                    
+                </div>
+
+
+                  <!--                 
                   <div>
                     <a class="ancor smallbuttonstyleround" href="#" style="text-decoration: none; margin-right: 3px; float: left; margin-top:30px;">Add Transport &#10009;</a>
                     <a class="ancor smallbuttonstyleround" href="#" style="text-decoration: none; margin-right: 3px; float: left; margin-top:30px;">Add Station &#10009;</a>                   
                   </div>
-                
+                -->
                 </form>
               </div>             
         </div>
