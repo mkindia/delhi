@@ -11,6 +11,17 @@
       font-size: 12px;
       text-align: center;
      
+   
+    }
+
+    #myTable th:first-child{
+
+        border-radius:7px 0 0 0;
+    }
+
+    #myTable th:last-child{
+
+        border-radius:0 7px 0 0;
     }
     
     #myTable td, #customers th {
@@ -47,6 +58,7 @@
             </h>
 
         </div>
+        <input type="hidden" name="clientgroup" id="h_cg">
         <div class="base-modal-body">
             <form name="order_form" id="order-item-form" method="POST">
                 {% csrf_token %}
@@ -55,22 +67,22 @@
                     <div class="col-l-6 col-m-6 col-s-6 col-7" style="float:left; padding:2px;">
                         <label for="id_email">Select Consignee</label>
                         <input id="consignee_input" name="consignee_input" placeholder="Select Consignee" type="search"
-                            value="" list="consignee_id" required style="text-transform:capitalize;" />
-                        <datalist id="consignee_id" style="text-transform:capitalize; ">
-                            <!--
+                            value="" list="consignee_list" required style="text-transform:capitalize;" />
+                        <datalist id="consignee_list" style="text-transform:capitalize; ">
+                            
+                           
                             {% for cli in consignes %}
-
-                            <option data-id="{{cli.id}}" value="{{cli.consignee_name}} / {{cli.client_id}}"> </option>>
-
+                            
+                            <option data-id="{{cli.id}}" client-id="{{cli.client_id}}"  value="{{cli.consignee_name}} / {{cli.client_id}}"> </option>
+                            
                             {% endfor %}
-                            -->
                         </datalist>
 
                     </div>
 
                     <div class="col-l-6 col-m-6 col-s-6 col-5" style="float:left; padding:1px;">
                         <label for="id_email">Date</label>
-                        <input type="Date" name="date" class="inputstyle" required id="id_date">
+                        <input type="Date" name="date" class="inputstyle" {% if user.is_user %} disabled="True" {% endif %} required id="id_date">
                     </div>
                 </div>
 
@@ -157,43 +169,40 @@
             </div>
             <div class="base-modal-body">
                 <form name="item_form" id="item-form" method="POST">
-                    <div class="col-l-6 col-m-6 col-s-5 col-7" style="float:left; padding:2px">
+                    <div class="col-l-6 col-m-6 col-s-12 col-12" style="float:left; padding:2px">
                         <label for="item_input">Item name</label>
                         <input id="item_input" type="search" value="" placeholder="select item" list="item_list"
                             required style="text-transform:capitalize;" />
                         <datalist id="item_list" style="text-transform:capitalize;">
-                            <option data-id="1" value="Sinhasan"> </option>
-                            <option data-id="2" value="Pooja Peti"> </option>
-                            <option data-id="5" value="Crusher"> </option>
-                            <option data-id="6" value="Pandan"> </option>
-                            <option data-id="7" value="Jhoola"> </option>
+                            {% for item in items %}
+
+                            <option data-id="{{item.id}}" item-unit="{{item.item_unit}}" value="{{item.item_name}}"></option>>
+
+                            {% endfor %}
                         </datalist>
+
                     </div>
 
-                    <div class="col-l-4 col-m-4 col-s-4 col-5" style="float:left; padding:2px">
+                    <div class="col-l-6 col-m-6 col-s-12 col-12" style="float:left; padding:2px">
 
                         <label for="item_variant">Item Variants</label>
                         <input id="item_variant" type="search" value="" placeholder="select variant"
                             list="item_variant_list" required style="text-transform:capitalize;" />
                         <datalist id="item_variant_list" style="text-transform:capitalize;">
-                            <option data-id="1" value="1 No."> </option>
-                            <option data-id="2" value="2 No."> </option>
-                            <option data-id="5" value="3 No."> </option>
-                            <option data-id="6" value="4 No."> </option>
-                            <option data-id="7" value="5 No."> </option>
+                          
                         </datalist>
 
 
                     </div>
 
-                    <div class="col-l-2 col-m-2 col-s-3 col-6" style="float:left; padding:2px;">
+                    <div class="col-l-6 col-m-6 col-s-6 col-6" style="float:left; padding:2px;">
                         <label for="item_price">Item Price</label>
-                        <input type="number" min="1" max="1000" step="any" , name="itemprice" placeholder="Enter Price"
+                        <input type="number" min="1" max="1000" step=".01" , name="itemprice" placeholder="Enter Price"
                             class="inputstyle" required id="item_price">
 
                     </div>
 
-                    <div class="col-l-5 col-m-5 col-s-5 col-6" style="float:left; padding:2px">
+                    <div class="col-l-6 col-m-6 col-s-6 col-6" style="float:left; padding:2px">
                         <label for="per_unit">Per</label>
                         <input id="per_unit" type="text" value="Kg." disabled='True' list="per_unit_list" required
                             style="text-transform:capitalize;" />
@@ -205,14 +214,14 @@
                     </div>
 
 
-                    <div class="col-l-3 col-m-3 col-s-3 col-6" style="float:left; padding:2px">
+                    <div class="col-l-6 col-m-6 col-s-6 col-6" style="float:left; padding:2px">
 
                         <label for="qty">Qty.</label>
-                        <input type="number" min="1" max="1000" step="any" , name="itemname" placeholder="Enter QTY."
+                        <input type="number" min="1" max="1000" step=".001"  name="itemname" placeholder="Enter QTY."
                             class="inputstyle" required id="qty">
                     </div>
 
-                    <div class="col-l-4 col-m-4 col-s-4 col-6" style="float:left; padding: 2px;">
+                    <div class="col-l-6 col-m-6 col-s-6 col-6" style="float:left; padding: 2px;">
                         <label for="order_unit">Unit</label>
                         <input id="order_unit" type="search" value="" placeholder="select unit" list="unit_list"
                             required style="text-transform:capitalize;" />
@@ -241,6 +250,19 @@
     <div id="showpage1" style="position: absolute; z-index: 999999;">
 
     </div>
+<div type="hidden">
+
+    <input id="client_id" name="consignee_input"  type="hidden" value="" list="consignee_list" />
+    <datalist id="client_list" >
+    {% for cli in clients %}    
+
+    <option data-id="{{cli.id}}" group-id="{{cli.client_group}}"  value="{{cli.client_name}}"> </option>
+    
+    {% endfor %}
+</datalist>
+
+
+</div>
 
 
     {% endblock main_content%}
@@ -249,11 +271,70 @@
 
     {% block main_scripts %}
     <script src="{% static 'core/js/fetchApi.js' %}"></script>
+
+    
+
     <script>
+
+        let item_varient_price='';
+        
+       
         var jsonArr = [];
         document.getElementById('count').addEventListener('click',count);
         document.getElementById('optionbtn').addEventListener('click',addopt)
         document.getElementById('atri').addEventListener('click',atri);
+        document.getElementById('item_input').addEventListener('change',getItemVariants);
+        document.getElementById('item_variant').addEventListener('change',getVariantPrice);
+        document.getElementById('consignee_input').addEventListener('change',getclientdetails)
+
+        function getclientdetails(){
+            item_varient_price='';
+            document.getElementById('client_id').value=selectedDatalistAttributeValue('consignee_input','consignee_list','client-id');
+
+            item_varient_price ='item_variant_price_'+selectedDatalistAttributeValue('client_id','client_list','group-id');            
+            
+        }
+        
+       
+
+        function getItemVariants(){
+           
+           // alert(item_varient_price);
+            item_varient_price = item_varient_price;
+           // console.log(item_unit);
+            document.getElementById('item_variant').value='';
+            //let item_at=document.getElementById('item_input');      
+
+            let item_id = selecteddatalistid('item_input', 'item_list');
+            var element =  document.getElementById('item_variant_list').innerHTML='';
+           // var item_unit = selecteddatalistid('item_input','item_list');
+            var sel = document.getElementById('item_variant_list');
+            let item_unit = selectedDatalistAttributeValue('item_input','item_list','item-unit');
+            
+            document.getElementById('per_unit').value=item_unit;
+            
+
+            fetch('/items/fetch_itemvariant/'+item_id+'/')
+            .then((response)=>{return response.json();})
+            .then((data)=>{
+                console.log(data);
+               // document.getElementById('item_price').value=data.item_variant_price;
+   
+                //document.getElementById('per_unit').value=item_unit;
+                for(var i = 0; i <data.length; i++) {
+           // alert(list[i]['item_price']);
+                var opt = document.createElement('option');
+                opt.setAttribute("data-id",data[i]['item_variant_price']);
+                opt.setAttribute('varientprice',data[i][item_varient_price])     
+                 opt.value = data[i]['item_variant_name'];
+                 sel.appendChild(opt);
+
+                }
+
+
+                
+            });
+        }
 
         function atri(e){
             e.preventDefault();
@@ -449,7 +530,14 @@
         // alert(table1);
 
 
+        function getVariantPrice(){
+           
+          
+           let aValue = selectedDatalistAttributeValue('item_variant','item_variant_list','varientprice');
 
+           document.getElementById('item_price').value=aValue;
+   
+       }
 
 
     </script>

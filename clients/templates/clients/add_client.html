@@ -31,15 +31,13 @@
                     <label for="id_client_group">Client group:</label>
                     
                     <input name="client_group" placeholder="Select Group" type="search"  style="text-transform:capitalize;" list="group_list" required id="id_client_group">
-                    <datalist id="group_list" style="text-transform:capitalize;">
-                   
-
-                      {% for cli in c_g %}
-           
-                        <option data-id="{{cli.id}}" value="{{cli.group_name}}"> </option>>
-                       
-                        {% endfor %}
-
+                    <datalist id="group_list" style="text-transform:capitalize;">                   
+                      <option data-id="a" value="a"> </option>
+                      <option data-id="b" value="b"> </option>
+                      <option data-id="c" value="c"> </option>
+                      <option data-id="d" value="d"> </option>
+                      <option data-id="e" value="e"> </option>
+                      <option data-id="f" value="f"> </option>
                     </datalist>
                     
                 </div>                     
@@ -82,13 +80,12 @@
                 </div>
 
                 <div class="col-l-6 col-m-6 col-s-6 col-" style="float:left; padding:2px">
-                  <label for="id_station">Whatsapp No.:</label> 
+                  <label for="id_station">Mobile/Whatsapp No :</label> 
 
-                  <input name="whatsapp" pattern="[7-9]{1}[0-9]{9}" placeholder="Enter 10 digit Whatsapp No." class="inputstyle" style="text-transform:capitalize;" required id="id_whatsapp">
+                  <input name="mnumber" pattern="[7-9]{1}[0-9]{9}" placeholder="Enter 10 digit Whatsapp No." class="inputstyle"  required id="id_number">
                  
                                     
                 </div>
-
 
                   <!--                 
                   <div>
@@ -124,12 +121,13 @@ document.getElementById('client-form').addEventListener('submit',submitdata);
 
 function submitdata(e){
   e.preventDefault();
-let c_name = document.getElementById('id_client_name').value;
+let c_name = document.getElementById('id_client_name').value.trim();
 let g_id=selecteddatalistid('id_client_group','group_list')
 let t_id=selecteddatalistid('id_transport','transport_list')
-let s_id=selecteddatalistid('id_station','station_list')
+const s_id=selecteddatalistid('id_station','station_list')
+const m_no=document.getElementById('id_number').value.trim();
 
-let data={'c_name':c_name,'g_id':g_id,'t_id':t_id,'s_id':s_id};
+let data={'c_name':c_name,'g_id':g_id,'t_id':t_id,'s_id':s_id,'m_no':m_no};
 let fetchtext =  fetch('/clients/add_client/',postoption(data));
   
   fetchtext.then(async response => {

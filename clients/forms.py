@@ -1,11 +1,10 @@
 from django import forms
 
-from .models import Client_Group,Client,Client_Token,Consignee,Transport,Station
+from .models import Client,Client_Token,Consignee,Transport,Station
 
 class Client_Form(forms.ModelForm):
     client=forms.CharField(label='Client Name',widget=forms.TextInput(attrs={'class':'inputstyle', 'style':'text-transform:capitalize;'}))
-    client_group=forms.ModelChoiceField(queryset=Client_Group.objects.all(),widget=forms.Select(attrs={'class':'inputstyle','style':'text-transform:capitalize;'}))
-
+    client_group=forms.ChoiceField(widget=forms.Select(attrs={'class':'inputstyle','style':'text-transform:capitalize;'}))
     class Meta:        
         model = Client
         fields = ['client_name','client_group']

@@ -16,12 +16,13 @@
 
       {% for cli in consigne %}
 
-      <option data-id="{{cli.id}}" value="{{cli.consignee_name}} / {{cli.client_id}}"> </option>>
+      <option data-id="{{cli.id}}" value="{{cli.consignee_name}} / {{cli.client_id}}"> </option>
 
       {% endfor %}
 
     </datalist>
 
+   
     <button class="buttonstyle" type="submit" id="check">Check</button>
     <!-- %0a for line brak in whatsups -->
     <a type="button" style="text-size-adjust:none;" href="whatsapp://send/?phone=919213427055&amp;text=Hello user  %0a{{orders}}" id="openWA">Send to

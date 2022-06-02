@@ -13,7 +13,7 @@ import uuid
 
 
 from core.models import Custom_User
-from .models import Client, Client_Group, Client_Token,Consignee,Transport,Station
+from .models import Client, Client_Token,Consignee,Transport,Station
 from .forms import Client_Form,Consignee_Transport_form,Consignee_form
 
 # for sending mail
@@ -47,7 +47,7 @@ def add_client(request):
               if request.headers.get('x-requested-with') == 'XMLHttpRequest':
                      data = json.loads(request.body.decode("utf-8"))
                      c_name = data['c_name']
-                     print(data['g_id'])
+                     print(c_name)
 
                      clientsall=[]
                      for cli in Client.objects.all():
@@ -57,10 +57,10 @@ def add_client(request):
                      return JsonResponse(data)
               
      
-              c_g = Client_Group.objects.all()
+           
               station=Station.objects.all()
               trns=Transport.objects.all()
-              
+            
               if request.method == 'POST':
 
                      next = request.POST.get('next', '/')
@@ -85,7 +85,7 @@ def add_client(request):
                                  
                                    g_id=request.POST.get('client_group')
                                    
-                                   g_inst=Client_Group.objects.only('id').get(id=g_id)         
+                                   #g_inst=Client_Group.objects.only('id').get(id=g_id)         
                                    
                                    t_id=request.POST.get('transport')
                                    
@@ -93,6 +93,9 @@ def add_client(request):
 
                                    s_id=request.POST.get('station')
                                    s_inst=Station.objects.only('id').get(id=s_id)
+
+                                   p_no= request.POST.get('mnumber')
+                                   print(p_no)
                                   
                                    #client=Client.objects.create(client_name=request.POST.get('client'),client_group=g_inst)
                             
@@ -111,7 +114,7 @@ def add_client(request):
                             except :
                                    print('errror')
                                    messages.warning(request,'Data_error')
-                                   return render(request,'clients/add_client.html/',{'c_g':c_g,'transport':trns,'station':station})                             
+                                   return render(request,'clients/add_client.html/',{'transport':trns,'station':station})                             
 
                      
                      
@@ -119,7 +122,7 @@ def add_client(request):
               
               else:       
             
-                     return render(request,'clients/add_client.html/',{'c_g':c_g,'transport':trns,'station':station})
+                     return render(request,'clients/add_client.html/',{'transport':trns,'station':station})
 
        else :
               return redirect('/')

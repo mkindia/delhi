@@ -7,9 +7,6 @@ from clients.models import *
 class Client(admin.ModelAdmin):
       list_display = ('id','client_name')
 
-@admin.register(Client_Group)
-class Client_Group(admin.ModelAdmin):
-      list_display=('group_name',)
 
 @admin.register(Transport)
 class Transport(admin.ModelAdmin):

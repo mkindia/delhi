@@ -10,7 +10,7 @@
       <input id="datalist_input" type="text" value="" list="datalist_id" required />
         <datalist id="datalist_id">          
             {% for clients in client %}   
-             <option data-id="{{clients.id}}" value="{{clients.client_name}}"></option>>
+             <option data-id="{{clients.id}}" value="{{clients.client_name}}">{{clients.client_group}}</option>>
             {% endfor %}
         </datalist>
 

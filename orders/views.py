@@ -5,7 +5,8 @@ from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.views.decorators.cache import cache_control
 from django.contrib import messages
-from clients.models import Client, Consignee 
+from clients.models import Client, Consignee
+from items.models import Item,Item_Variant
 import json
 
 # Create your views here.
@@ -68,8 +69,9 @@ def order_item(request):
         else :
             
             client=Client.objects.filter(user_id=request.user)           
-            consigne = Consignee.objects.filter(client_id__in=client)
-            return render(request,'orders/order_item.html/',{'clients':client,'consignes':consigne})
+            consigne = Consignee.objects.filter(client_id__in=client) # client_id__in = client filter use
+            Items=Item.objects.all()
+            return render(request,'orders/order_item.html/',{'clients':client,'consignes':consigne,'items':Items})
     
     else :
 
