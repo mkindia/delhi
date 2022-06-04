@@ -22,10 +22,10 @@
 
         <div>
 
-          <div class="col-l-6 col-m-6 col-s-6 col-" style="float:right; padding:2px">
+          <div class="col-l-6 col-m-6 col-s-6 col-" style="float:left; padding:2px">
             <label for="id_client_id">Client:</label>
 
-            <input name="client_id"  list="client_list" class="inputstyle" placeholder="Select Client" style="text-transform:capitalize;" required id="id_client_id">
+            <input name="client_id"  list="client_list" type="search" class="inputstyle" placeholder="Select Client" style="text-transform:capitalize;" required id="id_client_id">
             <datalist id="client_list" >
               {% for cli in clients %}
            
@@ -39,7 +39,7 @@
 
 
 
-          <div class="col-l-6 col-m-6 col-s-6 col-" style="float:right; padding:2px">
+          <div class="col-l-6 col-m-6 col-s-6 col-" style="float:left; padding:2px">
             <label for="id_consignee_name">Consignee Name:</label>
 
             <input type="text" name="consignee_name" placeholder="Enter Consignee Name" class="inputstyle" style="text-transform:capitalize;" required
@@ -48,34 +48,16 @@
 
           </div>
 
+          
 
-
-          <div class="col-l-6 col-m-6 col-s-6 col-" style="float:right; padding:2px">
-            <label for="id_transport">Transport:</label>
-
-            <input name="transport" list="transport_list" class="inputstyle" placeholder="Select Transport" style="text-transform:capitalize;" required id="id_transport">
-            <datalist id="transport_list">
-              {% for cli in transports %}
-           
-              <option data-id="{{cli.id}}" value="{{cli.transport_name}}"> </option>>
-             
-              {% endfor %}
-
-            </datalist>
-
-
-          </div>
-
-
-
-          <div class="col-l-6 col-m-6 col-s-6 col-" style="float:right; padding:2px">
+          <div class="col-l-6 col-m-6 col-s-6 col-" style="float:left; padding:2px">
             <label for="id_station">Station:</label>
 
-            <input name="station" list="station_list" class="inputstyle" placeholder="Select Station" style="text-transform:capitalize;" required id="id_station">
+            <input name="station" list="station_list" type="search" class="inputstyle validdatalist" placeholder="Select Station" style="text-transform:capitalize;" required id="id_station">
             <datalist id="station_list">
               {% for cli in stations %}
            
-              <option data-id="{{cli.id}}" value="{{cli.station_name}}"> </option>>
+              <option data-id="{{cli.id}}" value="{{cli.station}}"> </option>>
              
               {% endfor %}
 
@@ -83,6 +65,26 @@
 
 
           </div>
+
+          <div class="col-l-6 col-m-6 col-s-6 col-" style="float:left; padding:2px">
+            <label for="id_transport">Transport:</label>
+
+            <input name="transport" list="transport_list" type="search" class="inputstyle" placeholder="Select Transport" style="text-transform:capitalize;" required id="id_transport">
+            <datalist id="transport_list">
+              {% for cli in transports %}
+           
+              <option data-id="{{cli.id}}" value="{{cli.transport}}"> </option>>
+             
+              {% endfor %}
+
+            </datalist>
+
+
+          </div>
+
+
+
+          
         </div>
 
 

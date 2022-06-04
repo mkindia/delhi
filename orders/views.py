@@ -6,7 +6,7 @@ from django.shortcuts import redirect, render
 from django.views.decorators.cache import cache_control
 from django.contrib import messages
 from clients.models import Client, Consignee
-from items.models import Item,Item_Variant
+from items.models import Item,Item_Variant, Unit
 import json
 
 # Create your views here.
@@ -49,8 +49,16 @@ def order_item(request):
         
         if request.headers.get('x-requested-with') == 'XMLHttpRequest':
             data = json.loads(request.body.decode("utf-8"))
-            con_id = data['consignee_id']
-            order_id=data['order_id']
+            #print(len(data))
+            #print(len(data[0]))
+            #print(data[len(data)-1]['con_id'])
+            #print(data[len(data)-1]['item_id'])
+
+            for item in data:
+                print(item['item_id'])
+                print(item['item_variant_id'])
+            #con_id = data['item_name']
+            order_id=None
             clientsall=[]
 
             
@@ -68,10 +76,11 @@ def order_item(request):
                        
         else :
             
-            client=Client.objects.filter(user_id=request.user)           
+            client=Client.objects.filter(user_id=request.user)
+            units=Unit.objects.all()          
             consigne = Consignee.objects.filter(client_id__in=client) # client_id__in = client filter use
             Items=Item.objects.all()
-            return render(request,'orders/order_item.html/',{'clients':client,'consignes':consigne,'items':Items})
+            return render(request,'orders/order_item.html/',{'clients':client,'consignes':consigne,'items':Items,'units':units})
     
     else :
 

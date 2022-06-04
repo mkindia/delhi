@@ -37,8 +37,8 @@ class Client(models.Model) :
     address_2 = models.CharField("address line2", max_length=128, blank=True, null=True)
     address_3 = models.CharField("address line3", max_length=128, blank=True, null=True)
     address_4 = models.CharField("address line4", max_length=128, blank=True, null=True)
-    city = LowerCase("city", max_length=64, default="delhi", blank=True, null=True)
-    state = models.ForeignKey(State,on_delete=models.PROTECT, blank=True, null=True)
+    city = LowerCase("city", max_length=64, blank=True, null=True)
+    state = LowerCase('state',max_length=64, blank=True, null=True)
     zipcode = models.CharField("zipcode", max_length=10, default="", blank=True, null=True)
     email=models.EmailField(blank=True, null=True, verbose_name='email address',max_length=255,unique=True)   
     phoneNumberRegex = RegexValidator(regex = r"^\+?1?\d{9,15}$")
@@ -70,8 +70,9 @@ class Consignee(models.Model):
     error_messages={
             'unique': "A consignee already exists.",
         },)
-    station=models.ForeignKey(Station,on_delete=models.SET_NULL,null=True,blank=True)
-    transport=models.ForeignKey(Transport,on_delete=models.SET_NULL,null=True,blank=True)            
+    state = LowerCase('state',max_length=64, blank=True, null=True)
+    station=LowerCase('station',max_length=64,null=True,blank=True)
+    transport=LowerCase('transport',max_length=64,null=True,blank=True)
     private_marka = models.CharField(max_length=100,null=True,blank=True)
     is_client = models.BooleanField(default=False) 
     

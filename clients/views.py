@@ -13,7 +13,7 @@ import uuid
 
 
 from core.models import Custom_User
-from .models import Client, Client_Token,Consignee,Transport,Station
+from .models import Client, Client_Token,Consignee,Transport,Station,State
 from .forms import Client_Form,Consignee_Transport_form,Consignee_form
 
 # for sending mail
@@ -47,7 +47,7 @@ def add_client(request):
               if request.headers.get('x-requested-with') == 'XMLHttpRequest':
                      data = json.loads(request.body.decode("utf-8"))
                      c_name = data['c_name']
-                     print(c_name)
+                     #print(c_name)
 
                      clientsall=[]
                      for cli in Client.objects.all():
@@ -56,11 +56,11 @@ def add_client(request):
                      data={'clients':clientsall}
                      return JsonResponse(data)
               
-     
-           
-              station=Station.objects.all()
-              trns=Transport.objects.all()
-            
+              
+              
+              state=Consignee.objects.order_by('state').values('state').distinct()
+              station = Consignee.objects.order_by('station').values('station').distinct()
+              transport = Consignee.objects.order_by('transport').values('transport').distinct()
               if request.method == 'POST':
 
                      next = request.POST.get('next', '/')
@@ -92,6 +92,13 @@ def add_client(request):
                                    t_inst=Transport.objects.only('id').get(id=t_id)
 
                                    s_id=request.POST.get('station')
+                                   
+                                   staion_n = Station.objects.get(station_name=s_id)
+
+                                   if staion_n.station_name != s_id :
+                                          print(s_id)
+
+
                                    s_inst=Station.objects.only('id').get(id=s_id)
 
                                    p_no= request.POST.get('mnumber')
@@ -114,7 +121,7 @@ def add_client(request):
                             except :
                                    print('errror')
                                    messages.warning(request,'Data_error')
-                                   return render(request,'clients/add_client.html/',{'transport':trns,'station':station})                             
+                                   return render(request,'clients/add_client.html/',{'state':state,'transport':transport,'station':station})                             
 
                      
                      
@@ -122,7 +129,7 @@ def add_client(request):
               
               else:       
             
-                     return render(request,'clients/add_client.html/',{'transport':trns,'station':station})
+                     return render(request,'clients/add_client.html/',{'state':state,'transport':transport,'station':station})
 
        else :
               return redirect('/')
@@ -168,8 +175,10 @@ def add_consignee(request):
 
        if request.user.is_authenticated:
               client=Client.objects.filter(user_id=request.user.id)
-              station=Station.objects.all()
-              trns=Transport.objects.all() 
+              state=Consignee.objects.order_by('state').values('state').distinct()
+              station = Consignee.objects.order_by('station').values('station').distinct()
+              trns = Consignee.objects.order_by('transport').values('transport').distinct()
+             
               Con=False
               if request.method == 'POST':
                      
@@ -179,7 +188,7 @@ def add_consignee(request):
                             if cl.consignee_name == request.POST.get('consignee_name'):
                                   Con=True
                                   messages.error(request,'Consignee already exists.')
-                                  return render(request,'clients/add_consignee.html/',{'clients':client,'stations':station,'transports':trns})
+                                  return render(request,'clients/add_consignee.html/',{'clients':client,'state':state ,'stations':station,'transports':trns})
                            
                      if Con == False:
 
@@ -194,6 +203,6 @@ def add_consignee(request):
 
                            
 
-              return render(request,'clients/add_consignee.html/',{'clients':client,'stations':station,'transports':trns})
+              return render(request,'clients/add_consignee.html/',{'clients':client,'state':state ,'stations':station,'transports':trns})
        else:
               return redirect('/')

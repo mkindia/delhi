@@ -16,12 +16,12 @@
 
     #myTable th:first-child{
 
-        border-radius:7px 0 0 0;
+        border-radius:0 0 0 0;
     }
 
     #myTable th:last-child{
 
-        border-radius:0 7px 0 0;
+        border-radius:0 0 0 0;
     }
     
     #myTable td, #customers th {
@@ -68,8 +68,7 @@
                         <label for="id_email">Select Consignee</label>
                         <input id="consignee_input" name="consignee_input" placeholder="Select Consignee" type="search"
                             value="" list="consignee_list" required style="text-transform:capitalize;" />
-                        <datalist id="consignee_list" style="text-transform:capitalize; ">
-                            
+                        <datalist id="consignee_list" style="text-transform:capitalize; ">                            
                            
                             {% for cli in consignes %}
                             
@@ -82,18 +81,9 @@
 
                     <div class="col-l-6 col-m-6 col-s-6 col-5" style="float:left; padding:1px;">
                         <label for="id_email">Date</label>
-                        <input type="Date" name="date" class="inputstyle" {% if user.is_user %} disabled="True" {% endif %} required id="id_date">
+                        <input type="Date" name="date" class="inputstyle" style="padding: 2px;" {% if user.is_user %} disabled="True" {% endif %} required id="id_date">
                     </div>
                 </div>
-
-
-                <div class="col-l-12 col-m-12 col-s-12 col-" style="float:left; padding:2px;">
-                    <label for="id_email">Comment</label>
-                    <input type="text" name="itemname" id="comment" style="background-color: aliceblue; opacity: .7;"
-                        placeholder="About Orders" class="inputstyle">
-                </div>
-
-
 
 
                 <div id="orders_div" class="col-l-12 col-m-12 col-s-12 col-"
@@ -101,7 +91,7 @@
                     <table id="myTable">
                        <thead>
                         <tr style="font-size: 12px;">
-                            <th>SN.</th>
+                            <th>SN.</th>                            
                             <th>Item Name</th>
                             <th>Varient</th>
                             <th>Price</th>
@@ -115,6 +105,11 @@
                     </table>
                 </div>
 
+                <div class="col-l-12 col-m-12 col-s-12 col-" style="float:left; padding:2px;">
+                    <label for="id_email">Comment</label>
+                    <input type="text" name="itemname" id="comment" style="background-color: aliceblue; opacity: .7;"
+                        placeholder="About Orders" class="inputstyle">
+                </div>
                 
                 <div class="col-l-12 col-m-12 col-s-12 col-" style="float: left; padding: 2px;">
                     
@@ -125,7 +120,7 @@
                 </div>
                 
                 <div class="col-l-12 col-m-12 col-s-12 col-" style="float: left; padding: 2px;">
-                    <button id="count">oteritems</button>
+                    <button id="count">orderitems</button>
                     
                 </div>
 
@@ -151,13 +146,15 @@
                 </i></a>
             <button id="submit" class="buttonstyle" form="order-item-form"
                 style="float:right; margin-right: 10px;">Submit</button>
-            <button type="button" id="select_item" class="buttonstyle"
-                style="float:right; margin-right: 5px; background-color: aquamarine;">select item</button>
+            <button type="button" id="select_item" class="buttonstyle" 
+                style="float:right; margin-right: 5px; background-color: aquamarine; display: none;">select item</button>
 
         </div>
     </div>
 
 </div>
+
+<!-- item add model  -->
 <div>
     <div class="basemodal" id="item_modal" style="position: absolute; display: none;">
         <div class="base-modal-content col-l-6 col-m-9 col-s-11" style="margin-top:5px;">
@@ -171,7 +168,7 @@
                 <form name="item_form" id="item-form" method="POST">
                     <div class="col-l-6 col-m-6 col-s-12 col-12" style="float:left; padding:2px">
                         <label for="item_input">Item name</label>
-                        <input id="item_input" type="search" value="" placeholder="select item" list="item_list"
+                        <input id="item_input" type="search" value="" class="validdatalist" placeholder="select item" list="item_list"
                             required style="text-transform:capitalize;" />
                         <datalist id="item_list" style="text-transform:capitalize;">
                             {% for item in items %}
@@ -186,7 +183,7 @@
                     <div class="col-l-6 col-m-6 col-s-12 col-12" style="float:left; padding:2px">
 
                         <label for="item_variant">Item Variants</label>
-                        <input id="item_variant" type="search" value="" placeholder="select variant"
+                        <input id="item_variant" type="search" value="" class="validdatalist" placeholder="select variant"
                             list="item_variant_list" required style="text-transform:capitalize;" />
                         <datalist id="item_variant_list" style="text-transform:capitalize;">
                           
@@ -197,19 +194,21 @@
 
                     <div class="col-l-6 col-m-6 col-s-6 col-6" style="float:left; padding:2px;">
                         <label for="item_price">Item Price</label>
-                        <input type="number" min="1" max="1000" step=".01" , name="itemprice" placeholder="Enter Price"
+                        <input type="number" min="1" max="1000" step=".01" {% if user.is_user %} disabled="true"  {% endif %}  name="itemprice" placeholder="Enter Price"
                             class="inputstyle" required id="item_price">
 
                     </div>
 
                     <div class="col-l-6 col-m-6 col-s-6 col-6" style="float:left; padding:2px">
                         <label for="per_unit">Per</label>
-                        <input id="per_unit" type="text" value="Kg." disabled='True' list="per_unit_list" required
+                        <input id="per_unit" type="text" class="validdatalist" value="Kg." disabled='True' list="per_unit_list" required
                             style="text-transform:capitalize;" />
                         <datalist id="per_unit_list" style="text-transform:capitalize;">
-                            <option data-id="1" value="Kg."> </option>
-                            <option data-id="2" value="Pcs."> </option>
+                            {% for unit in units %}
 
+                            <option data-id="{{unit.id}}"  value="{{unit.unit_name}}"></option>>
+
+                            {% endfor %}
                         </datalist>
                     </div>
 
@@ -223,12 +222,14 @@
 
                     <div class="col-l-6 col-m-6 col-s-6 col-6" style="float:left; padding: 2px;">
                         <label for="order_unit">Unit</label>
-                        <input id="order_unit" type="search" value="" placeholder="select unit" list="unit_list"
+                        <input id="order_unit" type="search" class="validdatalist" value="Carton" placeholder="select unit" list="unit_list"
                             required style="text-transform:capitalize;" />
                         <datalist id="unit_list" style="text-transform:capitalize;">
-                            <option data-id="1" value="Kg."> </option>
-                            <option data-id="2" value="Pcs."> </option>
-                            <option data-id="5" value="Carton"> </option>
+                            {% for unit in units %}
+
+                            <option data-id="{{unit.id}}"  value="{{unit.unit_name}}"></option>>
+
+                            {% endfor %}
                         </datalist>
 
                     </div>
@@ -275,7 +276,7 @@
     
 
     <script>
-
+            document.getElementById("id_date").valueAsDate = new Date();
         let item_varient_price='';
         
        
@@ -284,16 +285,20 @@
         document.getElementById('optionbtn').addEventListener('click',addopt)
         document.getElementById('atri').addEventListener('click',atri);
         document.getElementById('item_input').addEventListener('change',getItemVariants);
-        document.getElementById('item_variant').addEventListener('change',getVariantPrice);
-        document.getElementById('consignee_input').addEventListener('change',getclientdetails)
+        let item_variant = document.getElementById('item_variant');
+        let consignee_input = document.getElementById('consignee_input');
 
-        function getclientdetails(){
+        consignee_input.addEventListener('change',function(event){
             item_varient_price='';
-            document.getElementById('client_id').value=selectedDatalistAttributeValue('consignee_input','consignee_list','client-id');
-
-            item_varient_price ='item_variant_price_'+selectedDatalistAttributeValue('client_id','client_list','group-id');            
-            
-        }
+            let client_value=document.getElementById('client_id').value=selectedDatalistAttributeValue('consignee_input','consignee_list','client-id');
+            item_varient_price ='item_variant_price_'+selectedDatalistAttributeValue('client_id','client_list','group-id');
+                          
+            if(typeof client_value !='undefined')
+            {
+                document.getElementById('select_item').style.display='block';
+            }else{document.getElementById('select_item').style.display='none';}
+           
+        });
         
        
 
@@ -305,35 +310,33 @@
             document.getElementById('item_variant').value='';
             //let item_at=document.getElementById('item_input');      
 
-            let item_id = selecteddatalistid('item_input', 'item_list');
+            let item_id = selectedDatalistAttributeValue('item_input', 'item_list','data-id');
             var element =  document.getElementById('item_variant_list').innerHTML='';
            // var item_unit = selecteddatalistid('item_input','item_list');
             var sel = document.getElementById('item_variant_list');
             let item_unit = selectedDatalistAttributeValue('item_input','item_list','item-unit');
             
             document.getElementById('per_unit').value=item_unit;
-            
-
-            fetch('/items/fetch_itemvariant/'+item_id+'/')
-            .then((response)=>{return response.json();})
-            .then((data)=>{
+            if(typeof item_id !='undefined')
+            {
+                fetch('/items/fetch_itemvariant/'+item_id+'/')
+                .then((response)=>{return response.json();})
+                .then((data)=>{
                 console.log(data);
                // document.getElementById('item_price').value=data.item_variant_price;
    
                 //document.getElementById('per_unit').value=item_unit;
                 for(var i = 0; i <data.length; i++) {
-           // alert(list[i]['item_price']);
+                // alert(list[i]['item_price']);
                 var opt = document.createElement('option');
-                opt.setAttribute("data-id",data[i]['item_variant_price']);
+                opt.setAttribute("data-id",data[i]['id']);
                 opt.setAttribute('varientprice',data[i][item_varient_price])     
                  opt.value = data[i]['item_variant_name'];
                  sel.appendChild(opt);
 
                 }
-
-
-                
-            });
+                });
+            }
         }
 
         function atri(e){
@@ -348,7 +351,7 @@
             
             for(var i =1,row;row = table.rows[i];i++){
                          var col = row.cells;
-                var jsonObj = {
+                var jsonObj = {                    
                     item_name : col[1].innerHTML.trim(),
                     item_variant : col[2].innerHTML.trim(),
                     item_price : col[3].innerHTML.trim(),
@@ -390,9 +393,9 @@
 
             e.preventDefault();
             const item_name = document.getElementById('item_input').value;
-            //const item_id = selecteddatalistid('item_input', 'item_list');
+            const item_id = selectedDatalistAttributeValue('item_input', 'item_list','data-id');
             const item_variant_name = document.getElementById('item_variant').value;
-            //const item_variant_id = selecteddatalistid('item_variant', 'item_variant_list');
+            const item_variant_id = selectedDatalistAttributeValue('item_variant', 'item_variant_list','data-id');
             const per = document.getElementById('per_unit').value;
             //const per_unit_id = selecteddatalistid('per_unit', 'per_unit_list');
             const item_price = document.getElementById('item_price').value;
@@ -400,18 +403,18 @@
             const order_qty = document.getElementById('order_unit').value;
 
             tbodyEl.innerHTML += `
-    <tr>
-        <td style="text-align: center; font-size: 12px;"> </td>      
+        <tr>
+        <td style="text-align: center; font-size: 12px;"> </td>  
         <td style="text-align: center; font-size: 12px;"> ${item_name}</td>            
         <td style="text-align: center; font-size: 12px;"> ${item_variant_name}</td>    
         <td style="text-align: center; font-size: 12px;"> ${item_price}</td>          
         <td style="text-align: center; font-size: 12px;"> ${per}</td>    
         <td style="text-align: center; font-size: 12px;"> ${item_qty}</td>   
         <td style="text-align: center; font-size: 12px;"> ${order_qty}</td>    
-        <td style="text-align: center; font-size: 12px;"><button class="deleteBtn">X</button></td> 
-    </tr>
-    
-    `;
+        <td style="text-align: center; font-size: 12px;"><button class="deleteBtn">X</button></td>
+        <td hidden> ${item_id}</td>
+        <td hidden> ${item_variant_id}</td> 
+        </tr>`;
 
             reindex();
             return false;
@@ -468,7 +471,7 @@
             document.getElementById('item_modal').style.display = 'none';
         }
 
-        document.getElementById("id_date").valueAsDate = new Date();
+        
 
 
         const submitorder = document.getElementById('order-item-form');
@@ -478,28 +481,30 @@
         async function validateForm(e) {
           
             e.preventDefault();
-            let con_id = selecteddatalistid('consignee_input', 'consignee_id');
 
-            let item_id = selecteddatalistid('item_input', 'item_list');
-            let item_price = document.getElementById('item_price').value;
+            let jarry = []
 
-            let per_unit_id = selecteddatalistid('per_unit', 'per_unit_list');
-            let item_variant_id = selecteddatalistid('item_variant', 'item_variant_list');
+            var table = document.getElementById('myTable');
+            
+            for(var i =1,row;row = table.rows[i];i++){
+                         var col = row.cells;
+                var jsonObj = {
+                    cli_id : selectedDatalistAttributeValue('client_id','client_list','data-id').trim(),
+                    con_id : selectedDatalistAttributeValue('consignee_input', 'consignee_list','data-id').trim(),  
+                    item_name : col[1].innerHTML.trim(),
+                    item_variant : col[2].innerHTML.trim(),
+                    item_price : col[3].innerHTML.trim(),
+                    per : col[4].innerHTML.trim(),
+                    qty : col[5].innerHTML.trim(),
+                    unit : col[6].innerHTML.trim(),
+                    item_id : col[8].innerHTML.trim(),
+                    item_variant_id : col[9].innerHTML.trim()
+                    }
 
-            let qty = document.getElementById('qty').value;
-
-            let order_unit_id = selecteddatalistid('order_unit', 'unit_list');
-            let comment = document.getElementById('comment').value;
-
-
-
-            let data = {
-                'order_id':25, 'consignee_id': con_id,
-                'item_id': item_id, 'item_price': item_price, 'per_unit_id': per_unit_id,
-                'item_variant_id': item_variant_id, 'qty': qty, 'order_unit_id': order_unit_id,
-                'comment': comment
-            };
-
+                jarry.push(jsonObj);
+        }
+          
+            let data = jarry
             await fetch('/orders/order_item/', postoption(data))
                 .then(response => {
                     if (!response.ok) {
@@ -526,18 +531,20 @@
         
         }
 
-        // var table1 = document.getElementById("myTable").rows.length;
-        // alert(table1);
+     
 
+        item_variant.addEventListener('change',function(){
 
-        function getVariantPrice(){
+            let ite=selectedDatalistAttributeValue('item_variant','item_variant_list','data-id')
            
-          
+            if(typeof ite != 'undefined')
+            {
+                
            let aValue = selectedDatalistAttributeValue('item_variant','item_variant_list','varientprice');
 
            document.getElementById('item_price').value=aValue;
-   
-       }
+            }
+       })
 
 
     </script>

@@ -7,7 +7,7 @@ class Client_Form(forms.ModelForm):
     client_group=forms.ChoiceField(widget=forms.Select(attrs={'class':'inputstyle','style':'text-transform:capitalize;'}))
     class Meta:        
         model = Client
-        fields = ['client_name','client_group']
+        fields = ['client_name','client_group','state']
 
         #widgets ={'client_group':forms.Select(attrs={'class':'inputstyle','text-transform':'capitalize'})}
 
@@ -19,7 +19,7 @@ class Consignee_form(forms.ModelForm):
 
     class Meta:
         model = Consignee
-        fields = ['client_id','consignee_name','transport','station']
+        fields = ['client_id','consignee_name','transport','station','station']
 
 class Transport_Form(forms.ModelForm):
     class Meta:

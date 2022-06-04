@@ -112,7 +112,7 @@ function whatsapp(val){
 
 
 function myFunction() {
-  let c_id=selecteddatalistid('id_client','client_list');
+  let c_id=selectedDatalistAttributeValue('id_client','client_list','data-id');
 
   let data={'client_id':c_id};
        
@@ -160,7 +160,7 @@ function myFunction() {
 function submitdata(){
 
   
-  let c_id=selecteddatalistid('id_client','client_list');
+  let c_id=selectedDatalistAttributeValue('id_client','client_list','data-id');
   document.getElementById('id_client').value=c_id;
 
 }

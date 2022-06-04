@@ -169,7 +169,7 @@ var c_alert = new CustomAlert();
 
 
 // for input list  datalist  validation
-var inputs = document.querySelectorAll("input[list]"); //input[list] for all input type thar have list
+var inputs = document.querySelectorAll(".validdatalist"); //input[list] for all input type thar have list
 for (var i = 0; i < inputs.length; i++) {
   // When the value of the input changes…
   inputs[i].addEventListener("change", function () {
@@ -193,34 +193,17 @@ for (var i = 0; i < inputs.length; i++) {
   });
 }
 
-// get datalist id 
-function selecteddatalistid(inputid,datalistid)
-{
- 
-    var    input = document.getElementById(inputid);
-    var    list = document.getElementById(datalistid);
-    var    i,idc=null;
-    for (i = 0; i < list.options.length; ++i)
-    {
-        if (list.options[i].value === input.value) 
-        {
-            idc = list.options[i].getAttribute('data-id');            
-            return idc;           
-            
-        }       
-    }
-}
 
 function selectedDatalistAttributeValue(inputId,datalistId,attributeName){
 
   let elem= document.getElementById(inputId.trim());
-  let atrivalue = 'please select a valid option';
+  //let atrivalue = 'please select a valid option';
   let dt = document.getElementById(datalistId.trim());
 for (let i = 0; i < dt.childElementCount; i++) {
 // check the selected value with option values.
 if (dt.children[i].attributes.value.value === elem.value) {
 // if Hit use the attributes object to find your attribute and get its value.
-atrivalue = dt.children[i].getAttribute(attributeName);
+let atrivalue = dt.children[i].getAttribute(attributeName);
 return atrivalue;
 }
 }

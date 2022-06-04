@@ -1,7 +1,8 @@
 from django.shortcuts import redirect, render
+from django.core import serializers
 from items.models import Item,Item_Variant
 from django.http import JsonResponse
-from .serializers import item_variants_serializars
+#from .serializers import item_variants_serializars
 import json
 
 # Create your views here.
@@ -28,11 +29,12 @@ def add_item(request):
 def fetch_itemvariant(request,item_id):
     
     if request.user.is_authenticated:
+        #variants=[]
 
-        variants=Item_Variant.objects.filter(item_id=item_id)
-        serializar=item_variants_serializars(variants,many=True)
-
-        return JsonResponse(serializar.data,safe=False)
+        itemvariants=list(Item_Variant.objects.values().filter(item_id=item_id))
+        #serializar=serializers.serialize('json',variants)
+       
+        return JsonResponse(itemvariants,safe=False)
 
     else:
         return redirect('/')
