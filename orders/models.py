@@ -13,11 +13,15 @@ class LowerCase(models.CharField):
         return str(value).lower()
 
 class Consignee_Order(models.Model):
+    order_type=[('sales','sales'),
+                ('purchase','purchase'),]
+
     client_id=models.ForeignKey(Client,on_delete=models.CASCADE)
-    consignee_id=models.ForeignKey(Consignee,on_delete=models.CASCADE)
-    create_date=models.DateField(auto_now_add=True,null=True,blank=True)
+    consignee_id = models.ForeignKey(Consignee,on_delete=models.CASCADE)
+    order_type = LowerCase(max_length=30,blank=True, null=True, choices=order_type,default='sales')
+    create_date=models.DateField(auto_now_add=True,null=True,blank=True)    
     date = models.DateField(null=True,blank=True)
-    des =LowerCase(max_length=200,null=True,blank=True)
+    comment =LowerCase(max_length=200,null=True,blank=True)
     
 class Item_Order(models.Model):   
     client_id=models.ForeignKey(Client,on_delete=models.CASCADE)

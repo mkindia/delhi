@@ -7,11 +7,8 @@
     <div class="basemodal">
         <div class="base-modal-content col-l-6 col-m-9 col-s-11" style="margin-top: 5px;" >
           <div class="base-modal-header">
-            <h style="position: relative; font-weight: bold; margin:0; top: 25%; -ms-transform: translateY(-50%);transform: translateY(-50%);" >
-                   
-              ADD CLIENT
-            
-             
+            <h style="position: relative; font-weight: bold; margin:0; top: 25%; -ms-transform: translateY(-50%);transform: translateY(-50%);" >                   
+              ADD CLIENT                         
             </h>
           
           </div>        
@@ -23,7 +20,7 @@
                   <div>
                     <div class="col-l-6 col-m-6 col-s-6 col-" style="float:left; padding:2px;">
                     <label for="id_client">Client Name:</label>                    
-                    <input type="text" name="client" class="inputstyle" style="text-transform:capitalize;" required id="id_client_name">  
+                    <input type="text" name="client" class="inputstyle" placeholder="enter client name" style="text-transform:capitalize;" required id="id_client_name">  
                     
                   </div>                     
                 
@@ -122,14 +119,14 @@
 document.getElementById('client-form').addEventListener('submit',submitdata);
 
 function submitdata(e){
-  e.preventDefault();
-let c_name = document.getElementById('id_client_name').value.trim();
-let g_id=selectedDatalistAttributeValue('id_client_group','group_list','data-id');
-let t_id=selectedDatalistAttributeValue('id_transport','transport_list','data-id');
-const s_id=selectedDatalistAttributeValue('id_station','station_list','data-id');
+e.preventDefault();
+const c_name = document.getElementById('id_client_name').value.trim().toLowerCase();
+const g_name=document.getElementById('id_client_group').value.trim().toLowerCase();
+const t_name=document.getElementById('id_transport').value.trim().toLowerCase();
+const s_name=document.getElementById('id_station').value.trim().toLowerCase();
 const m_no=document.getElementById('id_number').value.trim();
 
-let data={'c_name':c_name,'g_id':g_id,'t_id':t_id,'s_id':s_id,'m_no':m_no};
+const data={'c_name':c_name,'g_name':g_name,'t_name':t_name,'s_name':s_name,'m_no':m_no};
 let fetchtext =  fetch('/clients/add_client/',postoption(data));
   
   fetchtext.then(async response => {
@@ -142,9 +139,17 @@ let fetchtext =  fetch('/clients/add_client/',postoption(data));
    //Perform actions with the response data from the view          
   
 
-   // alert(data.token)      
-   console.log(data); 
-   if(!confirm('Add Another Clent')){window.history.back()}
+   alert(data.message)      
+  // console.log(data); 
+   if(!confirm('Add Another Clent'))
+   {window.history.back()}
+   else{
+    document.getElementById('id_client_name').value='';
+    document.getElementById('id_client_group').value='';
+    document.getElementById('id_transport').value='';
+    document.getElementById('id_station').value='';
+    document.getElementById('id_number').value='';
+   }
   
    })
    .catch(err=>{ if ( err == "Error: Internal Server Error" ){alert("Wrong Client");}else{ alert(err);}})

@@ -141,9 +141,9 @@
         </div>
         <div class="base-modal-footer">
 
-            <a type="button" class="buttonstyle" onclick="history.back()"
+            <button type="button" class="buttonstyle" onclick="history.back()"
                 style="text-decoration: none; float:right; margin-right:10px;"><i> Exit
-                </i></a>
+                </i></button>
             <button id="submit" class="buttonstyle" form="order-item-form"
                 style="float:right; margin-right: 10px;">Submit</button>
             <button type="button" id="select_item" class="buttonstyle" 
@@ -222,7 +222,7 @@
 
                     <div class="col-l-6 col-m-6 col-s-6 col-6" style="float:left; padding: 2px;">
                         <label for="order_unit">Unit</label>
-                        <input id="order_unit" type="search" class="validdatalist" value="Carton" placeholder="select unit" list="unit_list"
+                        <input id="order_unit" type="search" class="validdatalist" value="carton" placeholder="select unit" list="unit_list"
                             required style="text-transform:capitalize;" />
                         <datalist id="unit_list" style="text-transform:capitalize;">
                             {% for unit in units %}

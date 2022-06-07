@@ -49,7 +49,7 @@
                 
                   <div>
                     <label id="sendby" style="text-decoration: none; display: none; float: left; margin-right:5px; margin-top:30px;"><small>Send Token By:</small></label>
-                    <a  type="button" id="email" onclick="c_prompt.render('Send E-Mail','Enter E-Mail Address','sendmail')" class="ancor" style="text-decoration: none; display: none; float: left; margin-right:5px; margin-top:30px;" ><small><i>Email,</i></small></a>
+                    <a  type="button" id="email" class="ancor" style="text-decoration: none; display: none; float: left; margin-right:5px; margin-top:30px;" ><small><i>Email,</i></small></a>
                     <a type="button" id="whatsup"  class="ancor" style="text-decoration: none; display: none; float: left; margin-right:5px; margin-top:30px;" ><small><i>Whatsapp</i></small></a>
                     
                   </div>
@@ -69,31 +69,42 @@
 
 {% block main_scripts %}
 <script src="{% static 'core/js/fetchApi.js' %}"></script>
-<script src="https://smtpjs.com/v3/smtp.js"></script>
 <script>
 
 var secureToken = '' ;
 document.getElementById("id_client").addEventListener("change", myFunction);
+
+let email_id = document.getElementById('email');
+let f='hi';
 document.getElementById('whatsup').addEventListener('click',whatsappacc);
-function sendmail(val)
+email_id.addEventListener("click", function (event)
 {
-  let token=document.getElementById("id_status").value;
+  const c_id=selectedDatalistAttributeValue('id_client','client_list','data-id');
+        document.getElementById('loader').style.display='block';
+
+        const data={'client_id':c_id,'subject':'subject','message':'message'};
+       
+        let fetchtext =  fetch('/clients/send_email/',putoption(data));
   
-  if(sendmail){
-        document.getElementById('loader').style.display='block';   
-        Email.send({       
-              SecureToken: secureToken,
-              To: val,
-              From: "mail@spangle.in",
-              Subject: "your token is : ",
-              Body: "Your Token is : "+token,
-            })
-              .then(function (message) {
-                document.getElementById('loader').style.display='none';   
-                c_alert.render('Mail Messasge','mail sent successfully',2000);
-              });
-      }
-}
+         fetchtext.then(async response => {
+            if (!response.ok) {
+                throw Error(response.statusText);
+            }
+                  return await response.json(); // Convert response to json use text for text/html
+          })
+          .then(data => {        
+         
+           document.getElementById('loader').style.display='none';
+
+          c_alert.render('Message',data.message);
+         
+         
+          })
+          .catch(err=>{ if ( err == "Error: Internal Server Error" ){alert("Wrong Client");}else{ alert(err);}})
+  
+        
+      
+})
 
 function whatsappacc(){
 
@@ -101,22 +112,21 @@ c_prompt.render('Send Whatsapp','Enter 10 digit Whatsapp No.','whatsapp');
 
 }
 
-function whatsapp(val){
-  let token=document.getElementById("id_status").value;
-  
+function whatsapp(val){  
+  const token=document.getElementById("id_status");
   if (val){
-  window.open("https://wa.me/91"+val+"/?text=Token is: "+token);
+  window.open("https://wa.me/91"+val+"/?text=Token is: "+token.value);
   }
 }
 
 
 
 function myFunction() {
-  let c_id=selectedDatalistAttributeValue('id_client','client_list','data-id');
+  const c_id=selectedDatalistAttributeValue('id_client','client_list','data-id');
 
-  let data={'client_id':c_id};
+  const data={'client_id':c_id};
        
-        let fetchtext =  fetch('/clients/genrate_client_token',postoption(data));
+        let fetchtext =  fetch('/clients/genrate_client_token/',putoption(data));
   
          fetchtext.then(async response => {
             if (!response.ok) {

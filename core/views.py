@@ -39,15 +39,12 @@ def home(request):
        else:
               
               clients=Client.objects.filter(user_id=request.user)
-              consignes = Consignee.objects.all()
-              if request.user.is_admin :
-                    
+              consignes = Consignee.objects.filter(client_id__in=clients)
+              if request.user.is_admin :                    
                      return render(request,'clients/admin_dashboard.html',{'client':clients,'consigne':consignes,'orders':'Pandan/2 @120/Pcs.%0asinhasn 2no. : 150 Pcs. @320/Kg.'})
-              if request.user.is_staff :
-                    
+              if request.user.is_staff :                    
                      return render(request,'core/staff_dashboard.html',{'client':clients})
-              else  :
-                            
+              else  :                     
                      return render(request,'clients/client_dashboard.html',{'client':clients})
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
@@ -100,13 +97,16 @@ def signin(request):
                                  login(request, vuser)
                                  request.session['accesskey'] = 'accesskey'
                                  messages.success(request,'Wellcome ' +'[ '+ request.user.first_name + ' ' + request.user.last_name + ' ]')
+                                 """
                                  if request.user.is_admin:                                        
                                         return redirect('/')
                                  elif request.user.is_staff:
                                         return redirect('/')
                                 # messages.success(request,suer)
                                  else:                                                                      
-                                    return redirect('/')
+                                    return redirect('/')                                  
+                                   """
+                                 return redirect('/')
                              else:
                                     return redirect('/')
                       else: 

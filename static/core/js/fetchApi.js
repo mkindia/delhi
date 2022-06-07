@@ -6,7 +6,23 @@ const csrftoken = getCookie('csrftoken');
             method: 'POST',
             credentials: 'same-origin',
             headers:{
-            'Accept': 'application/json',
+            'Accept': 'application/json; charset=UTF-8',
+            'X-Requested-With': 'XMLHttpRequest', //Necessary to work with request.is_ajax()
+            'X-CSRFToken': csrftoken,
+            },
+                body: JSON.stringify(data) //JavaScript object of data to POST
+            } 
+
+            return option ;
+        } 
+
+        function putoption(data)
+        {
+         let option = {
+            method: 'PUT',
+            credentials: 'same-origin',
+            headers:{
+            'Accept': 'application/json; charset=UTF-8',
             'X-Requested-With': 'XMLHttpRequest', //Necessary to work with request.is_ajax()
             'X-CSRFToken': csrftoken,
             },

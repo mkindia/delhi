@@ -74,8 +74,7 @@ class Consignee(models.Model):
     station=LowerCase('station',max_length=64,null=True,blank=True)
     transport=LowerCase('transport',max_length=64,null=True,blank=True)
     private_marka = models.CharField(max_length=100,null=True,blank=True)
-    is_client = models.BooleanField(default=False) 
-    
+    is_client = models.BooleanField(default=False)     
     def __str__(self):
         return self.consignee_name
 

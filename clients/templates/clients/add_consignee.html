@@ -25,7 +25,7 @@
           <div class="col-l-6 col-m-6 col-s-6 col-" style="float:left; padding:2px">
             <label for="id_client_id">Client:</label>
 
-            <input name="client_id"  list="client_list" type="search" class="inputstyle" placeholder="Select Client" style="text-transform:capitalize;" required id="id_client_id">
+            <input name="client_id"  list="client_list" type="search" class="inputstyle validdatalist" placeholder="Select Client" style="text-transform:capitalize;" required id="id_client_id">
             <datalist id="client_list" >
               {% for cli in clients %}
            
@@ -53,7 +53,7 @@
           <div class="col-l-6 col-m-6 col-s-6 col-" style="float:left; padding:2px">
             <label for="id_station">Station:</label>
 
-            <input name="station" list="station_list" type="search" class="inputstyle validdatalist" placeholder="Select Station" style="text-transform:capitalize;" required id="id_station">
+            <input name="station" list="station_list" type="search" class="inputstyle" placeholder="Select Station" style="text-transform:capitalize;" required id="id_station">
             <datalist id="station_list">
               {% for cli in stations %}
            
@@ -117,12 +117,9 @@
 <script>
 
   function submitdata(){
-  let c_id=selecteddatalistid('id_client_id','client_list')
-  let t_id=selecteddatalistid('id_transport','transport_list')
-  let s_id=selecteddatalistid('id_station','station_list')
-  document.getElementById('id_client_id').value=c_id
-  document.getElementById('id_transport').value=t_id
-  document.getElementById('id_station').value=s_id
+ document.getElementById('id_consignee_name').value=document.getElementById('id_consignee_name').value.trim();
+ document.getElementById('id_transport').value=document.getElementById('id_transport').value.trim();
+ document.getElementById('id_station').value=document.getElementById('id_station').value.trim();
   
  
   }

@@ -55,6 +55,8 @@ def order_item(request):
             #print(data[len(data)-1]['item_id'])
 
             for item in data:
+                print(item['cli_id'])
+                print(item['con_id'])
                 print(item['item_id'])
                 print(item['item_variant_id'])
             #con_id = data['item_name']
