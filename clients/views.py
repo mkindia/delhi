@@ -20,9 +20,9 @@ from .models import Client, Client_Token,Consignee,Transport,Station,State
 from .forms import Client_Form,Consignee_Transport_form,Consignee_form
 
 # for sending mail
-def mail_for_verify_user(subject,email,url,message,token):
+def mail_for_verify_user(subject,message,email,url,token):
 
-       subject = subject
+     
 
        if url != None :
               message = f'{message} http://127.0.0.1:8000/{url}/{token}/'
@@ -32,8 +32,8 @@ def mail_for_verify_user(subject,email,url,message,token):
 
        
        from_email = settings.EMAIL_HOST_USER
-       recipient_list = [email]
-       send_mail(subject=subject,message=message,from_email=from_email,recipient_list=recipient_list)
+       to_email = [email]
+       send_mail(subject=subject,message=message,from_email=from_email,recipient_list=to_email)
 
 def send_email(request):
        if request.user.is_authenticated:
@@ -45,9 +45,8 @@ def send_email(request):
                             msg=data['message']
                             if cli_email.email == None or cli_email.email == '':
                                    msg = 'Client not Found any email please check'
-                            else:
-                                   print(cli_email.email)
-                                   mail_for_verify_user(sub,cli_email.email,None,msg,'nottoken')                                  
+                            else:                                  
+                                   mail_for_verify_user(sub,msg,cli_email.email,None,'nottoken')                                  
                                    msg = 'Email sent to Client'
 
                             data={'message':msg}
@@ -208,10 +207,14 @@ def genrate_client_token(request):
 def add_consignee(request):
 
        if request.user.is_authenticated:
-              client=Client.objects.filter(user_id=request.user.id)
+              client=Client.objects.filter(user_id=request.user.id)             
               state=Consignee.objects.order_by('state').values('state').distinct()
               station = Consignee.objects.order_by('station').values('station').distinct()
-              trns = Consignee.objects.order_by('transport').values('transport').distinct()              
+              trns = Consignee.objects.order_by('transport').values('transport').distinct()
+              user_client_name=None
+              if request.user.is_user:
+                     user_client=Client.objects.only('user_id').get(user_id=request.user.id)
+                     user_client_name=user_client.client_name
               Con=False
               if request.method == 'POST':
                      cli_id=Client.objects.get(client_name=request.POST.get('client_id'))                                       
@@ -235,6 +238,6 @@ def add_consignee(request):
                                    return render(request,'clients/add_consignee.html/',{'clients':client,'state':state ,'stations':station,'transports':trns})
                            
 
-              return render(request,'clients/add_consignee.html/',{'clients':client,'state':state ,'stations':station,'transports':trns})
+              return render(request,'clients/add_consignee.html/',{'clients':client,'user_client_name':user_client_name,'state':state ,'stations':station,'transports':trns})
        else:
               return redirect('/')

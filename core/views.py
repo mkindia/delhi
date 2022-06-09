@@ -17,7 +17,7 @@ from clients.models import Client, Client_Token,Consignee
 import os
 
 # for sending mail
-def mail_for_verify_user(subject,email,url,message,token):
+def mail_for_verify_user(subject,message,email,url,token):
 
        subject = subject
 
@@ -67,7 +67,7 @@ def signup(request):
                                    token=uuid.uuid4()
                                    ver_obj=User_Verification(user_id=nu,client_id=uv.client_id_id,email=nu.email,token=token)
                                    ver_obj.save()         
-                                   mail_for_verify_user('Verify Your account',nu.email,'account_verify','Hi Click on Link To Verify Your Account',token)
+                                   mail_for_verify_user('Verify Your account','account_verify','Hi Click on Link To Verify Your Account',nu.email,token)
                                    messages.success(request,'Account Verify mail Sent to'+' '+ nu.email)  
                                    request.session.flush()
                                    request.session.clear_expired()
@@ -253,13 +253,13 @@ def forget_pwd(request):
               if lastrequest != None:                            
                      if lastrequest.is_changed == False  :                            
                             messages.info(request,"Please check your registered Email ")
-                            mail_for_verify_user('Recover Your Password',uemail,'pass_change','Please click on link to new password',lastrequest.token)
+                            mail_for_verify_user('Recover Your Password','pass_change','Please click on link to new password',uemail,lastrequest.token)
                             return redirect('/')
                      else : 
                             cu_id = Custom_User.objects.only('id').get(user_name=uname)                                 
                             ver_obj=Password_Change(user_id=cu_id,email=uemail,token=token)                     
                             ver_obj.save()  
-                            mail_for_verify_user('Recover Your Password',uemail,'pass_change','Please click on link to new password',token)                     
+                            mail_for_verify_user('Recover Your Password','pass_change','Please click on link to new password',uemail,token)                     
                             messages.info(request,"Please check your registered Email ")
                             return redirect('/')
               else: 
@@ -286,7 +286,7 @@ def forget_uname(request):
                      return render(request,'core/forget_uname.html',{'header':'Forget Username'})
 
               token = uuid.uuid4()
-              mail_for_verify_user('your User name',email,None,'your User Name Is :- '+uname,token)                     
+              mail_for_verify_user('your User name','your User Name Is :- '+uname,email,None,token)                     
               messages.info(request,"Please check your registered mail " + uemail)
               return redirect('/')
        else :

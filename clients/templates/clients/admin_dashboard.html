@@ -1,52 +1,107 @@
 {% extends 'core/base.html' %}
-
 {% block title %}admin{% endblock title %}
+{% block page_head %} 
+<style>
+    #myTable {
+      font-family: Arial, Helvetica, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+      font-size: 12px;
+      text-align: center;
+     
+   
+    }
+
+    #myTable th:first-child{
+
+        border-radius:0 0 0 0;
+    }
+
+    #myTable th:last-child{
+
+        border-radius:0 0 0 0;
+    }
+    
+    #myTable td, #customers th {
+      border: 1px solid #ddd;
+      padding: 2px;
+    }
+    
+    #myTable tr:nth-child(even){background-color: #f2f2f2;}
+    /*
+    #myTable tr:hover {background-color: #ddd;}
+    */
+    #myTable th {
+      padding-top: 6px;
+      padding-bottom: 6px;    
+      font-size: 12px;
+      text-align: center;
+      background-color: #047eaa;
+      color: white;
+    }
+    </style>
+{% endblock page_head %}
+
 
 {% block main_content %}
-
-<div id="home_content">
-
-  <form>
-    <h> For Admin </h>
-
-    <input id="datalist_input" type="search" multiple value="" list="datalist_id" required
-      style="text-transform:capitalize;" />
-    <datalist id="datalist_id">
-
-
-      {% for cli in consigne %}
-
-      <option data-id="{{cli.id}}" value="{{cli.consignee_name}} / {{cli.client_id}}"> </option>
-
-      {% endfor %}
-
-    </datalist>
-
-   
-    <button class="buttonstyle" type="submit" id="check">Check</button>
-    <!-- %0a for line brak in whatsups -->
-    <a type="button" style="text-size-adjust:none;" href="whatsapp://send/?phone=919213427055&amp;text=Hello user  %0a{{orders}}" id="openWA">Send to
-      WhatsApp</a>
-
-  </form>
-  <!-- Auto open on WebView and Firefox 
-      <iframe id="launcher" src="whatsapp://send/?phone=62812345678&amp;text=test" style="display: none;"></iframe> -->
-
-
-
-  <br><br><br>
-  <button onclick="c_prompt.render('Aleart Box','Hello World','changeText')">CustomePromot</button>
-  <button onclick="c_alert.render('Aleart Box','Hello World',2000)">CustomeAlert</button>
-  <button onclick="fetchHtml('/clients/add_client')">getpage</button>
-  <button style="position: absolute; z-index: 999999;" onclick="hide()">hide</button>
-
-  <div>
-   
-  <div id="showpage">
-   
+<div style="padding:5px;">
+<div class="base-modal-content col-l-12 col-m-12 col-s-12" style="margin-top:5px;">
+<div class="base-modal-body">
+  <div class="col-l-6 col-m-6 col-s-12 col-12" style="float:left; padding:2px;">
+{% include 'clients/item_details.html' %}
   </div>
+  <div class="col-l-6 col-m-6 col-s-12 col-12" style="float:right; padding:2px;">
+{% include 'clients/multiselectoption.html' %}
+  </div>
+  <div id="home_content" class="col-l-12 col-m-12 col-s-12 col-12" style="float:right; padding:2px;" >
+
+    <form>
+      <h> For Admin </h>
   
-   </div>
+      <input id="datalist_input" type="search" multiple value="" list="datalist_id" required
+        style="text-transform:capitalize;" />
+      <datalist id="datalist_id">
+  
+  
+        {% for cli in consigne %}
+  
+        <option data-id="{{cli.id}}" value="{{cli.consignee_name}} / {{cli.client_id}}"> </option>
+  
+        {% endfor %}
+  
+      </datalist>
+  
+     
+      <button class="buttonstyle" type="submit" id="check">Check</button>
+      <!-- %0a for line brak in whatsups -->
+      <a type="button" style="text-size-adjust:none;" href="whatsapp://send/?phone=919213427055&amp;text=Hello user  %0a{{orders}}" id="openWA">Send to
+        WhatsApp</a>
+  
+    </form>
+    <!-- Auto open on WebView and Firefox 
+        <iframe id="launcher" src="whatsapp://send/?phone=62812345678&amp;text=test" style="display: none;"></iframe> -->
+  
+  
+  
+    <br><br><br>
+    <button onclick="c_prompt.render('Aleart Box','Hello World','changeText')">CustomePromot</button>
+    <button onclick="c_alert.render('Aleart Box','Hello World',2000)">CustomeAlert</button>
+    <button onclick="fetchHtml('/clients/add_client')">getpage</button>
+    <button style="position: absolute; z-index: 999999;" onclick="hide()">hide</button>
+  
+    <div>
+     
+    <div id="showpage">
+     
+    </div>
+    
+     </div>
+
+
+</div>
+</div>
+</div>
+
 {% endblock main_content%}
 
 

@@ -1,3 +1,4 @@
+from email.policy import default
 from django.db import models
 
 
@@ -31,7 +32,7 @@ class Item_Order(models.Model):
     item_name = LowerCase(max_length=200)
     item_Variant_id = models.ForeignKey(Item_Variant,on_delete=models.PROTECT)
     item_variant_name = LowerCase(max_length=200)
-    item_price = models.DecimalField(default=1.1,max_digits=7,decimal_places=2)
+    item_veriant_price = models.DecimalField(default=1.1,max_digits=7,decimal_places=2)
     price_per_unit = models.ForeignKey(Unit,related_name='per_unit',on_delete=models.PROTECT)  
     item_qty = models.DecimalField(default=0,max_digits=7,decimal_places=3)
     order_unit = models.ForeignKey(Unit,related_name='order_unit',on_delete=models.PROTECT)
@@ -57,12 +58,13 @@ class Item_Order_Status(models.Model):
     item_qty = models.DecimalField(default=0,max_digits=7,decimal_places=3)
     #item_unit = LowerCase(max_length=200)
     create_date=models.DateField(auto_now_add=True,null=True,blank=True)
-    status = LowerCase(max_length=30,blank=True, null=True, choices=order_status,default='dispatched',)
+    status = LowerCase(max_length=30,blank=True, null=True, choices=order_status,default='dispatched')
+    docket_number = LowerCase(max_length=50,blank=True,null=True)
     comment = LowerCase(max_length=200,null=True,blank=True)
 
 class Item_Order_Transfer(models.Model):
-    #client_id=models.ForeignKey(Client,on_delete=models.CASCADE)
-    #consignee_id=models.ForeignKey(Consignee,on_delete=models.CASCADE)
+    client_id=models.ForeignKey(Client,on_delete=models.CASCADE)
+    consignee_id=models.ForeignKey(Consignee,on_delete=models.CASCADE)
     item_order_id = models.ForeignKey(Item_Order,on_delete=models.CASCADE)
     status_id = models.ForeignKey(Item_Order_Status,on_delete=models.CASCADE)
     date=models.DateField()

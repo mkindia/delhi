@@ -164,10 +164,10 @@ function CustomAlert() {
 }
 var c_alert = new CustomAlert();
 
-function CustomConfirm(){
- this.render = function (header,dialog,fctn){
+function c_confirm(header,dialog){
+  return new Promise(function(resolve){
   // alert("hello");
- 
+  
   var msgdiv=document.createElement("div");
   msgdiv.id='maindiv';
   msgdiv.className = 'basemodal';
@@ -205,25 +205,25 @@ function CustomConfirm(){
   var d_footer = document.createElement("div")
       d_footer.id='d_footer'
       d_footer.className = 'base-modal-footer col-l-12 col-m-12 col-s-12';
-      d_footer.innerHTML = '<button class="buttonstyle" style="float:right; margin-top:5px; margin-right:10px;" onclick="c_confirm.ok(\''+fctn+'\')">OK</button> <button style="float:right; margin-top:5px; margin-right:10px;" class="buttonstyle" onclick="c_confirm.cancel(\''+fctn+'\')">Cancel</button>';	
+      d_footer.innerHTML = '<button class="buttonstyle" id="true_btn" style="float:right; margin-top:5px; margin-right:10px;">OK</button> <button id="false_btn"; style="float:right; margin-top:5px; margin-right:10px;" class="buttonstyle" >Cancel</button>';	
       cont_id.appendChild(d_footer);
 
+      let true_el = document.getElementById('true_btn');
+      let false_el = document.getElementById('false_btn');
+      true_el.onclick = function() {      
+        resolve(true);
+        document.getElementById('maindiv').parentNode.removeChild(maindiv);
+      };
+
+    false_el.onclick = function() {      
+        resolve(false);
+        document.getElementById('maindiv').parentNode.removeChild(maindiv);
+      };
   
-  }
-  this.cancel = function(fctn){
-    window[fctn](false);
-		document.getElementById('maindiv').parentNode.removeChild(maindiv);
-	}
-	this.ok = function(fctn){	
-		window[fctn](true);
-		document.getElementById('maindiv').parentNode.removeChild(maindiv);
-	
-	}
+  });
 
+ 
 }
-
-var c_confirm = new CustomConfirm();
-
 
 // for input list  datalist  validation
 var inputs = document.querySelectorAll(".validdatalist"); //input[list] for all input type thar have list
