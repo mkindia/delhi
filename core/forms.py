@@ -10,7 +10,7 @@ from django.contrib.auth.forms import (
    UserCreationForm, 
    UserChangeForm ,
     AuthenticationForm,SetPasswordForm )
-from django.db.models import fields
+
 
 from .models import *
 
@@ -21,9 +21,7 @@ class UserProfile_imgform(forms.ModelForm):
   class Meta:
     model=Custom_User
     fields=['user_img',]
-
-        
-
+    
 class UserProfile_changeform(forms.ModelForm):
                                          
   email=forms.EmailField(label='Email',widget=forms.EmailInput(attrs={'class':'inputstyle'}))

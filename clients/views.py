@@ -1,5 +1,3 @@
-
-
 from email import message
 from django.shortcuts import redirect, render
 from django.http import JsonResponse 
@@ -11,19 +9,12 @@ from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 import json
 import uuid
-
-from pymysql import NULL
-
-
 from core.models import Custom_User
 from .models import Client, Client_Token,Consignee,Transport,Station,State
 from .forms import Client_Form,Consignee_Transport_form,Consignee_form
 
 # for sending mail
 def mail_for_verify_user(subject,message,email,url,token):
-
-     
-
        if url != None :
               message = f'{message} http://127.0.0.1:8000/{url}/{token}/'
 
@@ -86,7 +77,7 @@ def add_client(request):
                             data = {'message':msg,'clients':clientsall}
                             return JsonResponse(data)
                      except:                                               
-                            cli_name=NULL
+                            cli_name=None
                             try:   
                                    ph=Client.objects.get(phone_number=m_no)
                                    msg = 'phone allready exist'

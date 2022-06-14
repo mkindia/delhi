@@ -1,0 +1,9 @@
+{% for field in items_fm %}   
+<div class="col-l-6 col-m-6 col-s-6 col-" style="float:left; padding:2px">      
+   {{ field.label_tag }}     
+   {{ field }}      
+  {% for error in field.errors %}
+  <p style="color: red;"><small>{{error}}</small></p>
+  {% endfor %}
+</div>
+{% endfor %}

@@ -3,15 +3,28 @@
     <thead>
      <tr style="font-size: 12px;">                            
          <th>Item Name</th>
-         <th>Varient</th>
-         <th>Price</th>
+         <th>Varient</th>       
          <th>A</th>
          <th>B</th>
          <th>C</th>
-         <th>D</th>
-         <th>E</th>
-         <th>F</th>       
+         <th>D</th>            
      </tr>
     </thead>
-     <tbody></tbody>
+     <tbody>
+        {% for item in items %}               
+            {% for variant in item_variants %}
+            <tr>           
+            {% if item.id == variant.item_id_id %}
+            <td>{{item.item_name}}</td>
+            <td>{{variant.variant_name}} </td>       
+            <td>{{variant.variant_price_a}} </td>
+            <td>{{variant.variant_price_b}} </td>
+            <td>{{variant.variant_price_c}} </td>
+            <td>{{variant.variant_price_d}} </td>
+           
+            {% endif %}
+            </tr>
+            {% endfor %}      
+        {% endfor %}
+     </tbody>
  </table>

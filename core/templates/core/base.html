@@ -5,11 +5,9 @@
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">  
-
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block title %} {% endblock title %} | orders</title>
   <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}" />
-
   <link rel="stylesheet" href="{% static 'core/css/topnav.css' %}" />
   <link rel="stylesheet" href="{% static 'core/css/model.css' %}" />
   <link rel="stylesheet" href="{% static 'core/css/base.css' %}" />
@@ -26,7 +24,7 @@
   <div
     style="position:fixed; top: 45px; bottom: 1px;  left: 0px; right: 0px; overflow-y: auto;  background-color: rgb(0,0,0); background-color: rgba(0,0,0,0.1);">
     {% block main_content %}
-      
+
     {% endblock main_content %}
   </div>
 
@@ -43,8 +41,8 @@
 
 
 
-  {% if user.is_authenticated %}
- 
+{% if user.is_authenticated %}
+
   <!--The menu model-->
   <div id="menuModal" class="menumodal">
     <!-- Modal content -->
@@ -109,8 +107,6 @@
   </div>
 
   <script>
-
-  
     var proclose = document.getElementById("profile_exit");
     proclose.onclick = function (event) {
       document.getElementById("profile-modal").style.display = "none";
@@ -139,9 +135,11 @@
       }
     });
 
-    
+
   </script>
-  {% endif %}
+{% endif %}
+
+<footer style="bottom:0 ; padding: 10px; left:0; right: 0; position:fixed; background-color: rgba(167, 167, 167, 0.42);"><h>footer</h></footer>
 
   {% block main_scripts %} {% endblock main_scripts %}
 

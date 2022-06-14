@@ -39,16 +39,14 @@ class Item(models.Model):
 
 class Item_Variant(models.Model):
     item_id = models.ForeignKey(Item,on_delete=models.PROTECT)
-    item_variant_name= LowerCase(max_length=100,default='no variant')   
+    variant_name= LowerCase(max_length=100)   
     con_factor = models.DecimalField(default=1,max_digits=7,decimal_places=2, blank=True,null=True)
-    alternate_unit = models.ForeignKey(Unit,on_delete=models.PROTECT)
-    item_variant_price=models.DecimalField(default=1,max_digits=7,decimal_places=2)
-    item_variant_price_a=models.DecimalField(default=1,max_digits=7,decimal_places=2,null=True,blank=True)
-    item_variant_price_b=models.DecimalField(default=1,max_digits=7,decimal_places=2,null=True,blank=True)
-    item_variant_price_c=models.DecimalField(default=1,max_digits=7,decimal_places=2,null=True,blank=True)
-    item_variant_price_d=models.DecimalField(default=1,max_digits=7,decimal_places=2,null=True,blank=True)
-    item_variant_price_e=models.DecimalField(default=1,max_digits=7,decimal_places=2,null=True,blank=True)
-    item_variant_price_f=models.DecimalField(default=1,max_digits=7,decimal_places=2,null=True,blank=True)
+    alternate_unit = models.ForeignKey(Unit,on_delete=models.PROTECT)   
+    variant_price_a=models.DecimalField(default=1,max_digits=7,decimal_places=2,null=True,blank=True)
+    variant_price_b=models.DecimalField(default=1,max_digits=7,decimal_places=2,null=True,blank=True)
+    variant_price_c=models.DecimalField(default=1,max_digits=7,decimal_places=2,null=True,blank=True)
+    variant_price_d=models.DecimalField(default=1,max_digits=7,decimal_places=2,null=True,blank=True)   
     comment = LowerCase(max_length=200,blank=True,null=True)
+
     def __str__(self):
-        return self.item_variant_name
+        return self.variant_name

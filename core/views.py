@@ -13,6 +13,7 @@ import uuid
 import json
 from .forms import *
 from .models import *
+from items.models import Item,Item_Variant
 from clients.models import Client, Client_Token,Consignee
 import os
 
@@ -39,13 +40,25 @@ def home(request):
        else:
               
               clients=Client.objects.filter(user_id=request.user)
-              consignes = Consignee.objects.filter(client_id__in=clients)
+              consignes = Consignee.objects.filter(client_id__in=clients)              
+              if request.user.is_user:
+                     user_client=Client.objects.get(user_id=request.user)
+                     client_name = user_client.client_name
+                     client_id = user_client.id
+              items=Item.objects.all().order_by('item_name')
+              item_variants = Item_Variant.objects.all().order_by('variant_name')
+              admin_context ={'client':clients,
+                            'consigne':consignes,
+                            'items':items,
+                            'item_variants':item_variants,
+                            'orders':'Pandan/2 @120/Pcs.%0asinhasn 2no. : 150 Pcs. @320/Kg.'}
+              
               if request.user.is_admin :                    
-                     return render(request,'clients/admin_dashboard.html',{'client':clients,'consigne':consignes,'orders':'Pandan/2 @120/Pcs.%0asinhasn 2no. : 150 Pcs. @320/Kg.'})
+                     return render(request,'clients/admin_dashboard.html',admin_context)
               if request.user.is_staff :                    
                      return render(request,'core/staff_dashboard.html',{'client':clients})
               else  :                     
-                     return render(request,'clients/client_dashboard.html',{'client':clients})
+                     return render(request,'clients/client_dashboard.html',{'client_id':client_id,'client_name':client_name})
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def signup(request): 
@@ -67,7 +80,7 @@ def signup(request):
                                    token=uuid.uuid4()
                                    ver_obj=User_Verification(user_id=nu,client_id=uv.client_id_id,email=nu.email,token=token)
                                    ver_obj.save()         
-                                   mail_for_verify_user('Verify Your account','account_verify','Hi Click on Link To Verify Your Account',nu.email,token)
+                                   mail_for_verify_user('Verify Your account','Hi Click on Link To Verify Your Account',nu.email,'account_verify',token)
                                    messages.success(request,'Account Verify mail Sent to'+' '+ nu.email)  
                                    request.session.flush()
                                    request.session.clear_expired()
@@ -253,13 +266,13 @@ def forget_pwd(request):
               if lastrequest != None:                            
                      if lastrequest.is_changed == False  :                            
                             messages.info(request,"Please check your registered Email ")
-                            mail_for_verify_user('Recover Your Password','pass_change','Please click on link to new password',uemail,lastrequest.token)
+                            mail_for_verify_user('Recover Your Password','Please click on link to new password',uemail,'pass_change',lastrequest.token)
                             return redirect('/')
                      else : 
                             cu_id = Custom_User.objects.only('id').get(user_name=uname)                                 
                             ver_obj=Password_Change(user_id=cu_id,email=uemail,token=token)                     
                             ver_obj.save()  
-                            mail_for_verify_user('Recover Your Password','pass_change','Please click on link to new password',uemail,token)                     
+                            mail_for_verify_user('Recover Your Password','Please click on link to new password',uemail,'pass_change',token)                     
                             messages.info(request,"Please check your registered Email ")
                             return redirect('/')
               else: 

@@ -1,5 +1,5 @@
 {% extends 'core/base.html' %}
-{% block title %}add client{% endblock title %}
+{% block title %}add consignee{% endblock title %}
 
 {% block main_content %}
 
@@ -16,16 +16,7 @@
 
     </div>
     <div class="base-modal-body">
-      <div hidden>
-        <input  id='user_client_id'
-
-        {% for cli in clients %}
-         
-        <option data-id="{{cli.id}}" value="{{cli.client_name}}"> </option>
-       
-        {% endfor %} >
-      </div>
-
+     
       <form name="Consignee_form" id="consignee_form" method="POST" onsubmit="submitdata()"> 
         {% csrf_token %}
 
@@ -126,7 +117,7 @@
 <script>
 
   if('{{user.is_user}}' == 'True'){
- document.getElementById('id_client_id').value='{{user_client_name}}'
+  document.getElementById('id_client_id').value='{{user_client_name}}'
   document.getElementById('id_client_id').disabled=true;
  }
 

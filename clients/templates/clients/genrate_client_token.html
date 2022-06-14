@@ -42,7 +42,7 @@
                 <div class="col-l-6 col-m-6 col-s-6 col-" style="float:left; padding:2px;">
                     <label for="id_status">Status:</label>
                     
-                    <input name="status" id="id_status" placeholder="Select Client" class="inputstyle" value="" style="text-transform:capitalize; background-color: aliceblue; font-weight: bold; color:black" disabled="true">
+                    <input name="status" id="id_status" placeholder="Select Client" class="inputstyle" value="" style="text-transform:capitalize; background-color: aliceblue; color:black" disabled="true">
                    
                     
                 </div>          
@@ -80,9 +80,10 @@ document.getElementById('whatsup').addEventListener('click',whatsappacc);
 email_id.addEventListener("click", function (event)
 {
   const c_id=selectedDatalistAttributeValue('id_client','client_list','data-id');
+  const token=document.getElementById("id_status");
         document.getElementById('loader').style.display='block';
 
-        const data={'client_id':c_id,'subject':'subject','message':'message'};
+        const data={'client_id':c_id,'subject':'wellcome to spangle','message':'Token is: '+token.value};
        
         let fetchtext =  fetch('/clients/send_email/',putoption(data));
   

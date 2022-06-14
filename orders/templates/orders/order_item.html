@@ -48,7 +48,6 @@
 {% block main_content %}
 
 <div class="basemodal">
-
     <!-- Modal content -->
     <div class="base-modal-content col-l-6 col-m-9 col-s-11" style="margin-top:5px;">
         <div class="base-modal-header">
@@ -231,8 +230,6 @@
         </div>
     </div>
 </div>
-
-
     <div id="showpage1" style="position: absolute; z-index: 999999;">
 
     </div>
@@ -258,23 +255,27 @@
     {% block main_scripts %}
     <script src="{% static 'core/js/fetchApi.js' %}"></script>
     <script>
-            document.getElementById("id_date").valueAsDate = new Date();
+        document.getElementById("id_date").valueAsDate = new Date();
         let item_varient_price='';
-        
-       
-        var jsonArr = [];
-       // document.getElementById('count').addEventListener('click',count);
-      //  document.getElementById('optionbtn').addEventListener('click',addopt)
-       // document.getElementById('atri').addEventListener('click',atri);
+        var jsonArr = [];     
         document.getElementById('item_input').addEventListener('change',getItemVariants);
         let item_variant = document.getElementById('item_variant');
         let consignee_input = document.getElementById('consignee_input');
+        const formEl = document.getElementById('item-form');
+        const tbodyEl = document.querySelector('tbody');
+        const tableEl = document.querySelector('table');
+        formEl.addEventListener('submit', onAddItems);
+        tableEl.addEventListener('click', onDeleteRow);
+        document.getElementById('select_item').addEventListener('click', additem);
+        document.getElementById('exit_item').addEventListener('click', exit_item);
+        const submitorder = document.getElementById('order-item-form');
+        submitorder.addEventListener('submit',validateForm)
 
         consignee_input.addEventListener('change',function(event){
             item_varient_price='';
             let client_value=document.getElementById('client_id').value=selectedDatalistAttributeValue('consignee_input','consignee_list','client-id');
-            item_varient_price ='item_variant_price_'+selectedDatalistAttributeValue('client_id','client_list','group-id');
-                          
+            item_varient_price ='variant_price_'+selectedDatalistAttributeValue('client_id','client_list','group-id');
+           
             if(typeof client_value !='undefined')
             {
                 document.getElementById('select_item').style.display='block';
@@ -282,8 +283,6 @@
            
         });
         
-       
-
         function getItemVariants(){
            
            // alert(item_varient_price);
@@ -292,7 +291,7 @@
             document.getElementById('item_variant').value='';
             //let item_at=document.getElementById('item_input');      
 
-            let item_id = selectedDatalistAttributeValue('item_input', 'item_list','data-id');
+            let item_id = selectedDatalistAttributeValue('item_input', 'item_list','data-id');            
             var element =  document.getElementById('item_variant_list').innerHTML='';
            // var item_unit = selecteddatalistid('item_input','item_list');
             var sel = document.getElementById('item_variant_list');
@@ -313,7 +312,7 @@
                 var opt = document.createElement('option');
                 opt.setAttribute("data-id",data[i]['id']);
                 opt.setAttribute('varientprice',data[i][item_varient_price])     
-                 opt.value = data[i]['item_variant_name'];
+                 opt.value = data[i]['variant_name'];
                  sel.appendChild(opt);
 
                 }
@@ -414,7 +413,7 @@
 
         return false;
         }
-
+        
         function onDeleteRow(e) {
             if (!e.target.classList.contains('deleteBtn')) {
                 return;
@@ -422,41 +421,7 @@
             const btn = e.target;
             btn.closest('tr').remove();
             reindex();
-        }
-
-
-        const formEl = document.getElementById('item-form');
-        const tbodyEl = document.querySelector('tbody');
-        const tableEl = document.querySelector('table');
-        formEl.addEventListener('submit', onAddItems);
-        tableEl.addEventListener('click', onDeleteRow);
-
-        document.getElementById('select_item').addEventListener('click', additem);
-        document.getElementById('exit_item').addEventListener('click', exit_item);
-
-        function fetchHtml(page) {
-            fetch(page)
-                .then((response) => {
-                    return response.text();
-                })
-                .then((html) => {
-                    document.getElementById('showpage1').innerHTML = html;
-                    var scripts = document.getElementById("showpage1").querySelectorAll("script");
-                    for (var i = 0; i < scripts.length; i++) {
-                        if (scripts[i].innerText) {
-                            eval(scripts[i].innerText);
-                        } else {
-                            fetch(scripts[i].src).then(function (data) {
-                                data.text().then(function (r) {
-                                    eval(r);
-                                })
-                            });
-
-                        }
-                        // To not repeat the element
-                        scripts[i].parentNode.removeChild(scripts[i]);
-                    }
-                });
+          
         }
 
         function additem() {
@@ -465,21 +430,7 @@
         function exit_item() {
             document.getElementById('item_modal').style.display = 'none';
         }
-
-    /*
-    async function delete_demo() {
-        let result = await c_confirm('are you sure you want to delete this?','hi');
-        if( result == true ){
-         // console.log(`Confirmation result ${result}`);}
-            re=true;
-        }
-    }*/
-
        
-        const submitorder = document.getElementById('order-item-form');
-        submitorder.addEventListener('submit',validateForm)
-        
-
         async function validateForm(e) {
           
             e.preventDefault();
@@ -487,12 +438,23 @@
             let jarry = []
 
             var table = document.getElementById('myTable');
-            
+            var duplicate = []
+            let is_duplicate=false;
             for(var i =1,row;row = table.rows[i];i++){
-                         var col = row.cells;
+                         var col = row.cells;                        
+                         
+                         for(d in duplicate)
+                         {
+                            if(duplicate[d]==col[1].innerHTML.trim()+col[2].innerHTML.trim()){
+                                alert('Duplicate Entry Found Please Remove One :-  '+col[1].innerHTML.trim()+" "+col[2].innerHTML.trim())
+                            is_duplicate=true;
+                            }   
+                         }
+                         duplicate.push(col[1].innerHTML.trim()+col[2].innerHTML.trim())                 
                 var jsonObj = {
                     cli_id : selectedDatalistAttributeValue('client_id','client_list','data-id').trim(),
-                    con_id : selectedDatalistAttributeValue('consignee_input', 'consignee_list','data-id').trim(),  
+                    con_id : selectedDatalistAttributeValue('consignee_input', 'consignee_list','data-id').trim(),
+                    date:document.getElementById('id_date').value.trim(),
                     item_name : col[1].innerHTML.trim(),
                     item_variant : col[2].innerHTML.trim(),
                     item_price : col[3].innerHTML.trim(),
@@ -504,9 +466,10 @@
                     }
 
                 jarry.push(jsonObj);
-        }
-          
+            }
+            
             let data = jarry
+            if(is_duplicate==false){
             await fetch('/orders/order_item/', postoption(data))
                 .then(response => {
                     if (!response.ok) {
@@ -515,18 +478,17 @@
                     return response.json(); // Convert response to json use text for text
                 })
                 .then(data => {
+                    console.log(data);
                     //Perform actions with the response data from the view          
-
+                    alert('order saved')
                // delete_demo();
                 
                 })
                 .catch(err => { alert(err); })
 
-             
-        
+            }
+                
         }
-
-     
 
         item_variant.addEventListener('change',function(){
 

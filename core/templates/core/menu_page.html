@@ -33,8 +33,8 @@
   </div>
   <div id="som_item" class="showdiv">
     <a href="{% url 'orderitem' %}" id="add_order" onclick="menumodelHide()" class="asubmenuitem">Add Order</a>
-    <a id="edit-party" class="asubmenuitem">Edit Consignees</a>
-    <a id="delete-party" class="asubmenuitem">Delete Consignees</a>
+    <a id="edit-Consignee" class="asubmenuitem">Edit Consignees</a>
+    <a id="delete-consignee" class="asubmenuitem">Delete Consignees</a>
   </div>
   <div id="party_menu_items" class="showdiv">
     <a href="{% url 'add_client' %}" id="add-party" onclick="menumodelHide()" class="asubmenuitem">Add Client</a>
@@ -42,7 +42,7 @@
     {% if user.is_staff %}
     <a href="{% url 'add_client' %}"  id="delete-party" class="asubmenuitem">Delete Client</a>
     {% endif %}
-    <a id="edit-party" href="{% url 'genrate_client_token' %}" class="asubmenuitem">Genrate Client Token</a>
+    <a id="genrate-token" href="{% url 'genrate_client_token' %}" class="asubmenuitem">Genrate Client Token</a>
   </div>
   <div id="pom_item" class="showdiv">
     <a id="apom" class="amenuitembtn" onclick="showhide('apom','apom_item')">Add hhhhh Purchase Orders</a>

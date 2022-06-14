@@ -2,6 +2,7 @@ from django.shortcuts import redirect, render
 from django.core import serializers
 from items.models import Item,Item_Variant
 from django.http import JsonResponse
+from .forms import itemGroupForm,unitForm,initems
 #from .serializers import item_variants_serializars
 import json
 
@@ -23,8 +24,8 @@ def add_item(request):
                      return JsonResponse(data)
         
         
-        
-        return render(request,'add_item.html')
+        item_fm=initems
+        return render(request,'items/add_item.html',{'items_fm':item_fm})
 
 def fetch_itemvariant(request,item_id):
     
