@@ -23,7 +23,9 @@ class Consignee_Order(models.Model):
     create_date=models.DateField(auto_now_add=True,null=True,blank=True)    
     date = models.DateField(null=True,blank=True)
     comment =LowerCase(max_length=200,null=True,blank=True)
-    
+    def __str__(self):
+        return str(self.pk)
+   
 class Item_Order(models.Model):   
     client_id=models.ForeignKey(Client,on_delete=models.CASCADE)
     consignee_id=models.ForeignKey(Consignee,on_delete=models.CASCADE)
@@ -36,7 +38,9 @@ class Item_Order(models.Model):
     order_unit = models.ForeignKey(Unit,related_name='order_unit',on_delete=models.PROTECT)
     create_date=models.DateField(auto_now_add=True,null=True,blank=True)
     comment = LowerCase(max_length=200,null=True,blank=True)
-
+    def __str__(self):
+        return str(self.pk)
+   
 
 
 class Item_Order_Status(models.Model):
@@ -48,17 +52,14 @@ class Item_Order_Status(models.Model):
     #consignee_id=models.ForeignKey(Consignee,on_delete=models.CASCADE)  
     item_order_id = models.ForeignKey(Item_Order,on_delete=models.CASCADE)
     #transfer_id = models.ForeignKey(Item_Order_Transfer,on_delete=models.CASCADE,blank=True,null=True)     
-    date=models.DateField()
-    #item_name = LowerCase(max_length=200)
-    #item_variant = LowerCase(max_length=200)
-    #item_price = models.DecimalField(default=1.1,max_digits=7,decimal_places=2)
-    #price_per_unit = LowerCase(max_length=200)   
+    date=models.DateField()   
     item_qty = models.DecimalField(default=0,max_digits=7,decimal_places=3)
-    #item_unit = LowerCase(max_length=200)
     create_date=models.DateField(auto_now_add=True,null=True,blank=True)
     status = LowerCase(max_length=30,blank=True, null=True, choices=order_status,default='dispatched')
     docket_number = LowerCase(max_length=50,blank=True,null=True)
     comment = LowerCase(max_length=200,null=True,blank=True)
+    def __str__(self):
+        return str(self.pk)
 
 class Item_Order_Transfer(models.Model):
     client_id=models.ForeignKey(Client,on_delete=models.CASCADE)
@@ -74,3 +75,5 @@ class Item_Order_Transfer(models.Model):
     #item_unit = LowerCase(max_length=200)
     create_date=models.DateField(auto_now_add=True,null=True,blank=True)
     comment = LowerCase(max_length=200,null=True,blank=True)
+    def __str__(self):
+        return str(self.pk)

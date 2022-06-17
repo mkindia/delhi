@@ -253,7 +253,7 @@
 
 
     {% block main_scripts %}
-    <script src="{% static 'core/js/fetchApi.js' %}"></script>
+    
     <script>
         document.getElementById("id_date").valueAsDate = new Date();
         let item_varient_price='';
@@ -434,10 +434,12 @@
         async function validateForm(e) {
           
             e.preventDefault();
-
-            let jarry = []
-
             var table = document.getElementById('myTable');
+            if(table.rows.length <= 1){
+                alert('Plese Select an Item')
+            }
+            else{
+            let jarry = []
             var duplicate = []
             let is_duplicate=false;
             for(var i =1,row;row = table.rows[i];i++){
@@ -486,6 +488,7 @@
                 })
                 .catch(err => { alert(err); })
 
+            }
             }
                 
         }

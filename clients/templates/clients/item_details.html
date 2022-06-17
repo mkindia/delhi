@@ -2,8 +2,7 @@
  <table id="myTable">
     <thead>
      <tr style="font-size: 12px;">                            
-         <th>Item Name</th>
-         <th>Varient</th>       
+         <th>Item Name</th>         
          <th>A</th>
          <th>B</th>
          <th>C</th>
@@ -15,9 +14,8 @@
             {% for variant in item_variants %}
             <tr>           
             {% if item.id == variant.item_id_id %}
-            <td>{{item.item_name}}</td>
-            <td>{{variant.variant_name}} </td>       
-            <td>{{variant.variant_price_a}} </td>
+            <td>{{item.item_name}} ( {{variant.variant_name}} )</td>
+            <td>{{variant.variant_price_a}} </td> 
             <td>{{variant.variant_price_b}} </td>
             <td>{{variant.variant_price_c}} </td>
             <td>{{variant.variant_price_d}} </td>

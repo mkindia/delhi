@@ -70,3 +70,9 @@
             height: 0;                   
         }
       }
+
+      .topnav .navbar-brand{
+        position:absolute; 
+        font-weight: normal; 
+        margin-top:10px; left:10px;
+      }

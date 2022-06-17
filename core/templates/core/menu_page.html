@@ -25,7 +25,7 @@
   </div>
   <div id="consignee_menu_items" class="showdiv">
     <a href="{% url 'add_consignee' %}" id="add_consignee" onclick="menumodelHide()" class="asubmenuitem">Add Consignee</a>
-    <a id="edit-party" class="asubmenuitem">Edit Consignees</a>
+    <a id="edit-consignee1" class="asubmenuitem">Edit Consignees</a>
     <a id="delete-party" class="asubmenuitem">Delete Consignees</a>
   </div>
   <div id="items_menu_items" class="showdiv">
@@ -40,7 +40,7 @@
     <a href="{% url 'add_client' %}" id="add-party" onclick="menumodelHide()" class="asubmenuitem">Add Client</a>
     <a id="edit-party" class="asubmenuitem">Edit Client</a>
     {% if user.is_staff %}
-    <a href="{% url 'add_client' %}"  id="delete-party" class="asubmenuitem">Delete Client</a>
+    <a href="{% url 'add_client' %}"  id="delete-party1" class="asubmenuitem">Delete Client</a>
     {% endif %}
     <a id="genrate-token" href="{% url 'genrate_client_token' %}" class="asubmenuitem">Genrate Client Token</a>
   </div>
