@@ -3,7 +3,6 @@
 {% block title %}add client{% endblock title %}
 
 {% block main_content %}
-
     <div class="basemodal">
         <div class="base-modal-content col-l-6 col-m-9 col-s-11" style="margin-top: 5px;" >
           <div class="base-modal-header">
@@ -20,9 +19,8 @@
                   <div>
                     <div class="col-l-6 col-m-6 col-s-6 col-" style="float:left; padding:2px;">
                     <label for="id_client">Client Name:</label>                    
-                    <input type="text" name="client" class="inputstyle" placeholder="enter client name" style="text-transform:capitalize;" required id="id_client_name">  
-                    
-                  </div>                     
+                    <input type="text" name="client" class="inputstyle" placeholder="enter client name" style="text-transform:capitalize;" required id="id_client_name">                    
+                    </div>                     
                 
                 <div class="col-l-6 col-m-6 col-s-6 col-" style="float:left; padding:2px;">
                     <label for="id_client_group">Client group:</label>
@@ -32,9 +30,7 @@
                       <option data-id="a" value="a"> </option>
                       <option data-id="b" value="b"> </option>
                       <option data-id="c" value="c"> </option>
-                      <option data-id="d" value="d"> </option>
-                      <option data-id="e" value="e"> </option>
-                      <option data-id="f" value="f"> </option>
+                      <option data-id="d" value="d"> </option>                    
                     </datalist>
                     
                 </div>     
@@ -86,6 +82,11 @@
                                     
                 </div>
 
+                <div class="col-l-6 col-m-6 col-s-6 col-" style="float:left; padding:2px;">
+                  <label for="id_email">Email:</label>                    
+                  <input type="email" name="email" class="inputstyle" placeholder="enter email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" id="id_email">                    
+                </div>   
+
                   <!--                 
                   <div>
                     <a class="ancor smallbuttonstyleround" href="#" style="text-decoration: none; margin-right: 3px; float: left; margin-top:30px;">Add Transport &#10009;</a>
@@ -101,13 +102,10 @@
           <a type="button" id="pageBack" class="ancor" return false; style="text-decoration: none; float:right; margin-right:10px;" ><i> Exit </i></a>
         </div>
     </div>
-
     {% endblock main_content%}
-
-
 {% block main_scripts %}
-<script src="{% static 'core/js/fetchApi.js' %}"></script>
-<script>
+<script type="module">
+import * as ajexcall from '/static/core/js/modules/ajex.js';
  document.getElementById('pageBack').addEventListener('click',pageback);
  
  function pageback(e) {
@@ -125,9 +123,10 @@ const g_name=document.getElementById('id_client_group').value.trim().toLowerCase
 const t_name=document.getElementById('id_transport').value.trim().toLowerCase();
 const s_name=document.getElementById('id_station').value.trim().toLowerCase();
 const m_no=document.getElementById('id_number').value.trim();
+const email=document.getElementById('id_email').value.trim();
 
-const data={'c_name':c_name,'g_name':g_name,'t_name':t_name,'s_name':s_name,'m_no':m_no};
-let fetchtext =  fetch('/clients/add_client/',postoption(data));
+const data={'c_name':c_name,'g_name':g_name,'t_name':t_name,'s_name':s_name,'m_no':m_no,'email':email};
+let fetchtext =  fetch('/clients/add_client/',ajexcall.postoption(data));
   
   fetchtext.then(async response => {
      if (!response.ok) {
@@ -149,6 +148,7 @@ let fetchtext =  fetch('/clients/add_client/',postoption(data));
     document.getElementById('id_transport').value='';
     document.getElementById('id_station').value='';
     document.getElementById('id_number').value='';
+    document.getElementById('id_email').value='';
    }
   
    })

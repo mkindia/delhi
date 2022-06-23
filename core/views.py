@@ -13,7 +13,7 @@ import uuid
 import json
 from .forms import *
 from .models import *
-from items.models import Item,Item_Variant
+from items.models import Item,Item_Variant,Unit
 from clients.models import Client, Client_Token,Consignee
 import os
 
@@ -40,17 +40,25 @@ def home(request):
        else:
               
               clients=Client.objects.filter(user_id=request.user)
-              consignes = Consignee.objects.filter(client_id__in=clients)              
+              consignes = Consignee.objects.filter(client_id__in=clients)             
               if request.user.is_user:
                      user_client=Client.objects.get(user_id=request.user)
                      client_name = user_client.client_name
                      client_id = user_client.id
-              items=Item.objects.all().order_by('item_name')
-              item_variants = Item_Variant.objects.all().order_by('variant_name')
+              item_arry =[]
+              item_variants_arry = []              
+              for i in Item.objects.all():                     
+                     item_arry.append({'item_id':i.id,'item_name':i.item_name})
+              items=json.dumps(item_arry)
+              for iv in Item_Variant.objects.all():
+                     item_variants_arry.append({'variant_id':iv.id,'variant_name':iv.variant_name})
+              item_variants =json.dumps(item_variants_arry)
+              unit=Unit.objects.all()
               admin_context ={'client':clients,
                             'consigne':consignes,
                             'items':items,
                             'item_variants':item_variants,
+                            'unit':unit,
                             'orders':'Pandan/2 @120/Pcs.%0asinhasn 2no. : 150 Pcs. @320/Kg.'}
               
               if request.user.is_admin :                    

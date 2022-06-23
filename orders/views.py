@@ -48,9 +48,8 @@ def add_order(request):
 def order_item(request):
     
     if request.user.is_authenticated:
-        
         if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-           
+            
             #print(len(data))
             #print(len(data[0]))
             #print(data[len(data)-1]['con_id'])
@@ -90,14 +89,26 @@ def order_item(request):
                 
                 #print(data)
                 #print(con_id)
-                """
-                if order_id ==None:
-                    data={'clients':clientsall}           
-                else:
-                    data={'clients':clientsall}             
-                """
+               
                 return JsonResponse(data,safe=False)
-                        
+            if request.method == 'PUT':
+                data = json.loads(request.body.decode("utf-8"))
+                print(data['con_id'])  
+                order=[]
+                """
+                for con_order in Consignee_Order.objects.filter(client_id=data['cli_id']):
+                    order.append({'order_id':con_order.id})
+                order_id=json.dumps(order)
+                """ 
+               
+                items=list(Item_Order.objects.filter(consignee_id=data['con_id']).values())
+                orders=list(Consignee_Order.objects.filter(consignee_id=data['con_id']).values())
+                msg='client not found'
+               # print(items)
+                data={'items':items,'orders':orders,'msg':msg}
+
+                return JsonResponse(data,safe=False)
+                                    
         else :            
             client=Client.objects.filter(user_id=request.user)
             units=Unit.objects.all()          

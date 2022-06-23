@@ -17,18 +17,22 @@
     }
     
     .loginbtn{
-        position:absolute;   
-        right: 10px;           
-        top:8px;
-        padding: 5px 10px;
-        background-color:lightblue ;
+        float: right;
         text-decoration: none;
-        border: solid black 1px;
-        border-radius: 6px;
-        color: black;
+        position:relative; 
+        color: whitesmoke;
+        top:10px;  
+        right: 10px;           
+     
+      
+    }
+    .loginbtn:hover{
+        color: rgb(0, 255, 255);
+        cursor: pointer; 
     }
 
     .logoutbtn{
+       
         position: absolute;   
         right: 10px;           
         margin-top:3px; 

@@ -2,180 +2,182 @@
 {% load static %}
 {% block title %}benrate token{% endblock title %}
 
-{% block main_content %} 
-    
-    <div class="basemodal">
-        <div class="base-modal-content col-l-6 col-m-9 col-s-11" style="margin-top: 5px;" >
-          <div class="base-modal-header">
-            <h style="position: relative; font-weight: bold; margin:0; top: 25%; -ms-transform: translateY(-50%);transform: translateY(-50%);" >
-                   
-              Genrate Token
-            
-             
-            </h>
-          
-          </div>        
-              <div class= "base-modal-body">
-                        
-                <form method="POST" id="genrate-token" onsubmit="submitdata()">
-                  {% csrf_token %}
-                  
-                               
-                
-                <div class="col-l-6 col-m-6 col-s-6 col-" style="float:left; padding:2px;">
-                    <label for="id_client">Select Client:</label>
-                    
-                    <input name="client" placeholder="Select Client" type="search" style="text-transform:capitalize;" list="client_list" required id="id_client">
-                    <datalist id="client_list" >
-                   
+{% block main_content %}
 
-                      {% for cli in clients %}
-           
-                        <option data-id="{{cli.id}}" value="{{cli.client_name}}"> </option>
-                       
-                        {% endfor %}
+<div class="basemodal">
+  <div class="base-modal-content col-l-6 col-m-9 col-s-11" style="margin-top: 5px;">
+    <div class="base-modal-header">
+      <h
+        style="position: relative; font-weight: bold; margin:0; top: 25%; -ms-transform: translateY(-50%);transform: translateY(-50%);">
 
-                    </datalist>
-                    
-                </div>           
-                
-                <div class="col-l-6 col-m-6 col-s-6 col-" style="float:left; padding:2px;">
-                    <label for="id_status">Status:</label>
-                    
-                    <input name="status" id="id_status" placeholder="Select Client" class="inputstyle" value="" style="text-transform:capitalize; background-color: aliceblue; color:black" disabled="true">
-                   
-                    
-                </div>          
-                
-                  <div>
-                    <label id="sendby" style="text-decoration: none; display: none; float: left; margin-right:5px; margin-top:30px;"><small>Send Token By:</small></label>
-                    <a  type="button" id="email" class="ancor" style="text-decoration: none; display: none; float: left; margin-right:5px; margin-top:30px;" ><small><i>Email,</i></small></a>
-                    <a type="button" id="whatsup"  class="ancor" style="text-decoration: none; display: none; float: left; margin-right:5px; margin-top:30px;" ><small><i>Whatsapp</i></small></a>
-                    
-                  </div>
-                  
-                </form>
-              </div>
-              <div class="base-modal-footer" >
-                
-                <button onclick="history.back(-1)" type="button" class="buttonstyle" style="text-decoration: none; float:right; margin-right:10px;" ><i>Exit</i></button>
-                <button type="submit" id="genrate" form="genrate-token" class="buttonstyle" style="float:right;display: none; margin-right: 10px;">Genrate Token</button>
-              </div>
-        </div>
+        Genrate Token
+
+
+      </h>
+
     </div>
+    <div class="base-modal-body">
 
-      
+      <form method="POST" id="genrate-token" onsubmit="submitdata()">
+        {% csrf_token %}
+
+
+
+        <div class="col-l-6 col-m-6 col-s-6 col-" style="float:left; padding:2px;">
+          <label for="id_client">Select Client:</label>
+
+          <input name="client" placeholder="Select Client" type="search" style="text-transform:capitalize;"
+            list="client_list" required id="id_client">
+          <datalist id="client_list">
+
+
+            {% for cli in clients %}
+
+            <option data-id="{{cli.id}}" phone-no="{{cli.phone_number}}" email="{{cli.email}}"
+              value="{{cli.client_name}}"> </option>
+
+            {% endfor %}
+
+          </datalist>
+
+        </div>
+
+        <div class="col-l-6 col-m-6 col-s-6 col-" style="float:left; padding:2px;">
+          <label for="id_status">Status:</label>
+
+          <input name="status" id="id_status" placeholder="Select Client" class="inputstyle" value=""
+            style="text-transform:capitalize; background-color: aliceblue; color:black" disabled="true">
+
+
+        </div>
+
+        <div>
+          <label id="sendby"
+            style="text-decoration: none; display: none; float: left; margin-right:5px; margin-top:30px;"><small>Send
+              Token By:</small></label>
+          <a type="button" id="email" class="ancor"
+            style="text-decoration: none; display: none; float: left; margin-right:5px; margin-top:30px;"><small><i>Email,</i></small></a>
+          <a type="button" id="whatsup" class="ancor"
+            style="text-decoration: none; display: none; float: left; margin-right:5px; margin-top:30px;"><small><i>Whatsapp</i></small></a>
+
+        </div>
+
+      </form>
+    </div>
+    <div class="base-modal-footer">
+
+      <button onclick="history.back(-1)" type="button" class="buttonstyle"
+        style="text-decoration: none; float:right; margin-right:10px;"><i>Exit</i></button>
+      <button type="submit" id="genrate" form="genrate-token" class="buttonstyle"
+        style="float:right;display: none; margin-right: 10px;">Genrate Token</button>
+    </div>
+  </div>
+</div>
+
+
 {% endblock main_content%}
 
 {% block main_scripts %}
-<script src="{% static 'core/js/fetchApi.js' %}"></script>
-<script>
+<script type="module">
+  import * as whatsapp from '/static/core/js/modules/whatsapp.js';
+  import * as ajex from '/static/core/js/modules/ajex.js';
+  let client_details = document.getElementById("id_client");
 
-var secureToken = '' ;
-document.getElementById("id_client").addEventListener("change", myFunction);
+  let email_id = document.getElementById('email');
+  let f = 'hi';
+  let whatapp = document.getElementById('whatsup');
+  email_id.addEventListener("click", function (event) {
+    const c_id = selectedDatalistAttributeValue('id_client', 'client_list', 'data-id');
+    const c_email = selectedDatalistAttributeValue('id_client', 'client_list', 'email');
+    const token = document.getElementById("id_status");
+    const data = { 'client_id': c_id, 'subject': 'wellcome to spangle', 'message': 'Token is: ' + token.value };
+    if (c_email == 'None') {
+      c_alert.render('Alert', 'Client Email Not Found');
+    } else {
+      document.getElementById('loader').style.display = 'block';
+      let fetchtext = fetch('/clients/send_email/', ajex.putoption(data));
 
-let email_id = document.getElementById('email');
-let f='hi';
-document.getElementById('whatsup').addEventListener('click',whatsappacc);
-email_id.addEventListener("click", function (event)
-{
-  const c_id=selectedDatalistAttributeValue('id_client','client_list','data-id');
-  const token=document.getElementById("id_status");
-        document.getElementById('loader').style.display='block';
-
-        const data={'client_id':c_id,'subject':'wellcome to spangle','message':'Token is: '+token.value};
-       
-        let fetchtext =  fetch('/clients/send_email/',putoption(data));
-  
-         fetchtext.then(async response => {
-            if (!response.ok) {
-                throw Error(response.statusText);
-            }
-                  return await response.json(); // Convert response to json use text for text/html
-          })
-          .then(data => {        
-         
-           document.getElementById('loader').style.display='none';
-
-          c_alert.render('Message',data.message);
-         
-         
-          })
-          .catch(err=>{ if ( err == "Error: Internal Server Error" ){alert("Wrong Client");}else{ alert(err);}})
-  
-        
-      
-})
-
-function whatsappacc(){
-
-c_prompt.render('Send Whatsapp','Enter 10 digit Whatsapp No.','whatsapp');
-
-}
-
-function whatsapp(val){  
-  const token=document.getElementById("id_status");
-  if (val){
-  window.open("https://wa.me/91"+val+"/?text=Token is: "+token.value);
-  }
-}
-
-
-
-function myFunction() {
-  const c_id=selectedDatalistAttributeValue('id_client','client_list','data-id');
-
-  const data={'client_id':c_id};
-       
-        let fetchtext =  fetch('/clients/genrate_client_token/',putoption(data));
-  
-         fetchtext.then(async response => {
-            if (!response.ok) {
-                throw Error(response.statusText);
-            }
-                  return await response.json(); // Convert response to json use text for text/html
-          })
-          .then(data => {
-          //Perform actions with the response data from the view          
-          document.getElementById('id_status').value = data.token ;
-
-          secureToken = data.securetoken;
-
-          if(data.token != 'Token : Not Genrated')
-          {
-            document.getElementById('genrate').style.display = 'none';
-            var email = document.getElementById('email');
-                email.style.display="block";
-            var whatsup = document.getElementById('whatsup');
-                whatsup.style.display="block";
-            var sendby = document.getElementById('sendby');
-                sendby.style.display="block";
-                       
-          }
-          else{
-            document.getElementById('genrate').style.display='block';
-            var email = document.getElementById('email');
-                email.style.display="none";
-            var whatsup = document.getElementById('whatsup');
-                whatsup.style.display="none";
-            var sendby = document.getElementById('sendby');
-                sendby.style.display="none";
-            
-          }
-          // alert(data.token)          
-         
-          })
-          .catch(err=>{ if ( err == "Error: Internal Server Error" ){alert("Wrong Client");}else{ alert(err);}})
-  
+      fetchtext.then(async response => {
+        if (!response.ok) {
+          throw Error(response.statusText);
         }
-function submitdata(){
+        return await response.json(); // Convert response to json use text for text/html
+      })
+        .then(data => {
 
-  
-  let c_id=selectedDatalistAttributeValue('id_client','client_list','data-id');
-  document.getElementById('id_client').value=c_id;
+          document.getElementById('loader').style.display = 'none';
 
-}
+          c_alert.render('Message', data.message);
+
+
+        })
+        .catch(err => { if (err == "Error: Internal Server Error") { alert("Wrong Client"); } else { alert(err); } })
+
+    }
+
+  })
+
+  whatapp.addEventListener('click', function () {
+    const phone_no = selectedDatalistAttributeValue('id_client', 'client_list', 'phone-no').trim();
+    if (phone_no == 'None') {
+      c_alert.render('Alert', 'Client Phone No. Not found')
+    }
+    else {
+      const token = document.getElementById("id_status");
+      whatsapp.whatsapp(phone_no, "Your Token is:- " + token.value);
+    }
+  })
+
+
+
+  client_details.addEventListener("change", function () {
+    const c_id = selectedDatalistAttributeValue('id_client', 'client_list', 'data-id');
+    const data = { 'client_id': c_id };
+
+    let fetchtext = fetch('/clients/genrate_client_token/', ajex.putoption(data));
+
+    fetchtext.then(async response => {
+      if (!response.ok) {
+        throw Error(response.statusText);
+      }
+      return await response.json(); // Convert response to json use text for text/html
+    })
+      .then(data => {
+        //Perform actions with the response data from the view          
+        document.getElementById('id_status').value = data.token;
+
+        if (data.token != 'Token : Not Genrated') {
+          document.getElementById('genrate').style.display = 'none';
+          var email = document.getElementById('email');
+          email.style.display = "block";
+          var whatsup = document.getElementById('whatsup');
+          whatsup.style.display = "block";
+          var sendby = document.getElementById('sendby');
+          sendby.style.display = "block";
+
+        }
+        else {
+          document.getElementById('genrate').style.display = 'block';
+          var email = document.getElementById('email');
+          email.style.display = "none";
+          var whatsup = document.getElementById('whatsup');
+          whatsup.style.display = "none";
+          var sendby = document.getElementById('sendby');
+          sendby.style.display = "none";
+
+        }
+        // alert(data.token)          
+
+      })
+      .catch(err => { if (err == "Error: Internal Server Error") { alert("Wrong Client"); } else { alert(err); } })
+
+  })
+
+  function submitdata() {
+    let c_id = selectedDatalistAttributeValue('id_client', 'client_list', 'data-id');
+    document.getElementById('id_client').value = c_id;
+  }
 
 </script>
-   
+
 {% endblock main_scripts %}

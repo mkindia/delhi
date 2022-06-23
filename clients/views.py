@@ -48,8 +48,6 @@ def send_email(request):
                             return JsonResponse(data)
 
 
-                   
-
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def admin_dashboard(request):
     clients = Client.objects.all()
@@ -60,39 +58,43 @@ def add_client(request):
 
        if request.user.is_authenticated:              
               if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-                     data = json.loads(request.body.decode("utf-8"))
-                     c_name = data['c_name']
-                     g_name = data['g_name']
-                     s_name = data['s_name']
-                     t_name = data['t_name']
-                     m_no = data['m_no']
-                     clientsall=[]
-                     for cli in Client.objects.all():
-                                   clientsall.append({'id':cli.id,'name':cli.client_name})
-                     try:
-                            cli_name=Client.objects.get(client_name=c_name.lower())                            
-                            msg = 'Client All ready exist ' + '[ ' +cli_name.client_name+ ' ]'
-                            if cli_name.phone_number == m_no:
-                                   msg = 'phone allready exist'                           
-                            data = {'message':msg,'clients':clientsall}
-                            return JsonResponse(data)
-                     except:                                               
-                            cli_name=None
-                            try:   
-                                   ph=Client.objects.get(phone_number=m_no)
-                                   msg = 'phone allready exist'
+                     if request.method == 'POST':
+                            data = json.loads(request.body.decode("utf-8"))
+                            c_name = data['c_name']
+                            g_name = data['g_name']
+                            s_name = data['s_name']
+                            t_name = data['t_name']
+                            m_no = data['m_no']
+                            email = data['email']
+                            clientsall=[]
+                            for cli in Client.objects.all():
+                                          clientsall.append({'id':cli.id,'name':cli.client_name})
+                            try:
+                                   cli_name=Client.objects.get(client_name=c_name.lower())                            
+                                   msg = 'Client All ready exist ' + '[ ' +cli_name.client_name+ ' ]'
+                                   if cli_name.phone_number == m_no:
+                                          msg = 'phone allready exist'
+                                   if cli_name.email == email :
+                                          msg = 'email allready exist'                        
                                    data = {'message':msg,'clients':clientsall}
                                    return JsonResponse(data)
-                            except:
-                                   client=Client.objects.create(client_name=c_name,client_group=g_name,phone_number=m_no)
-                            
-                                   client.user_id.add(request.user.id)
-                                   consignee=Consignee.objects.create(client_id=client,consignee_name=c_name,transport=t_name,station=s_name,is_client=True)             
-                                   consignee.save()  
-                                   msg='success'
-                                   data={'message':msg,'clients':clientsall}
-                                   return JsonResponse(data)
-              
+                            except:                                               
+                                   cli_name=None
+                                   try:   
+                                          ph=Client.objects.get(phone_number=m_no)
+                                          msg = 'phone allready exist'
+                                          data = {'message':msg,'clients':clientsall}
+                                          return JsonResponse(data)
+                                   except:
+                                          client_ob=Client.objects.create(client_name=c_name,client_group=g_name,phone_number=m_no,email=email)
+                                          consignee_ob=Consignee.objects.create(client_id=client_ob,consignee_name=c_name,transport=t_name,station=s_name,is_client=True)  
+                                          client_ob.user_id.add(request.user.id)
+                                          superuser=Custom_User.objects.get(is_staff=True)
+                                          client_ob.user_id.add(superuser.id)                                                
+                                          msg='Client Creation Success'
+                                          data={'message':msg,'clients':clientsall}
+                                          return JsonResponse(data)
+                     
               
               
               state=Consignee.objects.order_by('state').values('state').distinct()
@@ -167,11 +169,11 @@ def genrate_client_token(request):
               if request.method == 'POST':
                      client=request.POST.get('client')
                      try:
-                            c_f= Client_Token.objects.get(client_id=client)
+                            c_f= Client_Token.objects.get(client_name=client)
                             messages.warning(request,'Client Has Already Token '+'[ '+ c_f.token +' ]')
                      except:
                             c_f=None
-                            c_inst= Client.objects.only('id').get(id=client)                                               
+                            c_inst= Client.objects.only('client_name').get(client_name=client)                                               
                             c_token=Client_Token.objects.create(client_id=c_inst,token=uuid.uuid4())
                             messages.success(request,'Token Genrated')
 

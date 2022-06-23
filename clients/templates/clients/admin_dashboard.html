@@ -1,181 +1,266 @@
 {% extends 'core/base.html' %}
 {% block title %}admin{% endblock title %}
-{% block page_head %} 
+{% block page_head %}
 <style>
-    #myTable {
-      font-family: Arial, Helvetica, sans-serif;
-      border-collapse: collapse;
-      width: 100%;
-      font-size: 12px;
-      text-align: center;
-     
-   
-    }
+  .accordion {
+    background-color: rgb(214, 240, 255);
+    color: #444;
+    cursor: pointer;
+    padding: 10px;
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 15px;
+    transition: 0.4s;
+    margin-bottom: 5px;
+  }
+  
+  .active, .accordion:hover {
+    background-color: rgb(148, 214, 253);
+  }
+  
+  .accordion:after {
+    content: '\002B';
+    color: #777;
+    font-weight: bold;
+    float: right;
+    margin-left: 5px;
+  }
+  
+  .active:after {
+    content: "\2212";
+  }
+  
+  .panel {
+    padding: 5 10px;
+    background-color: white;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s ease-out;
+  }
+  </style>
+<style>
+  #myTable {
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 12px;
+    text-align: center;
 
-    #myTable th:first-child{
 
-        border-radius:0 0 0 0;
-    }
+  }
 
-    #myTable th:last-child{
+  #myTable th:first-child {
 
-        border-radius:0 0 0 0;
-    }
-    
-    #myTable td, #customers th {
-      border: 1px solid #ddd;
-      padding: 2px;
-    }
-    
-    #myTable tr:nth-child(even){background-color: #f2f2f2;}
-    /*
+    border-radius: 0 0 0 0;
+  }
+
+  #myTable th:last-child {
+
+    border-radius: 0 0 0 0;
+  }
+
+  #myTable td,
+  #customers th {
+    border: 1px solid #ddd;
+    padding: 2px;
+  }
+
+  #myTable tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+
+  /*
     #myTable tr:hover {background-color: #ddd;}
     */
-    #myTable th {
-      padding-top: 6px;
-      padding-bottom: 6px;    
-      font-size: 12px;
-      text-align: center;
-      background-color: #047eaa;
-      color: white;
-    }
-    </style>
+  #myTable th {
+    padding-top: 6px;
+    padding-bottom: 6px;
+    font-size: 12px;
+    text-align: center;
+    background-color: #047eaa;
+    color: white;
+  }
+</style>
 {% endblock page_head %}
 
 
 {% block main_content %}
 <div style="padding:5px;">
-<div class="base-modal-content col-l-12 col-m-12 col-s-12" style="margin-top:5px;">
-<div class="base-modal-body">
- 
-  <div id="home_content" class="col-l-12 col-m-12 col-s-12 col-12" style="float:right; padding:2px;" >
+  <div class="base-modal-content col-l-12 col-m-12 col-s-12" style="margin-top:5px;">
+    <div class="base-modal-body">
+      <div id="home_content" class="col-l-10 col-m-10 col-s-10 col-10" style="float:left; padding:2px;">
+        <input id="consignee_input" placeholder="Select Consignee" type="search" multiple value="" list="datalist"
+          required style="text-transform:capitalize;" />
+        <datalist id="datalist">
+          {% for cli in consigne %}
+          <option data-id="{{cli.id}}" client-id="{{cli.client_id}}" value="{{cli.consignee_name}} / {{cli.client_id}}">
+          </option>
+          {% endfor %}
+        </datalist>
 
-    <form>
-      <h> For Admin </h>
-  
-      <input id="datalist_input" type="search" multiple value="" list="datalist_id" required
-        style="text-transform:capitalize;" />
-      <datalist id="datalist_id">
-  
-  
-        {% for cli in consigne %}
-  
-        <option data-id="{{cli.id}}" value="{{cli.consignee_name}} / {{cli.client_id}}"> </option>
-  
-        {% endfor %}
-  
-      </datalist>
-  
-     
-      <button class="buttonstyle" type="submit" id="check">Check</button>
-      <!-- %0a for line brak in whatsups -->
-      <a type="button" style="text-size-adjust:none;" href="whatsapp://send/?phone=919213427055&amp;text=Hello user  %0a{{orders}}" id="openWA">Send to
-        WhatsApp</a>
-  
-    </form>
-    <!-- Auto open on WebView and Firefox 
-        <iframe id="launcher" src="whatsapp://send/?phone=62812345678&amp;text=test" style="display: none;"></iframe> -->
-  
-  
-  
-    <br><br><br>
-    <button onclick="c_prompt.render('Aleart Box','Hello World','changeText')">CustomePromot</button>
-    <button onclick="c_alert.render('Aleart Box','Hello World',2000)">CustomeAlert</button>
-    <button onclick="fetchHtml('/clients/add_client')">getpage</button>
-    <button style="position: absolute; z-index: 999999;" onclick="hide()">hide</button>
-  
-    <div>
-     
-    <div id="showpage">
+                  <!--
+              <button onclick="c_prompt.render('Aleart Box','Hello World','changeText')">CustomePromot</button>
+              <button onclick="c_alert.render('Aleart Box','Hello World',2000)">CustomeAlert</button>
+              <button onclick="fetchHtml('/clients/add_client')">getpage</button>
+              <button style="position: absolute; z-index: 999999;" onclick="hide()">hide</button>
+                -->
+      </div>
+      <div id="home_content" class="col-l-2 col-m-2 col-s-2 col-2"
+        style="text-align: center; margin-top: 4px; float:right; padding:2px;">
+        <button id="show-order" class="buttonstyle"> Show </button>
+      </div>
+
+      <div id="ac" class="col-l-12 col-m-12 col-s-12 col-">
+    
+      </div>
      
     </div>
-    
-     </div>
 
-
+  </div>
+  {% include 'clients/multiselectoption.html' %}
 </div>
-</div>
-</div>
-
 {% endblock main_content%}
 
 
 {% block main_scripts %}
 
-<script>
+<script type="module">
+  import * as ajexcall from "/static/core/js/modules/ajex.js";
+  let items = JSON.parse('{{items  | escapejs }}');
+  let item_variants = JSON.parse('{{item_variants | escapejs }}');
+  // console.log(items);
+  const order1_div=document.getElementById('accordion');
+ // const tbodyEl = document.querySelector('tbody');
+  const ord=document.getElementById('ac');
+ // order1_div.addEventListener('mouseover',gg);
 
-function hide(){
-  document.getElementById('showpage').style.display='none';
-}
+  document.getElementById('show-order').addEventListener('click', show_order_item);
 
-function fetchHtml(page) {
+  function show_order_item() {
+    let con_id = selectedDatalistAttributeValue('consignee_input', 'datalist', 'data-id');    
+    const data = { 'con_id': con_id };   
+    get_data('/orders/order_item', data);
+  }
 
- fetch(page)
-  .then((response) => {
-    return response.text();
-  })
-  .then((html) => {
-    document.getElementById('showpage').innerHTML = html ;
-    document.getElementById('showpage').style.display='block';
-    var scripts = document.getElementById("showpage").querySelectorAll("script");
-    for (var i = 0; i < scripts.length; i++) {
-    if (scripts[i].innerText) {
-      eval(scripts[i].innerText);
-    } else {
-      fetch(scripts[i].src).then(function (data) {
-        data.text().then(function (r) {
-          eval(r);
-        })
-      });
+  function get_data(path, data) {
+    
+    let item_name = '';
+    let variant_name = '';
+    fetch('/orders/order_item/', ajexcall.putoption(data))
+      .then(response => {
+        if (!response.ok) {
+          throw Error(response.statusText);
+        }
+        return response.json(); // Convert response to json use text for text
+      })
+      .then(data => {
 
-    }
-    // To not repeat the element
-    scripts[i].parentNode.removeChild(scripts[i]);
+        console.log(data);
+        ord.innerHTML='';
+        for (let o = 0; o < data['orders'].length; o++) {
+          let tb = document.createElement('table');
+              tb.id='myTable';
+          let the = document.createElement('thead');
+          let tr = document.createElement('tr');
+
+          let th0 = document.createElement('th');
+          let th1 = document.createElement('th');
+          let th2 = document.createElement('th');
+          let th3 = document.createElement('th');
+          let th4 = document.createElement('th');
+
+          let tbb = document.createElement('tbody')
+          let tht0 = document.createTextNode('Item');
+          let tht1 = document.createTextNode('Price');
+          let tht2 = document.createTextNode('Order');
+          let tht3 = document.createTextNode('Bal');
+          let tht4 = document.createTextNode('');
+
+              th0.appendChild(tht0);
+              th1.appendChild(tht1);
+              th2.appendChild(tht2);
+              th3.appendChild(tht3);
+              th4.appendChild(tht4);
+
+              tr.appendChild(th0);
+              tr.appendChild(th1);
+              tr.appendChild(th2);
+              tr.appendChild(th3);
+              tr.appendChild(th4);
+
+              the.appendChild(tr);
+              tb.appendChild(the);
+              tb.appendChild(tbb);
+            
+          let d=document.createElement('div');
+              d.className='panel';
+              d.appendChild(tb);
+          let btnt1=document.createTextNode('Date : '+data['orders'][o]['date'])
+          let btn = document.createElement('button');
+              btn.className='accordion';       
+              btn.appendChild(btnt1);
+              ord.appendChild(btn);
+              ord.appendChild(d);
+        
+            
+        
+        
+        for (var i = 0; i < data['items'].length; i++) {
+          
+          if(data['orders'][o]['id'] == data['items'][i]['order_id_id'] ){
+
+          for (let it in items) {
+            if (data['items'][i]['item_id_id'] == items[it]['item_id']) { item_name = items[it]['item_name'] }
+          }
+          for (let iv in item_variants) {
+            if (data['items'][i]['item_variant_id_id'] == item_variants[iv]['variant_id']) { variant_name = item_variants[iv]['variant_name'] }
+          }
+          tbb.innerHTML += `
+        <tr>        
+        <td style="text-align: center; font-size: 12px;">${item_name + ' ' + variant_name}</td>
+        <td style="text-align: center; font-size: 12px;">${data['items'][i]['item_veriant_price']}</td>
+        <td style="text-align: center; font-size: 12px;">${data['items'][i]['item_qty']}</td>
+        <td style="text-align: center; font-size: 12px;">${data['items'][i]['item_qty']}</td>   
+        <td style="text-align: center; font-size: 12px;"><button class="deleteBtn">&#8942;</button></td>       
+        </tr>`;
+        } }
+      }
+        ss();
+      })
+      .catch(err => { alert(err); })
+    
+  }
+function ss(){
+var acc = document.getElementsByClassName("accordion");
+var pa=document.getElementsByClassName('panel');
+var i;
+var p1;
+for (i = 0; i < acc.length; i++) {
+
+ // 
+ // if(pa[i].style.maxHeight){pa=i}
+ //  alert(pa[1].style.maxHeight);
+  acc[i].addEventListener("click", function() {
    
-  }
+    for (let j=0;j<3;j++){if(pa[j].style.maxHeight){pa[j].style.maxHeight=null;acc[j].classList.remove("active")}}
+   // p1=pa[0].style.maxHeight;
+   // if(pa[i].style.maxHeight){pa[i].style.maxHeight=null;}
+  
+    this.classList.toggle("active");
+   var panel = this.nextElementSibling;
+    if (panel.style.maxHeight) {
+      panel.style.maxHeight = null;
+    } else {     
+      panel.style.maxHeight = panel.scrollHeight + "px";
+     // alert( panel.style.maxHeight);
+    } 
   });
- 
 }
-
-
-function changeText(val){ 
-	alert(val);
-	
-	} 
-function doStuff(val){ 
-	alert(val);
-	} 
-
-  var menumodal = document.getElementById("menuModal");
-  var menubtn = document.getElementById("menuBtn");
-
-  window.onclick = function (event) {
-    if (event.target == menumodal) {
-      menumodal.style.display = "none";
-    }
-
-  }
-
-  menubtn.onclick = function (event) {
-    menumodal.style.display = "block";
-  }
-
-
-
-  document.getElementById('check').addEventListener('click', function () {
-
-    itc = selecteddatalistid('datalist_input', 'datalist_id');
-    if (itc != undefined) {
-      //alert(itc)
-    }
-    else {
-      //alert ("Please Select Valied Value") 
-    }
-  });
-
+}
 
 </script>
 
 
 {% endblock main_scripts %}
-

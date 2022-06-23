@@ -76,10 +76,7 @@ function CustomPrompt() {
     var d_footer = document.createElement("div");
     d_footer.id = "d_footer";
     d_footer.className = "base-modal-footer col-l-12 col-m-12 col-s-12";
-    d_footer.innerHTML =
-      '<button class="buttonstyle" style="float:right; margin-top:5px; margin-right:10px;" onclick="c_prompt.ok(\'' +
-      fctn +
-      '\')">OK</button> <button style="float:right; margin-top:5px; margin-right:10px;" class="buttonstyle" onclick="c_prompt.cancel()">Cancel</button>';
+    d_footer.innerHTML ='<button class="buttonstyle" style="float:right; margin-top:5px; margin-right:10px;" onclick="c_prompt.ok(\''+fctn+'\')">OK</button> <button style="float:right; margin-top:5px; margin-right:10px;" class="buttonstyle" onclick="c_prompt.cancel()">Cancel</button>';
     cont_id.appendChild(d_footer);
   };
   this.cancel = function () {

@@ -28,7 +28,7 @@ class Station(models.Model):
 
 
 class Client(models.Model) :
-    Client_Group=[('a','a'),('b','b'),('c','c'),('d','d'),('e','e'),('f','f')]
+    Client_Group=[('a','a'),('b','b'),('c','c'),('d','d')]
     user_id = models.ManyToManyField(Custom_User)
     client_name = LowerCase(max_length=100, unique=True)
     client_group = LowerCase(max_length=10,choices=Client_Group,default='a')   

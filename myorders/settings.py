@@ -141,7 +141,7 @@ USE_L10N = True
 
 USE_TZ = True
 
-
+#DATE_INPUT_FORMATS = ('%d-%m-%Y','%Y-%m-%d')
 # Change the builtin user model to our user model
 AUTH_USER_MODEL = 'core.Custom_User' 
 
