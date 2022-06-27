@@ -3,23 +3,24 @@
 {% block page_head %}
 <style>
   .accordion {
-    background-color: rgb(214, 240, 255);
-    color: #444;
+    background-color: rgb(199, 199, 199);
+    color: rgb(51, 51, 51);
     cursor: pointer;
-    padding: 10px;
+    padding: 7px;
     width: 100%;
     border: none;
     text-align: left;
     outline: none;
     font-size: 15px;
     transition: 0.4s;
-    margin-bottom: 5px;
+    margin-bottom: 2px;
   }
-  
-  .active, .accordion:hover {
+
+  .active,
+  .accordion:hover {
     background-color: rgb(148, 214, 253);
   }
-  
+
   .accordion:after {
     content: '\002B';
     color: #777;
@@ -27,11 +28,11 @@
     float: right;
     margin-left: 5px;
   }
-  
+
   .active:after {
     content: "\2212";
   }
-  
+
   .panel {
     padding: 5 10px;
     background-color: white;
@@ -39,9 +40,9 @@
     overflow: hidden;
     transition: max-height 0.2s ease-out;
   }
-  </style>
+</style>
 <style>
-  #myTable {
+  .myTable {
     font-family: Arial, Helvetica, sans-serif;
     border-collapse: collapse;
     width: 100%;
@@ -51,36 +52,36 @@
 
   }
 
-  #myTable th:first-child {
+  .myTable th:first-child {
 
     border-radius: 0 0 0 0;
   }
 
-  #myTable th:last-child {
+  .myTable th:last-child {
 
     border-radius: 0 0 0 0;
   }
 
-  #myTable td,
-  #customers th {
+  .myTable td,
+  .customers th {
     border: 1px solid #ddd;
     padding: 2px;
   }
 
-  #myTable tr:nth-child(even) {
+  .myTable tr:nth-child(even) {
     background-color: #f2f2f2;
   }
 
   /*
     #myTable tr:hover {background-color: #ddd;}
     */
-  #myTable th {
+  .myTable th {
     padding-top: 6px;
     padding-bottom: 6px;
     font-size: 12px;
     text-align: center;
-    background-color: #047eaa;
-    color: white;
+    background-color: rgb(148, 214, 253);
+    color: rgb(34, 33, 33);
   }
 </style>
 {% endblock page_head %}
@@ -100,7 +101,7 @@
           {% endfor %}
         </datalist>
 
-                  <!--
+        <!--
               <button onclick="c_prompt.render('Aleart Box','Hello World','changeText')">CustomePromot</button>
               <button onclick="c_alert.render('Aleart Box','Hello World',2000)">CustomeAlert</button>
               <button onclick="fetchHtml('/clients/add_client')">getpage</button>
@@ -113,9 +114,9 @@
       </div>
 
       <div id="ac" class="col-l-12 col-m-12 col-s-12 col-">
-    
+
       </div>
-     
+
     </div>
 
   </div>
@@ -131,21 +132,21 @@
   let items = JSON.parse('{{items  | escapejs }}');
   let item_variants = JSON.parse('{{item_variants | escapejs }}');
   // console.log(items);
-  const order1_div=document.getElementById('accordion');
- // const tbodyEl = document.querySelector('tbody');
-  const ord=document.getElementById('ac');
- // order1_div.addEventListener('mouseover',gg);
+  const order1_div = document.getElementById('accordion');
+  // const tbodyEl = document.querySelector('tbody');
+  const ord = document.getElementById('ac');
+  // order1_div.addEventListener('mouseover',gg);
 
   document.getElementById('show-order').addEventListener('click', show_order_item);
 
   function show_order_item() {
-    let con_id = selectedDatalistAttributeValue('consignee_input', 'datalist', 'data-id');    
-    const data = { 'con_id': con_id };   
+    let con_id = selectedDatalistAttributeValue('consignee_input', 'datalist', 'data-id');
+    const data = { 'con_id': con_id };
     get_data('/orders/order_item', data);
   }
 
   function get_data(path, data) {
-    
+
     let item_name = '';
     let variant_name = '';
     fetch('/orders/order_item/', ajexcall.putoption(data))
@@ -158,12 +159,16 @@
       .then(data => {
 
         console.log(data);
-        ord.innerHTML='';
+        ord.innerHTML = '';
         for (let o = 0; o < data['orders'].length; o++) {
           let tb = document.createElement('table');
-              tb.id='myTable';
+          tb.id = 'myTable' + o;
+          tb.className = 'myTable';
+          tb.style = "text-align: center;";
           let the = document.createElement('thead');
+          the.style = 'text-align: center; font-size: 12px;';
           let tr = document.createElement('tr');
+
 
           let th0 = document.createElement('th');
           let th1 = document.createElement('th');
@@ -171,53 +176,54 @@
           let th3 = document.createElement('th');
           let th4 = document.createElement('th');
 
-          let tbb = document.createElement('tbody')
+          let tbody = document.createElement('tbody')
           let tht0 = document.createTextNode('Item');
           let tht1 = document.createTextNode('Price');
           let tht2 = document.createTextNode('Order');
           let tht3 = document.createTextNode('Bal');
           let tht4 = document.createTextNode('');
 
-              th0.appendChild(tht0);
-              th1.appendChild(tht1);
-              th2.appendChild(tht2);
-              th3.appendChild(tht3);
-              th4.appendChild(tht4);
+          th0.appendChild(tht0);
+          th1.appendChild(tht1);
+          th2.appendChild(tht2);
+          th3.appendChild(tht3);
+          th4.appendChild(tht4);
 
-              tr.appendChild(th0);
-              tr.appendChild(th1);
-              tr.appendChild(th2);
-              tr.appendChild(th3);
-              tr.appendChild(th4);
+          tr.appendChild(th0);
+          tr.appendChild(th1);
+          tr.appendChild(th2);
+          tr.appendChild(th3);
+          tr.appendChild(th4);
 
-              the.appendChild(tr);
-              tb.appendChild(the);
-              tb.appendChild(tbb);
-            
-          let d=document.createElement('div');
-              d.className='panel';
-              d.appendChild(tb);
-          let btnt1=document.createTextNode('Date : '+data['orders'][o]['date'])
+          the.appendChild(tr);
+          tb.appendChild(the);
+          tb.appendChild(tbody);
+
+          let d = document.createElement('div');
+          d.className = 'panel';
+          d.appendChild(tb);
+          let date = document.createTextNode(' Date : ' + formatDate(data['orders'][o]['date']) + ' Order Id : ' + data['orders'][o]['id']);
+
           let btn = document.createElement('button');
-              btn.className='accordion';       
-              btn.appendChild(btnt1);
-              ord.appendChild(btn);
-              ord.appendChild(d);
-        
-            
-        
-        
-        for (var i = 0; i < data['items'].length; i++) {
-          
-          if(data['orders'][o]['id'] == data['items'][i]['order_id_id'] ){
+          btn.className = 'accordion';
+          btn.appendChild(date);
+          ord.appendChild(btn);
+          ord.appendChild(d);
 
-          for (let it in items) {
-            if (data['items'][i]['item_id_id'] == items[it]['item_id']) { item_name = items[it]['item_name'] }
-          }
-          for (let iv in item_variants) {
-            if (data['items'][i]['item_variant_id_id'] == item_variants[iv]['variant_id']) { variant_name = item_variants[iv]['variant_name'] }
-          }
-          tbb.innerHTML += `
+
+
+
+          for (var i = 0; i < data['items'].length; i++) {
+
+            if (data['orders'][o]['id'] == data['items'][i]['order_id_id']) {
+
+              for (let it in items) {
+                if (data['items'][i]['item_id_id'] == items[it]['item_id']) { item_name = items[it]['item_name'] }
+              }
+              for (let iv in item_variants) {
+                if (data['items'][i]['item_variant_id_id'] == item_variants[iv]['variant_id']) { variant_name = item_variants[iv]['variant_name'] }
+              }
+              tbody.innerHTML += `
         <tr>        
         <td style="text-align: center; font-size: 12px;">${item_name + ' ' + variant_name}</td>
         <td style="text-align: center; font-size: 12px;">${data['items'][i]['item_veriant_price']}</td>
@@ -225,40 +231,77 @@
         <td style="text-align: center; font-size: 12px;">${data['items'][i]['item_qty']}</td>   
         <td style="text-align: center; font-size: 12px;"><button class="deleteBtn">&#8942;</button></td>       
         </tr>`;
-        } }
-      }
+            }
+          }
+          caltab('myTable' + o);
+        }
         ss();
+
       })
       .catch(err => { alert(err); })
-    
-  }
-function ss(){
-var acc = document.getElementsByClassName("accordion");
-var pa=document.getElementsByClassName('panel');
-var i;
-var p1;
-for (i = 0; i < acc.length; i++) {
 
- // 
- // if(pa[i].style.maxHeight){pa=i}
- //  alert(pa[1].style.maxHeight);
-  acc[i].addEventListener("click", function() {
-   
-    for (let j=0;j<3;j++){if(pa[j].style.maxHeight){pa[j].style.maxHeight=null;acc[j].classList.remove("active")}}
-   // p1=pa[0].style.maxHeight;
-   // if(pa[i].style.maxHeight){pa[i].style.maxHeight=null;}
-  
-    this.classList.toggle("active");
-   var panel = this.nextElementSibling;
-    if (panel.style.maxHeight) {
-      panel.style.maxHeight = null;
-    } else {     
-      panel.style.maxHeight = panel.scrollHeight + "px";
-     // alert( panel.style.maxHeight);
-    } 
-  });
-}
-}
+  }
+  function ss() {
+    var acc = document.getElementsByClassName("accordion");
+    var pa = document.getElementsByClassName('panel');
+    var i;
+    var p1;
+    for (i = 0; i < acc.length; i++) {
+      // 
+      // if(pa[i].style.maxHeight){pa=i}
+      //  alert(pa[1].style.maxHeight);
+      acc[i].addEventListener("click", function () {
+
+        // p1=pa[0].style.maxHeight;
+        // if(pa[i].style.maxHeight){pa[i].style.maxHeight=null;}  
+        this.classList.toggle("active");
+        var panel = this.nextElementSibling;
+        if (panel.style.maxHeight) {
+          panel.style.maxHeight = null;
+        } else {
+          for (let j = 0; j < acc.length; j++) {
+            if (pa[j].style.maxHeight) {
+              pa[j].style.maxHeight = null;
+              acc[j].classList.remove("active");
+            }
+          }
+          panel.style.maxHeight = panel.scrollHeight + "px";
+          // alert( panel.style.maxHeight);
+        }
+      });
+    }
+  }
+  function caltab(table_id) {
+    document.getElementById(table_id)
+      .addEventListener('click', function (e) {
+
+        if (e.target.classList.contains('deleteBtn')) {
+          e = e || window.event;
+          var data = [];
+          var target = e.srcElement || e.target;
+          while (target && target.nodeName !== "TR") {
+            target = target.parentNode;
+          }
+          if (target) {
+            var cells = target.getElementsByTagName("td");
+            for (var i = 0; i < cells.length - 1; i++) {
+              data.push(cells[i].innerHTML);
+            }
+          }
+          alert(data);
+        
+
+        }
+             });
+  }
+
+  function formatDate(input) {
+    var datePart = input.match(/\d+/g),
+      year = datePart[0].substring(0), // get only two digits
+      month = datePart[1], day = datePart[2];
+
+    return day + '/' + month + '/' + year;
+  }
 
 </script>
 
