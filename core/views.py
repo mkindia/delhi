@@ -46,14 +46,18 @@ def home(request):
                      client_name = user_client.client_name
                      client_id = user_client.id
               item_arry =[]
-              item_variants_arry = []              
+              item_variants_arry = []
+              unit_arry =[]            
               for i in Item.objects.all():                     
                      item_arry.append({'item_id':i.id,'item_name':i.item_name})
               items=json.dumps(item_arry)
               for iv in Item_Variant.objects.all():
                      item_variants_arry.append({'variant_id':iv.id,'variant_name':iv.variant_name})
               item_variants =json.dumps(item_variants_arry)
-              unit=Unit.objects.all()
+              for u in Unit.objects.all():
+                     unit_arry.append({'unit_id':u.id,'unit_name':u.unit_name})        
+              unit=json.dumps(unit_arry)
+              
               admin_context ={'client':clients,
                             'consigne':consignes,
                             'items':items,

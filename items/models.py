@@ -21,6 +21,7 @@ class Item_Group(models.Model):
 
 class Unit(models.Model):    
     unit_name = LowerCase(max_length=100,unique=True)
+    short_unit_name =LowerCase(max_length=10,unique=True)
     comment = LowerCase(max_length=200,blank=True,null=True)
     def __str__(self):
         return self.unit_name

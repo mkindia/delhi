@@ -137,11 +137,10 @@
   </script>
 {% endif %}
 
-<footer style="bottom:0 ; padding: 10px; left:0; right: 0; position:fixed; background-color: rgba(167, 167, 167, 0.42);"><h>footer</h></footer>
+<!-- <footer style="bottom:0 ; padding: 10px; left:0; right: 0; position:fixed; background-color: rgba(167, 167, 167, 0.42);"><h>footer</h></footer> -->
 
   {% block main_scripts %} {% endblock main_scripts %}
-
-
+  
   {% if messages %}
   {% for message in messages %}
   <script>c_alert.render('Message', '{{message}}', 5000)</script>
