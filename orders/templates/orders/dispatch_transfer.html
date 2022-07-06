@@ -1,0 +1,41 @@
+
+
+<div class="basemodal" id="item_modal" style="position: absolute; dispalay:none">
+    <div class="base-modal-content col-l-6 col-m-9 col-s-11" style="margin-top:5px;">
+        <div class="base-modal-header">
+            <h
+                style="position: relative; font-weight: bold; margin:0; top: 25%; -ms-transform: translateY(-50%);transform: translateY(-50%);">
+                Dispath/Tanfer Order
+            </h>
+        </div>
+        <div class="base-modal-body">
+            <form name="item_form" id="item-form" method="POST">
+               
+                <div class="col-l-6 col-m-6 col-s-6 col-5" style="float:left; padding:1px;">
+                    <label for="id_email">Date</label>
+                    <input type="Date" name="date" class="inputstyle" style="padding: 3px;" 
+                     required id="id_date">
+                </div>
+                <div class="col-l-6 col-m-6 col-s-6 col-6" style="float:left; padding:2px;">
+                    <label for="item_price">Item Price</label>
+                    <input type="number" min="1" max="1000" step=".1" {% if user.is_user %} disabled="true" {% endif %} name="itemprice" placeholder="Enter Price" class="inputstyle" required
+                        id="item_price">
+
+                </div>
+                <div class="col-l-6 col-m-6 col-s-6 col-6" style="float:left; padding:2px;">
+                    <label for="item_price">Item Price</label>
+                    <input type="number" min="1" max="1000" step=".01" {% if user.is_user %} disabled="true" {% endif %} name="itemprice" placeholder="Enter Price" class="inputstyle" required
+                        id="item_price">
+
+                </div>
+            </form>
+        </div>
+        <div class="base-modal-footer">
+            <button type="button" id="exit_item" class="buttonstyle"
+                style="float:right; margin-right: 10px; margin-bottom: 10px;">Exit</button>
+            <button class="buttonstyle" form="item-form" id="add_item"
+                style="float:right; margin-right: 10px; margin-bottom: 10px;">Submit</button>
+
+        </div>
+    </div>
+</div>

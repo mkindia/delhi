@@ -9,6 +9,7 @@ from django.contrib import messages
 from clients.models import Client, Consignee
 from items.models import Item,Item_Variant, Unit
 from .models import Consignee_Order,Item_Order
+from .forms import order_dispatchForm
 import json
 
 # Create your views here.
@@ -92,8 +93,18 @@ def order_item(request):
                
                 return JsonResponse(data,safe=False)
             if request.method == 'PUT':
-                data = json.loads(request.body.decode("utf-8"))
-                print(data['con_id'])  
+                data = json.loads(request.body.decode("utf-8"))                
+                is_client = Consignee.objects.get(pk=data['con_id'])
+                selected_consignes=Consignee.objects.filter(client_id=is_client.client_id)
+                if is_client.is_client :
+                    print(data['con_id'])
+                    items=list(Item_Order.objects.filter(client_id=is_client.client_id).values())
+                    orders=list(Consignee_Order.objects.filter(client_id=is_client.client_id).values())
+                    selected_consignes=list(Consignee.objects.filter(client_id=is_client.client_id).values())
+                else:
+                    items=list(Item_Order.objects.filter(consignee_id=data['con_id']).values())
+                    orders=list(Consignee_Order.objects.filter(consignee_id=data['con_id']).values())
+                    selected_consignes=list(Consignee.objects.filter(client_id=is_client.client_id).values())
                 order=[]
                 """
                 for con_order in Consignee_Order.objects.filter(client_id=data['cli_id']):
@@ -101,11 +112,10 @@ def order_item(request):
                 order_id=json.dumps(order)
                 """ 
                
-                items=list(Item_Order.objects.filter(consignee_id=data['con_id']).values())
-                orders=list(Consignee_Order.objects.filter(consignee_id=data['con_id']).values())
+               
                 msg='client not found'
                # print(items)
-                data={'items':items,'orders':orders,'msg':msg}
+                data={'items':items,'orders':orders,'msg':msg,'selected_consignes':selected_consignes}
 
                 return JsonResponse(data,safe=False)
                                     
@@ -118,4 +128,16 @@ def order_item(request):
     
     else :
 
+        return redirect('/')
+
+def dispatched_transfer_order(request):
+    if request.user.is_authenticated:
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            if request.method == 'PUT':
+                data = json.loads(request.body.decode("utf-8"))
+            
+                disform = order_dispatchForm
+                return render(request,'orders/dispatch_transfer.html',{'fm':disform})
+
+    else :
         return redirect('/')

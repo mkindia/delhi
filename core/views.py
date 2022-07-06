@@ -47,7 +47,11 @@ def home(request):
                      client_id = user_client.id
               item_arry =[]
               item_variants_arry = []
-              unit_arry =[]            
+              unit_arry =[]
+              consignee_arry =[]
+              for con in Consignee.objects.filter(client_id__in=clients):
+                     consignee_arry.append({'consignee_id':con.id,'consignee_name':con.consignee_name})
+              consigne_names=json.dumps(consignee_arry)
               for i in Item.objects.all():                     
                      item_arry.append({'item_id':i.id,'item_name':i.item_name})
               items=json.dumps(item_arry)
@@ -60,6 +64,7 @@ def home(request):
               
               admin_context ={'client':clients,
                             'consigne':consignes,
+                            'consignee_names':consigne_names,
                             'items':items,
                             'item_variants':item_variants,
                             'unit':unit,
