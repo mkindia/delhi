@@ -24,7 +24,7 @@ class Station(admin.ModelAdmin):
 
 @admin.register(Consignee)
 class Consignee(admin.ModelAdmin):
-      list_display =('consignee_name', 'client_id','station','transport','is_client')
+      list_display =('id','consignee_name', 'client_id','station','transport','is_client')
 
 @admin.register(Client_Token)
 class Consignee(admin.ModelAdmin):

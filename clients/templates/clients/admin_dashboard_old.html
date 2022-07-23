@@ -1,0 +1,691 @@
+{% extends 'core/base.html' %}
+{% block title %}admin{% endblock title %}
+{% block page_head %}
+<style>
+  .accordion {
+    background-color: rgb(209, 252, 233);
+    color: rgb(51, 51, 51);
+    cursor: pointer;
+    padding: 7px;
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 15px;
+    transition: 0.4s;
+    margin-bottom: 2px;
+  }
+
+  .active,
+  .accordion:hover {
+    background-color: rgb(148, 214, 253);
+  }
+
+  .accordion:after {
+    content: '\002B';
+    color: #777;
+    font-weight: bold;
+    float: right;
+    margin-left: 5px;
+  }
+
+  .active:after {
+    content: "\2212";
+  }
+
+  .panel {
+    padding: 5 10px;
+    background-color: whitesmoke;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s ease-out;
+  }
+</style>
+<style>
+  .myTable {
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 12px;
+    text-align: center;
+
+
+  }
+
+  .myTable th:first-child {
+
+    border-radius: 0 0 0 0;
+  }
+
+  .myTable th:last-child {
+
+    border-radius: 0 0 0 0;
+  }
+
+  .myTable td,
+  .customers th {
+    border: 1px solid #ddd;
+    padding: 2px;
+  }
+
+  .myTable tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+
+  /*
+    #myTable tr:hover {background-color: #ddd;}
+    */
+  .myTable th {
+    padding-top: 6px;
+    padding-bottom: 6px;
+    font-size: 12px;
+    text-align: center;
+    background-color: rgb(148, 214, 253);
+    color: rgb(34, 33, 33);
+  }
+</style>
+<style>
+  .popupdiv {
+    display: none;
+    position: absolute;
+    /* Stay in place */
+    z-index: 1;
+    /* Sit on top */
+    left: 0;
+    top: 0;
+    bottom: 0;
+    padding-left: 7px;
+    padding-right: 7px;
+    width: 100%;
+    /* Full width */
+    height: 100%;
+    /* Full height */
+    overflow: auto;
+    /* Enable scroll if needed */
+    background-color: rgba(0, 0, 0, 0.1);
+    /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.1);
+    /* Black w/ opacity */
+
+  }
+
+  /* Popup container */
+  .popup {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    margin-left: 50px;
+  }
+
+  /* The actual popup (appears on top) */
+  .popuptext {
+    width: 280px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 0px 0px;
+    position: absolute;
+    top: 0;
+    right: 6vw;
+    z-index: 99999999;
+
+
+  }
+
+  /* Popup arrow */
+  .popuptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 95%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+  }
+
+  /* Toggle this class when clicking on the popup container (hide and show the popup) */
+  .showpopup {
+    display: block;
+    visibility: visible;
+    -webkit-animation: fadeIn 1s;
+    animation: fadeIn 1s
+  }
+
+  /* Add animation (fade in the popup) */
+  @-webkit-keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+</style>
+{% endblock page_head %}
+
+
+{% block main_content %}
+<!--Search Consignee-->
+<div style="padding:5px;">
+  <div class="base-modal-content col-l-12 col-m-12 col-s-12" style="margin-top:5px; padding: 5px;">
+    <div class="base-modal-header" style="border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">
+      <div class="col-l-10 col-m-10 col-s-10 col-9" style="float:left;">
+        <input id="consignee_input" placeholder="Select Consignee" type="search" multiple value="" list="datalist"
+          required style="text-transform:capitalize;" />
+        <datalist id="datalist">
+          {% for cli in consigne %}
+          <option data-id="{{cli.id}}" client-id="{{cli.client_id_id}}" value="{{cli.consignee_name}} / {{cli.client_id}}">
+          </option>
+          {% endfor %}
+        </datalist>
+      </div>
+      <div class="col-l-2 col-m-2 col-s-2 col-3" style="text-align: center; float:right; padding:2px;">
+        <button id="show-order" class="buttonstyle" style="padding: 4px;"> Show </button>
+      </div>
+           
+    </div>
+    <div class="base-modal-body">
+      <div id="ac" class="col-l-12 col-m-12 col-s-12 col-">
+
+      </div>     
+    </div>
+
+  </div>
+</div>
+<!--for send/transfer-->
+<div class="basemodal" id="dis_tran" style="position: absolute; display:none">
+  <div class="base-modal-content col-l-6 col-m-9 col-s-11" style="margin-top:5px;">
+      <div class="base-modal-header">
+          <h
+              style="position: relative; font-weight: bold; margin:0; top: 25%; -ms-transform: translateY(-50%);transform: translateY(-50%);">
+              Dispath/Tanfer Order
+          </h>
+      </div>
+      <div class="base-modal-body">
+          <form name="dispatch_form" id="dispatch-form" method="POST" >
+              {% csrf_token %}
+              <div class="col-l-6 col-m-6 col-s-6 col-6" style="float:left; padding:1px;">
+                  <label for="id_datel">Date</label>
+                  <input type="Date" name="date" class="inputstyle" style="padding: 3px;" 
+                   required id="id_date">
+              </div>
+              <div class="col-l-6 col-m-6 col-s-6 col-6" style="float:left; padding:2px;">
+                  <label for="dippatch_qty">Qty</label>
+                  <input type="number" min="1" max="1000" step=".1" name="itemprice" placeholder="Enter Qty" class="inputstyle" required
+                      id="dispatch_qty">
+              </div>
+              <div class="col-l-6 col-m-6 col-s-6 col-12" style="float:left; padding:2px;">
+                <label for="status">Status</label>
+                <select id="status" placeholder="Select Status" class="inputstyle">
+                  <option selected>Dispatched</option>
+                  <option>Transfer to Consignee</option>
+                  <option>Cancelled</option>                    
+                </select>
+            </div>
+            <div id="tranfer_to" class="col-l-6 col-m-6 col-s-6 col-12" style="float:left; padding:2px; display: none;">
+              <label for="t_consignee">Transfer_to</label>
+              <select id="t_consignee" placeholder="Select Consignee" class="inputstyle">
+               
+              </select>
+          </div>
+              <div class="col-l-6 col-m-6 col-s-6 col-12" style="float:left; padding:2px;">
+                <label for="item_price">Docket No.</label>
+                <input  placeholder="Enter Docket No." class="inputstyle"
+                    id="docket">
+              </div>
+             
+              <div class="col-l-12 col-m-12 col-s-12 col-12" style="float:left; padding:2px;">
+                <label for="dispatch_comments">Comments</label>
+                <input   class="inputstyle" placeholder="add comments" id="dispatch_coments">
+              </div>
+          </form>
+      </div>
+      <div class="base-modal-footer">
+          <button type="button" id="exit_dis_trns" class="buttonstyle"
+              style="float:right; margin-right: 10px; margin-bottom: 10px;">Exit</button>
+          <button class="buttonstyle" form="dispatch-form" id="dispatch_order" 
+              style="float:right; margin-right: 10px; margin-bottom: 10px;">Submit</button>
+
+      </div>
+  </div>
+</div>
+<!--for popup option-->
+<div class="popupdiv" id="popupdiv">
+  <div class="popuptext" id="myPopup">
+    <button style="width:20%; float: left; border-radius: 6px;" id="edit_order">Edit</button>
+    <button style="width:20%; float: left; border-radius: 6px;" id="dispatch_details">Details</button>
+    <button style="width:20%; float: left; border-radius: 6px;" id="delete_order">Delete</button>
+    <button style="width:28%; float: left; border-radius: 6px;" id="dispatch">Dispatch</button>
+    <button style="width:12%; float: left; border-radius: 6px;" id="popupclose" onclick=popupclose()>X</button>
+  </div>
+</div>
+{% endblock main_content%}
+
+
+{% block main_scripts %}
+
+<script type="module">
+
+  var tablerowdata = [];
+  let consignee_ios=[];
+  
+  import * as ajexcall from "/static/core/js/modules/ajex.js";
+  let consignee_names = JSON.parse('{{consignee_names | escapejs }}');
+  let items = JSON.parse('{{items  | escapejs }}');
+  let item_variants = JSON.parse('{{item_variants | escapejs }}');
+  let unit = JSON.parse('{{unit | escapejs }}');
+ // console.log(unit);
+  // console.log(items);
+  const order1_div = document.getElementById('accordion');
+  // const tbodyEl = document.querySelector('tbody');
+
+  const mainDiv = document.getElementById('maindiv');
+  //  mainDiv.style.height=screen.height-320+"px";
+  const ord = document.getElementById('ac');
+  ord.style.maxHeight = 350 + "px";
+  let dataFromFetch ='';
+
+  // order1_div.addEventListener('mouseover',gg);
+
+  document.getElementById('show-order').addEventListener('click', function(){ 
+    let con_id = selectedDatalistAttributeValue('consignee_input', 'datalist', 'data-id');
+    let client_id1= selectedDatalistAttributeValue('consignee_input','datalist','client-id');
+    const data = { 'con_id': con_id };
+
+fetch('/ios/ios_by_client_id/'+client_id1)  
+  .then(function (response){   
+      if (!response.ok) {
+         throw Error(response.statusText);
+     }    
+     return response.json(); })
+  .then( data2 => {   
+     consignee_ios=data2;
+    console.log(data2);
+    return fetch('/orders/order_item/', ajexcall.putoption(data))
+    .then(function (response){   
+      if (!response.ok) {
+         throw Error(response.statusText);
+     }    
+     return response.json(); })
+      .then(data1 => {
+        dataFromFetch=data1; //all jSON data to dataFromfetch assign
+        get_data('/orders/order_item', dataFromFetch);     
+       console.log(dataFromFetch);
+       
+      })
+      .catch(err=>{alert(err);})
+
+   })
+   .catch(err=>{alert(err);})
+
+});
+
+
+function get_data(path, dataFromFetch) {
+    let client_id = 0;
+    let consignee_name = '';
+    let consignee_id =0;
+    let item_name = '';
+    let variant_name = '';
+    let order_unit = '';
+    let per_unit ='';
+    let t_con = ""
+    let ois= 0.0;
+    ord.innerHTML = '';
+        for (let o = 0; o < dataFromFetch['orders'].length; o++) 
+        {
+          let tb = document.createElement('table');
+          tb.id = 'myTable' + o;
+          tb.className = 'myTable';
+          tb.style = "text-align: center;";
+          let the = document.createElement('thead');
+          the.style = 'text-align: center; font-size: 12px;';
+          let tr = document.createElement('tr');
+          let updateBtn = document.createElement('button');
+
+
+          let th0 = document.createElement('th');
+          let th1 = document.createElement('th');
+          let th2 = document.createElement('th');
+          let th3 = document.createElement('th');
+          let th4 = document.createElement('th');
+
+          let tbody = document.createElement('tbody')
+          let tht0 = document.createTextNode('Item');
+          let tht1 = document.createTextNode('Price');
+          let tht2 = document.createTextNode('Order');
+          let tht3 = document.createTextNode('Bal');
+          let tht4 = document.createTextNode('');
+
+          th0.appendChild(tht0);
+          th1.appendChild(tht1);
+          th2.appendChild(tht2);
+          th3.appendChild(tht3);
+          th4.appendChild(tht4);
+
+          tr.appendChild(th0);
+          tr.appendChild(th1);
+          tr.appendChild(th2);
+          tr.appendChild(th3);
+          tr.appendChild(th4);
+
+          the.appendChild(tr);
+          tb.appendChild(the);
+          tb.appendChild(tbody);
+
+          let d = document.createElement('div');
+          d.className = 'panel';
+          d.appendChild(tb);
+          for(let con in consignee_names){
+            if(dataFromFetch['orders'][o]['consignee_id_id'] == consignee_names[con]['consignee_id']){
+              consignee_name = consignee_names[con]['consignee_name']
+             
+            }
+          }
+          let date = document.createTextNode(' Date : ' + formatDate(dataFromFetch['orders'][o]['date']) + ' Order Id : ' + dataFromFetch['orders'][o]['id']+" "+ consignee_name);
+
+          let btn = document.createElement('button');
+
+          btn.className = 'accordion';
+          btn.appendChild(date);
+          ord.appendChild(btn);
+          ord.appendChild(d);
+
+
+          for (var i = 0; i < dataFromFetch['items'].length; i++) {
+              client_id = dataFromFetch['items'][i]['client_id_id']
+              consignee_id = dataFromFetch['items'][i]['consignee_id_id']
+              ois=0.0;
+            if (dataFromFetch['orders'][o]['id'] == dataFromFetch['items'][i]['order_id_id']) {
+                
+              for (let it in items) {
+                if (dataFromFetch['items'][i]['item_id_id'] == items[it]['item_id']) {
+                   item_name = items[it]['item_name'] 
+                  }
+              }
+              for (let iv in item_variants) {
+                if (dataFromFetch['items'][i]['item_variant_id_id'] == item_variants[iv]['variant_id']) {
+                   variant_name = item_variants[iv]['variant_name'] 
+                  }
+              }
+
+              for (let ios in consignee_ios){
+                if(dataFromFetch['items'][i]['id'] == consignee_ios[ios]['item_order_id']){
+                  ois += parseFloat(consignee_ios[ios]['item_qty'])
+                }
+              }
+
+              for(let un in unit){
+                if(dataFromFetch['items'][i]['order_unit_id'] == unit[un]['unit_id']){
+                 order_unit = unit[un]['unit_name']
+                
+                }
+                if(dataFromFetch['items'][i]['price_per_unit_id'] == unit[un]['unit_id']){
+                 per_unit = unit[un]['unit_name']
+                
+                }
+
+              }
+              let bal = '';
+              if(parseFloat((dataFromFetch['items'][i]['item_qty'])-ois).toFixed(1)==0.0 || parseFloat((dataFromFetch['items'][i]['item_qty'])-ois).toFixed(1) < 0.0){
+                bal = 'background-color: aquamarine;';
+              }
+
+              //parseInt((data['items'][i]['item_qty'])-ois);
+             // alert(bal);
+              tbody.innerHTML += `              
+              <tr style="${bal}">        
+              <td style="text-align: center; font-size: 12px;">${item_name + ' ' + variant_name}</td>
+              <td style="text-align: center; font-size: 12px;">${dataFromFetch['items'][i]['item_veriant_price']+' /'+per_unit}</td>
+              <td style="text-align: center; font-size: 12px;">${dataFromFetch['items'][i]['item_qty']+ ' ' + order_unit}</td>
+              <td style="text-align: center; font-size: 12px;">${parseFloat((dataFromFetch['items'][i]['item_qty'])-ois).toFixed(1)+ ' ' + order_unit}</td>          
+              <td hidden>${client_id}</td>
+              <td hidden>${consignee_id}</td>              
+              <td hidden>${dataFromFetch['items'][i]['order_id_id']}</td>
+              <td hidden>${dataFromFetch['items'][i]['id']}</td>
+              <td hidden>${dataFromFetch['items'][i]['item_id_id']}</td>
+              <td hidden>${dataFromFetch['items'][i]['item_variant_id_id']}</td>
+              <td hidden>${dataFromFetch['items'][i]['item_veriant_price']}</td>
+              <td hidden>${dataFromFetch['items'][i]['item_qty']}</td>
+              <td style="text-align: center; font-size: 12px;"><button class="optionBtn">&#8942;</button></td>      
+              </tr>`;
+
+            }
+          }
+          caltab('myTable' + o);
+
+        }
+               
+        accordenmenu();
+
+     
+  }
+  function accordenmenu() {
+    var acc = document.getElementsByClassName("accordion");
+    var pa = document.getElementsByClassName('panel');
+    var i;
+    var p1;
+    for (i = 0; i < acc.length; i++) {
+
+      acc[i].addEventListener("click", function () {      
+        this.classList.toggle("active");
+        var panel = this.nextElementSibling;
+        if (panel.style.maxHeight) {
+          panel.style.maxHeight = null;
+        } else {
+          for (let j = 0; j < acc.length; j++) {
+            if (pa[j].style.maxHeight) {
+              pa[j].style.maxHeight = null;
+              acc[j].classList.remove("active");
+            }
+          }
+          panel.style.maxHeight = panel.scrollHeight + "px";
+          // alert( panel.style.maxHeight);
+        }
+      });
+    }
+  }
+
+  function caltab(table_id) {
+    document.getElementById(table_id)
+      .addEventListener('click', function (e) {
+        tablerowdata = '';
+        if (e.target.classList.contains('optionBtn')) {
+          e = e || window.event;
+          var data = [];
+          var target = e.srcElement || e.target;
+          while (target && target.nodeName !== "TR") {
+            target = target.parentNode;
+          }
+          if (target) {
+            var cells = target.getElementsByTagName("td");
+            for (var i = 0; i < cells.length - 1; i++) {
+              data.push(cells[i].innerHTML);
+
+            }
+
+          }
+          popupcordinate(e);
+          tablerowdata = data ;
+          // alert(data);        
+
+        }
+
+
+      });
+  }
+
+  function formatDate(input) {
+    var datePart = input.match(/\d+/g),
+      year = datePart[0].substring(0), // get only two digits
+      month = datePart[1], day = datePart[2];
+
+    return day + '/' + month + '/' + year;
+  }
+
+  const popupdiv = document.getElementById('popupdiv');
+  const popup = document.getElementById("myPopup");
+
+
+  function popupcordinate(event) {
+    var x = event.offsetX;
+    var y = event.offsetY;
+    popup.style.marginTop = event.clientY - 75 - y + "px";
+    // popup.style.marginLeft=event.clientX-230-x +"px";
+    // popup.style.right=event.clientX-x +"px";
+    popupdiv.style.display = 'block';
+  
+  }
+
+
+  document.getElementById('dispatch').addEventListener('click', function() {   
+    document.getElementById('status').value='Dispatched';
+    document.getElementById('tranfer_to').style.display='none';
+    document.getElementById('tranfer_to').setAttribute('required',false);
+    let t_con = document.getElementById('t_consignee');
+            t_con.innerHTML='';
+          
+    let dispatch_transfer_date = document.getElementById("id_date");
+    dispatch_transfer_date.valueAsDate = new Date();
+    let dispatch_qty =document.getElementById('dispatch_qty').value;
+    let dispatch_status = document.getElementById('status').value;
+    let dispatch_comment = document.getElementById('dispatch_coments').value;
+    //ord.innerHTML='';
+    
+    const data = { 'order_id': tablerowdata[4],'item_order_id':tablerowdata[5] };
+   
+        for (let i = 0; i < dataFromFetch['selected_consignes'].length; i++) {
+                        if(tablerowdata[5]!=dataFromFetch['selected_consignes'][i]['id'])
+                        {
+                        let opt = document.createElement('option');
+                        opt.innerHTML=dataFromFetch['selected_consignes'][i]['consignee_name'];
+                       
+                        opt.value =dataFromFetch['selected_consignes'][i]['id']; ;
+                        t_con.appendChild(opt);
+                        }
+                    }
+   
+    let item_qty = tablerowdata[3].split(' ');
+    if (parseFloat(item_qty[0]).toFixed(1) != 0.0 && parseFloat(item_qty[0]).toFixed(1) > 0.0 ){   
+    document.getElementById('dispatch_qty').value = parseFloat(item_qty[0]).toFixed(1);
+    document.getElementById('dis_tran').style.display='block'; 
+    } else{
+      alert('Order Completed');
+    }
+    popupdiv.style.display='none';
+    document.getElementById('exit_dis_trns').addEventListener('click',function(){
+    document.getElementById('dis_tran').style.display='none';
+    })
+  })
+
+  
+
+  document.getElementById('status').addEventListener('change',function(){
+    if(document.getElementById('status').value=='Transfer to Consignee')
+    {
+      document.getElementById('tranfer_to').setAttribute('required',true);
+      document.getElementById('tranfer_to').style.display='block';      
+    }
+    else{
+      document.getElementById('tranfer_to').style.display='none';
+    }
+  })
+
+  const submitorder = document.getElementById('dispatch-form');
+  submitorder.addEventListener('submit',function(e){
+    e.preventDefault();
+    let item_qty = tablerowdata[3].split(' ');
+   
+    
+    let data='';
+    let dispatch_transfer_date = document.getElementById("id_date");
+    let dispatch_qty =document.getElementById('dispatch_qty').value;
+    let dispatch_status = document.getElementById('status').value;
+    let dispatch_comment = document.getElementById('dispatch_coments').value;
+
+   
+   
+    if (dispatch_status == 'Transfer to Consignee'){
+    
+    let t_con = document.getElementById('t_consignee').value;    
+
+    data = {
+      'client_id':tablerowdata[4],
+      'consignee_id':tablerowdata[5],
+      'order_id':tablerowdata[6],
+    'order_item_id':tablerowdata[7],
+    'dispatch_date':dispatch_transfer_date.value,
+    'dispatch_qty':dispatch_qty,
+    'status':dispatch_status,
+    'trs_id':t_con,
+    'dispatch_comment':dispatch_comment};
+    console.log(data);
+    }
+    else{
+    data = {
+      'client_id':tablerowdata[4],
+      'consignee_id':tablerowdata[5],
+      'order_id':tablerowdata[6],
+    'order_item_id':tablerowdata[7],
+    'dispatch_date':dispatch_transfer_date.value,
+    'dispatch_qty':dispatch_qty,
+    'status':dispatch_status,
+    'trs_id':null,
+    'dispatch_comment':dispatch_comment};
+    console.log(data);
+    }
+
+    if(parseFloat(item_qty[0]).toFixed(1) < dispatch_qty){
+      alert('Balance Order Qty. is less then');
+    }
+    else{
+      fetch('/ios/ios_by_client/', ajexcall.postoption(data))
+      .then(response => {
+        if (!response.ok) {
+          throw Error(response.statusText);
+        }
+        return response.json(); // Convert response to json use text for text
+      })
+      .then(data => {
+       
+       console.log(data);
+      })
+      .catch(err=>{alert(err);})
+
+    }
+
+  })
+ 
+
+</script>
+<script>
+ 
+  function popupclose() {
+    let popupdiv = document.getElementById('popupdiv');
+    popupdiv.style.display = 'none';
+  }
+
+  window.onclick = function (event) {
+    if (event.target.className == 'popupdiv') {
+      popupdiv.style.display = 'none';
+    }
+  }
+
+  
+
+</script>
+
+{% endblock main_scripts %}

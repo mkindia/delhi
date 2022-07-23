@@ -6,9 +6,10 @@ from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.views.decorators.cache import cache_control
 from django.contrib import messages
+from pymysql import NULL
 from clients.models import Client, Consignee
 from items.models import Item,Item_Variant, Unit
-from .models import Consignee_Order,Item_Order
+from .models import Consignee_Order,Item_Order,Item_Order_Status
 from .forms import order_dispatchForm
 import json
 
@@ -72,7 +73,7 @@ def order_item(request):
                                                             date=order_date)
                     Item_Order.objects.create(client_id=client_instance,
                                             consignee_id=con_instance,
-                                            order_id=create_order,
+                                            date=order_date,                                           
                                             item_id=item_instance,                                           
                                             item_variant_id=item_variant_instance,                                           
                                             item_veriant_price=item['item_price'],
@@ -93,9 +94,12 @@ def order_item(request):
                
                 return JsonResponse(data,safe=False)
             if request.method == 'PUT':
+
                 data = json.loads(request.body.decode("utf-8"))                
                 is_client = Consignee.objects.get(pk=data['con_id'])
                 selected_consignes=Consignee.objects.filter(client_id=is_client.client_id)
+               
+              
                 if is_client.is_client :
                     print(data['con_id'])
                     items=list(Item_Order.objects.filter(client_id=is_client.client_id).values())
@@ -105,13 +109,7 @@ def order_item(request):
                     items=list(Item_Order.objects.filter(consignee_id=data['con_id']).values())
                     orders=list(Consignee_Order.objects.filter(consignee_id=data['con_id']).values())
                     selected_consignes=list(Consignee.objects.filter(client_id=is_client.client_id).values())
-                order=[]
-                """
-                for con_order in Consignee_Order.objects.filter(client_id=data['cli_id']):
-                    order.append({'order_id':con_order.id})
-                order_id=json.dumps(order)
-                """ 
-               
+
                
                 msg='client not found'
                # print(items)
@@ -130,12 +128,29 @@ def order_item(request):
 
         return redirect('/')
 
+def item_order_status(request):
+     if request.user.is_authenticated:
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            if request.method == 'PUT':
+                data = json.loads(request.body.decode("utf-8"))
+               # print(data['order_item_id'])
+                
+                Item_Order_status=Item_Order_Status.objects.filter(item_order_id=data['order_item_id'])
+                item_qty=0
+                for qty in Item_Order_status:
+                    if qty.item_qty != None:
+                        item_qty += qty.item_qty
+                    else:
+                        item_qty=0
+                item_order_status ={'item_qty':item_qty,'order_item_id':data['order_item_id']}
+                return JsonResponse(item_order_status)
+
 def dispatched_transfer_order(request):
     if request.user.is_authenticated:
         if request.headers.get('x-requested-with') == 'XMLHttpRequest':
             if request.method == 'PUT':
                 data = json.loads(request.body.decode("utf-8"))
-            
+                
                 disform = order_dispatchForm
                 return render(request,'orders/dispatch_transfer.html',{'fm':disform})
 

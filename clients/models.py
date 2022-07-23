@@ -65,7 +65,7 @@ class Transport(models.Model):
 
 
 class Consignee(models.Model):
-    client_id = models.ForeignKey(Client,on_delete=models.CASCADE)
+    client_id = models.ForeignKey(Client,related_name='client_id' ,on_delete=models.CASCADE)
     consignee_name = LowerCase(max_length=150,
     error_messages={
             'unique': "A consignee already exists.",
