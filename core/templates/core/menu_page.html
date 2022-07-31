@@ -29,7 +29,9 @@
     <a id="delete-party" class="asubmenuitem">Delete Consignees</a>
   </div>
   <div id="items_menu_items" class="showdiv">
-    <p>mainFrameTwo</p>
+    <a href="{% url 'add_item' %}" id="add_items" onclick="menumodelHide()" class="asubmenuitem">Add Items</a>
+    <a href="{% url 'add_item_variant' %}" id="add_items_variant" onclick="menumodelHide()" class="asubmenuitem">Add Items Variant</a>
+    
   </div>
   <div id="som_item" class="showdiv">
     <a href="{% url 'orderitem' %}" id="add_order" onclick="menumodelHide()" class="asubmenuitem">Add Order</a>
@@ -57,15 +59,9 @@
 <script type="application/javascript" src="{% static 'core/js/menu_page.js' %}"></script>
 
 <script>
-/*
-const buttons = [].slice.call(document.getElementsByClassName('asubmenuitem'))
-buttons.forEach(button => {
-  button.addEventListener('click', e => document.getElementById('menuModal').style.display='none')
-})*/
 
 
-
-  var menumodal = document.getElementById("menuModal");
+var menumodal = document.getElementById("menuModal");
 var menubtn = document.getElementById("menuBtn");
 
 function menumodelHide(){ menumodal.style.display="none";}

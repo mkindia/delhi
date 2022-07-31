@@ -300,12 +300,13 @@
 
   // order1_div.addEventListener('mouseover',gg);
 
-  document.getElementById('show-order').addEventListener('click', function(){ 
+  document.getElementById('show-order').addEventListener('click', function()
+  { 
     let con_id = selectedDatalistAttributeValue('consignee_input', 'datalist', 'data-id');
     let client_id1= selectedDatalistAttributeValue('consignee_input','datalist','client-id');
     const data = { 'con_id': con_id };
 
-fetch('/ios/ios_by_client_id/'+client_id1)  
+  fetch('/clients/api/clients/'+client_id1)  
   .then(function (response){   
       if (!response.ok) {
          throw Error(response.statusText);

@@ -1,9 +1,104 @@
-{% for field in items_fm %}   
-<div class="col-l-6 col-m-6 col-s-6 col-" style="float:left; padding:2px">      
-   {{ field.label_tag }}     
-   {{ field }}      
-  {% for error in field.errors %}
-  <p style="color: red;"><small>{{error}}</small></p>
-  {% endfor %}
+{% extends 'core/base.html' %}
+{% block title %}admin{% endblock title %}
+{% block page_head %}
+{% endblock page_head %}
+
+
+{% block main_content %}
+<div class="basemodal">
+  <div class="base-modal-content col-l-6 col-m-9 col-s-11" style="margin-top: 5px;" >
+    <div class="base-modal-header">
+      <h style="position: relative; font-weight: bold; margin:0; top: 25%; -ms-transform: translateY(-50%);transform: translateY(-50%);" >                   
+        ADD ITEMS                         
+      </h>
+    
+    </div>        
+        <div class= "base-modal-body">
+        
+          <form method="POST" id="item-form">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ request.GET.next }}">
+            
+            <div class="col-l-6 col-m-6 col-s-6 col-" style="float:left; padding:2px;">
+              <label for="id_item_group">item group:</label>              
+              <input name="item_group" class="validdatalist" placeholder="Select Group" type="search"  style="text-transform:capitalize;" list="item_group_list" required id="id_item_group">
+              <datalist id="item_group_list" style="text-transform:capitalize;">                   
+               {% for group in item_groups %}
+               <option data-id="{{group.id}}" value="{{group.group_name}}"> </option>
+               {% endfor %}                    
+              </datalist>              
+            </div>    
+            
+            <div class="col-l-6 col-m-6 col-s-6 col-" style="float:left; padding:2px;">
+              <label for="id_client">Item Name:</label>                    
+              <input type="text" name="item" class="inputstyle" placeholder="Enter item name" style="text-transform:capitalize;" required id="id_item_name">                    
+            </div>                 
+
+          <div class="col-l-6 col-m-6 col-s-6 col-" style="float:left; padding:2px">
+            <label for="id_unit">Unit:</label> 
+
+            <input name="unit" list="unit_list" type="search" placeholder="Select Unit" class="inputstyle" style="text-transform:capitalize;" required id="id_unit">
+            <datalist id="unit_list">
+              {% for unit in item_units %}
+
+              <option data-id="{{unit.id}}" value="{{unit.unit_name}}"> </option>
+
+              {% endfor %} 
+            </datalist>                              
+          </div>
+
+          <div class="col-l-6 col-m-6 col-s-6 col-" style="float:left; padding:2px;">
+            <label for="id_email">hsn/sac:</label>                    
+            <input type="text" name="hsnsac" class="inputstyle" placeholder="enter hsn/sac"  id="id_hsnsac">                    
+          </div>   
+
+          <div class="col-l-12 col-m-12 col-s-12 col-" style="float:left; padding:2px;">
+            <label for="id_comment">hsn/sac:</label>                    
+            <input type="text" name="comment" class="inputstyle" placeholder="Enter comment"  id="id_comment">                    
+          </div>       
+              
+          </form>
+        </div>             
+  
+  <div class="base-modal-footer">
+    <button id="ac_submit"  class="buttonstyle" form="item-form" style="float:right; margin-right: 10px;">Submit</button>
+        
+    <a type="button" id="pageBack" class="ancor" onclick="history.back(-1)" style="text-decoration: none; float:right; margin-right:10px;" ><i> Exit </i></a>
+  </div>
 </div>
-{% endfor %}
+{% endblock main_content%}
+{% block main_scripts %}
+<script type="module">
+import * as ajexcall from "/static/core/js/modules/ajex.js";
+let item_form =  document.getElementById('item-form');
+item_form.addEventListener('submit',function(e){
+  let unit_id = selectedDatalistAttributeValue('id_unit', 'unit_list', 'data-id');
+  let group_id = selectedDatalistAttributeValue('id_item_group', 'item_group_list', 'data-id');
+  let item_name = document.getElementById('id_item_name').value;
+  let hsn_sac = document.getElementById('id_hsnsac').value; 
+  let comment=document.getElementById('id_comment').value;
+  e.preventDefault()
+ const data={'item_group':group_id,'item_name':item_name,'item_unit':unit_id,'hsn_sac':hsn_sac,'comment':comment}
+  fetch('/items/api/items/',ajexcall.postoption(data))
+  .then(function (response){
+    if (!response.ok) {
+         throw Error(response.statusText);
+        }
+        return response.json();
+  })
+  .then(data=>{
+   // console.log(data);
+   document.getElementById('id_item_name').value='';
+   document.getElementById('id_hsnsac').value='';
+   document.getElementById('id_comment').value='';
+   document.getElementById('id_unit').value='';
+   document.getElementById('id_item_group').value='';
+   c_alert.render('Item Status','Item Created Success',5000);
+  })
+  .catch(err=>{if(err == 'Error: Bad Request'){alert('Item Already Exist');}else alert(err);})
+ 
+});
+
+
+</script>
+{% endblock main_scripts %}

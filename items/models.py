@@ -42,7 +42,7 @@ class Item_Variant(models.Model):
     item_id = models.ForeignKey(Item,on_delete=models.PROTECT)
     variant_name= LowerCase(max_length=100)   
     con_factor = models.DecimalField(default=1,max_digits=7,decimal_places=2, blank=True,null=True)
-    alternate_unit = models.ForeignKey(Unit,on_delete=models.PROTECT)   
+    alternate_unit = models.ForeignKey(Unit,on_delete=models.PROTECT,null=True,blank=True)   
     variant_price_a=models.DecimalField(default=1,max_digits=7,decimal_places=2,null=True,blank=True)
     variant_price_b=models.DecimalField(default=1,max_digits=7,decimal_places=2,null=True,blank=True)
     variant_price_c=models.DecimalField(default=1,max_digits=7,decimal_places=2,null=True,blank=True)

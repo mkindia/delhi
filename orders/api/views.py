@@ -1,31 +1,38 @@
 from http import client
+from urllib import request
 from orders.models import Consignee_Order, Item_Order_Status,Item_Order
 from clients.models import Client,Consignee
-from orders.api.serializers import itemOrderStatus,consigneeOrder_serializers, order_item_serializers
+from orders.api.serializers import itemOrderStatus_serializers,consigneeOrder_serializers, order_item_serializers
 from rest_framework.response import Response
+from rest_framework.permissions import BasePermission
 
 from rest_framework import status
-from rest_framework import viewsets
+from rest_framework import viewsets , generics
 
-class ios_by_client_id(viewsets.ViewSet):
-   
+from orders.views import item_order_status
+
+class CustomPermissions(BasePermission):
+    def has_permission(self, request, view):
+        if (request.user.is_admin or request.user.is_staff and request.user.is_authenticated):
+            return True
+        return False
+
+class itemOrderStatus(viewsets.ModelViewSet):
+
+    queryset = Item_Order_Status.objects.all()
+    serializer_class =itemOrderStatus_serializers
+    permission_classes = (CustomPermissions,)
+    http_method_names = ['get','post']
+
+
+    """
     def list(self,request):
         ios = Item_Order_Status.objects.all()
         serializer = itemOrderStatus(ios,many=True)
         return Response(serializer.data)
 
-    def retrieve(self,request,pk=None):
-            try:
-                ios=Item_Order_Status.objects.filter(client_id=pk)              
-                serializer=itemOrderStatus(ios,many=True)
-                return Response(serializer.data,status=status.HTTP_200_OK)
-            except Item_Order_Status.DoesNotExist :
-                ios=None
-                return Response({"msg":"Status Not Found",},status=status.HTTP_400_BAD_REQUEST)
-    
     def post(self,request):
         post_data = request.data
-
         print(post_data['client_id'] + ' ' + post_data['consignee_id'])
         print(post_data['order_item_id'] + ' ' + post_data['dispatch_qty']+' '+ post_data['dispatch_date'])
         cli_instance=Client.objects.only('id').get(id=post_data['client_id'])        
@@ -44,8 +51,21 @@ class ios_by_client_id(viewsets.ViewSet):
             trs_id = None      
         
         return Response(post_data,status=status.HTTP_200_OK)
+    """
+class ios_by_client_id(viewsets.ModelViewSet):   
+    serializer_class =itemOrderStatus_serializers   
+    permission_classes = (CustomPermissions,)
+    http_method_names = ['get','post',]
 
-
+    def get_queryset(self):
+        #queryset = super(ios_by_client_id, self).get_queryset()   
+        query_set = Item_Order_Status.objects.all()       
+        return query_set
+    def retrieve(self, request, *args, **kwargs):
+        params= kwargs       
+        clients=Item_Order_Status.objects.filter(client_id=params['pk'])
+        serializer=itemOrderStatus_serializers(clients,many=True)
+        return Response(serializer.data)
 
 class consignee_order_by_client_id(viewsets.ViewSet):
     def list(self,request):

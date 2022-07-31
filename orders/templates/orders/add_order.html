@@ -87,17 +87,13 @@
             return await response.json(); // Convert response to json
         })
             .then(data => {
-                //Perform actions with the response data from the view            
-              
-                
-                
+               
                 if (data.consignee) {
                     alert(data.consignee); 
                     window.location.href = '/orders/order_item/';
                   
                     }
 
-               // window.location('/order/add_order/')
 
             })
             .catch(err => { alert( err) } );

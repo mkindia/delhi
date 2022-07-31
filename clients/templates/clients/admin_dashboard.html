@@ -249,9 +249,9 @@
 
                     </select>
                 </div>
-                <div class="col-l-6 col-m-6 col-s-6 col-12" style="float:left; padding:2px;">
+                <div id="docket_div" class="col-l-6 col-m-6 col-s-6 col-12"  style="float:left; padding:2px;">
                     <label for="item_price">Docket No.</label>
-                    <input placeholder="Enter Docket No." class="inputstyle" id="docket">
+                    <input placeholder="Enter Docket No." class="inputstyle" id="docket" required>
                 </div>
 
                 <div class="col-l-12 col-m-12 col-s-12 col-12" style="float:left; padding:2px;">
@@ -294,25 +294,20 @@
     let items = JSON.parse('{{items  | escapejs }}');
     let item_variants = JSON.parse('{{item_variants | escapejs }}');
     let unit = JSON.parse('{{unit | escapejs }}');
-    // console.log(unit);
-    // console.log(items);
-    const order1_div = document.getElementById('accordion');
-    // const tbodyEl = document.querySelector('tbody');
 
+    const order1_div = document.getElementById('accordion');
     const mainDiv = document.getElementById('maindiv');
-    //  mainDiv.style.height=screen.height-320+"px";
+   
     const ord = document.getElementById('disp_div');
     ord.style.maxHeight = 350 + "px";
     let dataFromFetch = '';
-
-    // order1_div.addEventListener('mouseover',gg);
-
+  
     document.getElementById('show-comorder').addEventListener('click', function () {
         let con_id = selectedDatalistAttributeValue('consignee_input', 'datalist', 'data-id');
         let client_id1 = selectedDatalistAttributeValue('consignee_input', 'datalist', 'client-id');
         const data = { 'con_id': con_id };
 
-        fetch('/ios/ios_by_client_id/' + client_id1)
+        fetch('/orders/api/ios_by_client_id/' + client_id1)
             .then(function (response) {
                 if (!response.ok) {
                     throw Error(response.statusText);
@@ -320,7 +315,7 @@
                 return response.json();
             })
             .then(data2 => {
-                consignee_ios = data2;               
+                consignee_ios = data2;
                 return fetch('/orders/order_item/', ajexcall.putoption(data))
                     .then(function (response) {
                         if (!response.ok) {
@@ -330,7 +325,7 @@
                     })
                     .then(data1 => {
                         dataFromFetch = data1; //all jSON data to dataFromfetch assign
-                        orders('dispatched', dataFromFetch);                      
+                        orders('dispatched', dataFromFetch);
                     })
                     .catch(err => { alert(err); })
 
@@ -345,7 +340,7 @@
         let client_id1 = selectedDatalistAttributeValue('consignee_input', 'datalist', 'client-id');
         const data = { 'con_id': con_id };
 
-        fetch('/ios/ios_by_client_id/' + client_id1)
+        fetch('/orders/api/ios_by_client_id/' + client_id1)
             .then(function (response) {
                 if (!response.ok) {
                     throw Error(response.statusText);
@@ -353,7 +348,7 @@
                 return response.json();
             })
             .then(data2 => {
-                consignee_ios = data2;             
+                consignee_ios = data2;
                 return fetch('/orders/order_item/', ajexcall.putoption(data))
                     .then(function (response) {
                         if (!response.ok) {
@@ -364,7 +359,7 @@
                     .then(data1 => {
                         dataFromFetch = data1; //all jSON data to dataFromfetch assign
                         orders('undispatched', dataFromFetch);
-                       
+
                     })
                     .catch(err => { alert(err); })
 
@@ -497,7 +492,7 @@
 
                 if (parseFloat((dataFromFetch['items'][i]['item_qty']) - ois).toFixed(1) != 0.0 || parseFloat((dataFromFetch['items'][i]['item_qty']) - ois).toFixed(1) < 0.0) {
 
-                tbody.innerHTML += `
+                    tbody.innerHTML += `
               <tr><td colspan=5 style="text-align: left; padding:4px; font-weight:bold; background-color:lightgray;">${consignee_name + ' - ' + date}</td></tr>            
               <tr>        
               <td style="text-align: center; font-size: 12px;">${item_name + ' ' + variant_name}</td>
@@ -644,9 +639,14 @@
         if (document.getElementById('status').value == 'Transfer to Consignee') {
             document.getElementById('tranfer_to').setAttribute('required', true);
             document.getElementById('tranfer_to').style.display = 'block';
+            document.getElementById('docket').setAttribute('required',false)
+            document.getElementById('docket_div').style.display='none';
         }
         else {
+            document.getElementById('tranfer_to').setAttribute('required', false);
             document.getElementById('tranfer_to').style.display = 'none';
+            document.getElementById('docket').setAttribute('required',true)
+            document.getElementById('docket_div').style.display='block';
         }
     })
 
@@ -697,7 +697,7 @@
             alert('Balance Order Qty. is less then');
         }
         else {
-            fetch('/ios/ios_by_client_id/', ajexcall.postoption(data))
+            fetch('/ios/ios/', ajexcall.postoption(data))
                 .then(function (response) {
                     if (!response.ok) {
                         throw Error(response.statusText);
@@ -705,22 +705,38 @@
                     return response.json(); // Convert response to json use text for text
                 })
                 .then(data3 => {
-                    console.log(data);
-                    const conid = { 'con_id': data3['consignee_id'] };
-                    return fetch('/orders/order_item/', ajexcall.putoption(conid))
+                   // console.log(data3);
+                    let client_id1r = selectedDatalistAttributeValue('consignee_input', 'datalist', 'client-id');
+                    let con_id = selectedDatalistAttributeValue('consignee_input', 'datalist', 'data-id');
+                    const data23 = { 'con_id': con_id };
+
+                    fetch('/ios/ios_by_client_id/' + client_id1r)
                         .then(function (response) {
                             if (!response.ok) {
                                 throw Error(response.statusText);
                             }
                             return response.json();
                         })
-                        .then(data4 => {
-                            dataFromFetch = data4; //all jSON data to dataFromfetch assign
-                            orders('dispatched', dataFromFetch);
-                            document.getElementById('dis_tran').style.display = 'none';
+                        .then(data2r => {
+                            consignee_ios = data2r;
+                            return fetch('/orders/order_item/', ajexcall.putoption(data23))
+                                .then(function (response) {
+                                    if (!response.ok) {
+                                        throw Error(response.statusText);
+                                    }
+                                    return response.json();
+                                })
+                                .then(data1r => {
+                                    dataFromFetch = data1r; //all jSON data to dataFromfetch assign
+                                    orders('undispatched', data1r);
+                                    document.getElementById('dis_tran').style.display = 'none';
+                                    c_alert.render('Order Status','Order Dispatched Success',5000);
+                                })
+                                .catch(err => { alert(err); })
 
                         })
                         .catch(err => { alert(err); })
+
 
 
                 })

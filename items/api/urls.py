@@ -3,14 +3,13 @@ from django.db import router
 from django.urls import path,include
 from django.conf import settings
 from django.conf.urls.static import static
-from clients.api import views
+from items.api import views
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
-router.register('clients',views.clients,basename='clients')
-#router.register('consignees',views.consignee_by_client_id,basename='consignees')
-
-
+router.register('itemgroup',views.itemgroup,basename='itemgroup')
+router.register('items',views.items,basename='items')
+router.register('item_variant',views.item_variant,'item_variant')
 
 urlpatterns = [
     path('', include(router.urls)),
