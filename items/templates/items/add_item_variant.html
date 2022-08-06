@@ -78,15 +78,16 @@ let item_form =  document.getElementById('variant-form');
 item_form.addEventListener('submit',function(e){
   let item_id = selectedDatalistAttributeValue('id_item', 'item_list', 'data-id');
  
-  let variant_name = document.getElementById('id_variant_name').value;
-  let price_a = document.getElementById('id_price_a').value;
-  let price_b = document.getElementById('id_price_b').value;
-  let price_c = document.getElementById('id_price_c').value;
-  let price_d = document.getElementById('id_price_d').value;
-  let comment=document.getElementById('id_comment').value;
+  let variant_name = document.getElementById('id_variant_name').value.trim();
+  let price_a = document.getElementById('id_price_a').value.trim();
+  let price_b = document.getElementById('id_price_b').value.trim();
+  let price_c = document.getElementById('id_price_c').value.trim();
+  let price_d = document.getElementById('id_price_d').value.trim();
+  let comment=document.getElementById('id_comment').value.trim();
   e.preventDefault()
  const data={'item_id':item_id,'variant_name':variant_name,'variant_price_a':price_a,'variant_price_b':price_b,
  'variant_price_c':price_c,'variant_price_d':price_d,'comment':comment}
+ console.log(data)
   fetch('/items/api/item_variant/',ajexcall.postoption(data))
   .then(function (response){
     if (!response.ok) {

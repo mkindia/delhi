@@ -63,7 +63,7 @@
         </div>
         <input type="hidden" name="clientgroup" id="h_cg">
         <div class="base-modal-body">
-            <form name="order_form" id="order-item-form" method="POST">
+            <form id="order-item-form" method="POST">
                 {% csrf_token %}
                 <input type="hidden" name="next" value="{{ request.path }}">
                 <div id="Con_div">
@@ -268,7 +268,7 @@
 
     let client = '{{clients}}';
 
-    console.log('{{jclients}}');
+   // console.log('{{jclients}}');
 
 
 
@@ -302,6 +302,15 @@
             document.getElementById('select_item').style.display = 'block';
         } else { document.getElementById('select_item').style.display = 'none'; }
 
+        document.getElementById('item_input').value='';       
+        document.getElementById('item_variant').value='';        
+        document.getElementById('per_unit').value=''
+        //const per_unit_id = selecteddatalistid('per_unit', 'per_unit_list');
+        document.getElementById('item_price').value='';
+        document.getElementById('qty').value='';
+        document.getElementById('order_unit').value='';
+
+
     });
 
     function getItemVariants() {
@@ -320,13 +329,10 @@
 
         document.getElementById('per_unit').value = item_unit;
         if (typeof item_id != 'undefined') {
-            fetch('/items/fetch_itemvariant/' + item_id + '/')
+            fetch('/items/api/itemvariant_by_item_id/'+item_id)
                 .then((response) => { return response.json(); })
                 .then((data) => {
-                    console.log(data);
-                    // document.getElementById('item_price').value=data.item_variant_price;
-
-                    //document.getElementById('per_unit').value=item_unit;
+                
                     for (var i = 0; i < data.length; i++) {
                         // alert(list[i]['item_price']);
                         var opt = document.createElement('option');
@@ -397,10 +403,11 @@
         const item_variant_name = document.getElementById('item_variant').value;
         const item_variant_id = selectedDatalistAttributeValue('item_variant', 'item_variant_list', 'data-id');
         const per = document.getElementById('per_unit').value;
-        //const per_unit_id = selecteddatalistid('per_unit', 'per_unit_list');
+        const per_unit_id = selectedDatalistAttributeValue('per_unit', 'per_unit_list','data-id');
         const item_price = document.getElementById('item_price').value;
         const item_qty = document.getElementById('qty').value;
         const order_qty = document.getElementById('order_unit').value;
+        const order_qty_id = selectedDatalistAttributeValue('order_unit', 'unit_list','data-id');
 
         tbodyEl.innerHTML += `
         <tr>
@@ -413,7 +420,9 @@
         <td style="text-align: center; font-size: 12px;"> ${order_qty}</td>    
         <td style="text-align: center; font-size: 12px;"><button class="deleteBtn">X</button></td>
         <td hidden> ${item_id}</td>
-        <td hidden> ${item_variant_id}</td> 
+        <td hidden> ${item_variant_id}</td>
+        <td hidden> ${per_unit_id}</td>
+        <td hidden> ${order_qty_id}</td> 
         </tr>`;
 
         document.getElementById('item_input').value = '';
@@ -429,7 +438,7 @@
         if (!confirm('add more item')) {
             document.getElementById('item_modal').style.display = 'none';
         }
-
+        console.log(item_price);
         return false;
     }
 
@@ -450,7 +459,7 @@
         document.getElementById('item_modal').style.display = 'none';
     }
 
-    async function validateForm(e) {
+    function validateForm(e) {
 
         e.preventDefault();
         var table = document.getElementById('myTable');
@@ -458,8 +467,12 @@
             alert('Plese Select an Item')
         }
         else {
-            let jarry = []
+            let for_info = []
+            let data1=[]
+            let dataObj1=[]
             var duplicate = []
+          
+         
             let is_duplicate = false;
             for (var i = 1, row; row = table.rows[i]; i++) {
                 var col = row.cells;
@@ -484,41 +497,57 @@
                     item_id: col[8].innerHTML.trim(),
                     item_variant_id: col[9].innerHTML.trim()
                 }
-
-                jarry.push(jsonObj);
+                    
+                 let ordobj = { 
+                        "date": document.getElementById('id_date').value.trim(),       
+                        "item_veriant_price": col[3].innerHTML.trim(),
+                        "item_qty": col[5].innerHTML.trim(),
+                        "client_id": selectedDatalistAttributeValue('client_id', 'client_list', 'data-id').trim(),
+                        "consignee_id": selectedDatalistAttributeValue('consignee_input', 'consignee_list', 'data-id').trim(),
+                        "item_id":col[8].innerHTML.trim(),
+                        "item_variant_id":col[9].innerHTML.trim(),
+                        "price_per_unit_id":col[10].innerHTML.trim(),
+                        "order_unit_id": col[11].innerHTML.trim()
+                    }
+            
+            
+                for_info.push(jsonObj);
+               data1.push(ordobj);
             }
 
-            let data = jarry
+            
+           
+          //  console.log(data);
+         //   console.log(data1);         
             if (is_duplicate == false) {
-                await fetch('/orders/order_item/', ajexcall.postoption(data))
-                    .then(response => {
+               
+                fetch('/orders/api/item_order_by_consignee_id/',ajexcall.postoption(data1))
+                    .then(function(response) {
                         if (!response.ok) {
-                            throw Error(response.statusText);
+                           throw Error(response.statusText);
                         }
                         return response.json(); // Convert response to json use text for text
                     })
                     .then(data => {
-                        console.log(data);
-                        //Perform actions with the response data from the view          
-
-                        // delete_demo();
+                      //  console.log(data);                    
+                      
                         if (confirm('======= Order Saved ======\n\nWant to Send Whattsapp or Email ?')) {
-                            let msg = '===== Order Confermed =====%0a';
-                            for (var i = 0; i < data.length; i++) {
-                                msg += data[i]['item_name'] + " "
-                                    + data[i]['item_variant'] + " "
-                                    + data[i]['qty'] + data[i]['unit'] + "@"
-                                    + data[i]['item_price'] + "/" + data[i]['per'] + " ," + "%0a"
+                            let msg = '----- Order Confermed -----%0a';
+                            for (var i = 0; i <for_info.length; i++) {
+                                msg += for_info[i]['item_name'] + " "
+                                    + for_info[i]['item_variant'] + " "
+                                    + for_info[i]['qty'] + for_info[i]['unit'] + "@"
+                                    + for_info[i]['item_price'] + "/" + for_info[i]['per'] + " ," + "%0a"
                             }
 
                             whats_app.whatsapp(client_phone_no, msg)
                         }
-
+                        
                     })
                     .catch(err => { alert(err); })
-
+                }
+     
             }
-        }
 
     }
 

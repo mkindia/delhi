@@ -1,19 +1,19 @@
-from http import client
-from urllib import request
+
+
 from orders.models import Consignee_Order, Item_Order_Status,Item_Order
-from clients.models import Client,Consignee
+#from clients.models import Client,Consignee
 from orders.api.serializers import itemOrderStatus_serializers,consigneeOrder_serializers, order_item_serializers
 from rest_framework.response import Response
 from rest_framework.permissions import BasePermission
+#from rest_framework.decorators import action
 
 from rest_framework import status
-from rest_framework import viewsets , generics
+from rest_framework import viewsets
 
-from orders.views import item_order_status
 
 class CustomPermissions(BasePermission):
     def has_permission(self, request, view):
-        if (request.user.is_admin or request.user.is_staff and request.user.is_authenticated):
+        if (request.user.is_authenticated):
             return True
         return False
 
@@ -24,41 +24,12 @@ class itemOrderStatus(viewsets.ModelViewSet):
     permission_classes = (CustomPermissions,)
     http_method_names = ['get','post']
 
-
-    """
-    def list(self,request):
-        ios = Item_Order_Status.objects.all()
-        serializer = itemOrderStatus(ios,many=True)
-        return Response(serializer.data)
-
-    def post(self,request):
-        post_data = request.data
-        print(post_data['client_id'] + ' ' + post_data['consignee_id'])
-        print(post_data['order_item_id'] + ' ' + post_data['dispatch_qty']+' '+ post_data['dispatch_date'])
-        cli_instance=Client.objects.only('id').get(id=post_data['client_id'])        
-        con_instance=Consignee.objects.only('id').get(id=int(post_data['consignee_id']))
-        itemOrder_instance=Item_Order.objects.only('id').get(id=post_data['order_item_id'])
-        Item_Order_Status.objects.create(
-            client_id=cli_instance,
-            consignee_id=con_instance,
-            item_order_id=itemOrder_instance,
-            date=post_data['dispatch_date'],
-            item_qty=post_data['dispatch_qty'],status=post_data['status'])
-
-        if post_data['trs_id'] != None:
-            trs_id = post_data['trs_id']
-        else:
-            trs_id = None      
-        
-        return Response(post_data,status=status.HTTP_200_OK)
-    """
 class ios_by_client_id(viewsets.ModelViewSet):   
     serializer_class =itemOrderStatus_serializers   
     permission_classes = (CustomPermissions,)
-    http_method_names = ['get','post',]
+    http_method_names = ['get']
 
-    def get_queryset(self):
-        #queryset = super(ios_by_client_id, self).get_queryset()   
+    def get_queryset(self):       
         query_set = Item_Order_Status.objects.all()       
         return query_set
     def retrieve(self, request, *args, **kwargs):
@@ -67,6 +38,32 @@ class ios_by_client_id(viewsets.ModelViewSet):
         serializer=itemOrderStatus_serializers(clients,many=True)
         return Response(serializer.data)
 
+
+
+class item_order_by_consignee_id(viewsets.ModelViewSet):
+    queryset = Item_Order.objects.all()
+    serializer_class=order_item_serializers
+    permission_classes = (CustomPermissions,)
+    http_method_names = ['get','post','put']
+
+    def get_queryset(self):       
+        query_set = Item_Order.objects.all()       
+        return query_set
+
+    def retrieve(self, request, *args, **kwargs):
+        params= kwargs       
+        consignee=Item_Order.objects.filter(consignee_id=params['pk'])
+        serializer=order_item_serializers(consignee,many=True)
+        return Response(serializer.data)
+
+    def create(self, request, *args, **kwargs): # for multiple instace creation
+        serializer = self.get_serializer(data=request.data, many=isinstance(request.data,list))
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)        
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        
+        
 class consignee_order_by_client_id(viewsets.ViewSet):
     def list(self,request):
         con_ord = Consignee_Order.objects.all()
@@ -84,6 +81,7 @@ class consignee_order_by_client_id(viewsets.ViewSet):
 
 
 class order_item_by_order_id(viewsets.ViewSet):
+    
     def list(self,request):
         ord_item = Item_Order.objects.all()
         serializer = order_item_serializers(ord_item,many=True)

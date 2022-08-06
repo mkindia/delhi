@@ -12,7 +12,7 @@ class consigneeOrder_serializers(serializers.ModelSerializer):
         model = Consignee_Order
         fields = '__all__'
         
-class order_item_serializers(serializers.ModelSerializer):
+class order_item_serializers(serializers.ModelSerializer):   
     class Meta:
         model = Item_Order
         fields = '__all__'

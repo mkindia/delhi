@@ -77,7 +77,7 @@
                 <div class="col-l-6 col-m-6 col-s-6 col-" style="float:left; padding:2px">
                   <label for="id_station">Mobile/Whatsapp No :</label> 
 
-                  <input name="mnumber" pattern="[7-9]{1}[0-9]{9}" placeholder="Enter 10 digit Whatsapp No." class="inputstyle"  required id="id_number">
+                  <input name="mnumber" pattern="[7-9]{1}[0-9]{9}" placeholder="Enter 10 digit Whatsapp No." class="inputstyle"  id="id_number">
                  
                                     
                 </div>
@@ -112,7 +112,6 @@ import * as ajexcall from '/static/core/js/modules/ajex.js';
   
    window.history.back();
  }
-
  
 document.getElementById('client-form').addEventListener('submit',submitdata);
 
@@ -124,35 +123,68 @@ const t_name=document.getElementById('id_transport').value.trim().toLowerCase();
 const s_name=document.getElementById('id_station').value.trim().toLowerCase();
 const m_no=document.getElementById('id_number').value.trim();
 const email=document.getElementById('id_email').value.trim();
+const uid={{user.id}};
+alert(uid);
+//const data={'c_name':c_name,'g_name':g_name,'t_name':t_name,'s_name':s_name,'m_no':m_no,'email':email};
+const data1={
+          "client_name": c_name,
+          "client_group": g_name,
+          "business_name": null,
+          "address_1": null,
+          "address_2": null,
+          "address_3": null,
+          "address_4": null,
+          "city": "",
+          "state": "",
+          "zipcode": "",
+          "email": null,
+          "phone_number": null,
+          "client_des": null,       
+          "user_id": [
+              1,
+              {{user.id}}
+          ]}
 
-const data={'c_name':c_name,'g_name':g_name,'t_name':t_name,'s_name':s_name,'m_no':m_no,'email':email};
-let fetchtext =  fetch('/clients/add_client/',ajexcall.postoption(data));
+let fetchtext =  fetch('/clients/api/clients/',ajexcall.postoption(data1));
   
-  fetchtext.then(async response => {
+  fetchtext.then(function(response) {
      if (!response.ok) {
          throw Error(response.statusText);
      }
-           return await response.json(); // Convert response to json use text for text/html
+           return response.json(); // Convert response to json use text for text/html
    })
-   .then(data => {
-   //Perform actions with the response data from the view          
-  
+   .then(getclientdata => {
+    const consigneedata={'client_id':getclientdata['id'],'consignee_name':getclientdata['client_name'],'station':s_name,'transport':t_name,'is_client':true}
+   console.log(getclientdata);
+   console.log(consigneedata);
+    return fetch('/clients/api/consignee/',ajexcall.postoption(consigneedata))
+    .then(function(response){
+      if(!response.ok){
+        throw Error(response.statusText)
+      }
+      return response.json();
+      })
+    .then(getconsigneedata =>{
+      alert('Client Created Success');
+         
+       console.log(getconsigneedata); 
+       if(!confirm('Add Another Clent'))
+       {window.history.back()}
+       else{
+        document.getElementById('id_client_name').value='';
+        document.getElementById('id_client_group').value='';
+        document.getElementById('id_transport').value='';
+        document.getElementById('id_station').value='';
+        document.getElementById('id_number').value='';
+        document.getElementById('id_email').value='';
+       }
 
-   alert(data.message)      
-  // console.log(data); 
-   if(!confirm('Add Another Clent'))
-   {window.history.back()}
-   else{
-    document.getElementById('id_client_name').value='';
-    document.getElementById('id_client_group').value='';
-    document.getElementById('id_transport').value='';
-    document.getElementById('id_station').value='';
-    document.getElementById('id_number').value='';
-    document.getElementById('id_email').value='';
-   }
-  
+    })
+    .catch(error=>{alert(error);})
+      
+   
    })
-   .catch(err=>{ if ( err == "Error: Internal Server Error" ){alert("Wrong Client");}else{ alert(err);}})
+   .catch(err=>{alert(err);})
 
 
 

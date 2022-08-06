@@ -38,7 +38,12 @@ class clients(viewsets.ModelViewSet):
                 cli=None
                 return Response({"msg":"Client Not Found",},status=status.HTTP_400_BAD_REQUEST)
     """
-   
+class consignee(viewsets.ModelViewSet):
+    queryset = Consignee.objects.all()
+    serializer_class = consigneeSeializers
+    permission_classes = (CustomPermissions,)
+    http_method_names = ['get','post']
+
 class consignee_by_client_id(viewsets.ViewSet):
     def list(self,request):
         con = Consignee.objects.all()

@@ -1,12 +1,6 @@
 from django.shortcuts import redirect, render
-from django.core import serializers
 from items.models import Item,Item_Variant,Item_Group,Unit
 from django.http import JsonResponse
-from .forms import itemGroupForm, itemsForm,unitForm,initems
-#from .serializers import item_variants_serializars
-import json
-
-# Create your views here.
 
 def add_item(request):
     if request.user.is_authenticated:

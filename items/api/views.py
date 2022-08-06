@@ -37,3 +37,23 @@ class item_variant(viewsets.ModelViewSet):
     serializer_class = itemVariantSerializers
     permission_classes=(CustomPermissions,)
     http_method_names = ['post','get']
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data, many=isinstance(request.data,list))
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)        
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+class item_varient_by_item_id(viewsets.ModelViewSet):
+    serializer_class =itemVariantSerializers    
+    http_method_names = ['get']
+
+    def get_queryset(self):       
+        query_set = Item_Variant.objects.all()       
+        return query_set
+    def retrieve(self, request, *args, **kwargs):
+        params= kwargs       
+        clients=Item_Variant.objects.filter(item_id=params['pk'])
+        serializer=itemVariantSerializers(clients,many=True)
+        return Response(serializer.data)

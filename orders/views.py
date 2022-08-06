@@ -1,12 +1,8 @@
-
-from http import client
-from math import fabs
-from pyexpat.errors import messages
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.views.decorators.cache import cache_control
-from django.contrib import messages
-from pymysql import NULL
+
+
 from clients.models import Client, Consignee
 from items.models import Item,Item_Variant, Unit
 from .models import Consignee_Order,Item_Order,Item_Order_Status
@@ -52,10 +48,7 @@ def order_item(request):
     if request.user.is_authenticated:
         if request.headers.get('x-requested-with') == 'XMLHttpRequest':
             
-            #print(len(data))
-            #print(len(data[0]))
-            #print(data[len(data)-1]['con_id'])
-            #print(data[len(data)-1]['item_id'])
+           
             if request.method == 'POST':
                 data = json.loads(request.body.decode("utf-8"))
                 order_created=False       
@@ -66,7 +59,7 @@ def order_item(request):
                     item_variant_instance= Item_Variant.objects.only('id').get(id=int(item['item_variant_id']))
                     order_date=item['date']
                     
-                    if order_created == False :
+                    if order_created == False : 
                         order_created = True
                         create_order= Consignee_Order.objects.create(client_id=client_instance,
                                                             consignee_id=con_instance,

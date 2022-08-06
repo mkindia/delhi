@@ -223,7 +223,7 @@
             </h>
         </div>
         <div class="base-modal-body">
-            <form name="dispatch_form" id="dispatch-form" method="POST">
+            <form id="dispatch-form" method="POST">
                 {% csrf_token %}
                 <div class="col-l-6 col-m-6 col-s-6 col-6" style="float:left; padding:1px;">
                     <label for="id_datel">Date</label>
@@ -236,10 +236,10 @@
                 </div>
                 <div class="col-l-6 col-m-6 col-s-6 col-12" style="float:left; padding:2px;">
                     <label for="status">Status</label>
-                    <select id="status" placeholder="Select Status" class="inputstyle">
+                    <select id="status" placeholder="Select Status" class="inputstyle" required>
                         <option selected>Dispatched</option>
-                        <option>Transfer to Consignee</option>
-                        <option>Cancelled</option>
+                        <option >Transfer to Consignee</option>
+                        <option >Cancelled</option>
                     </select>
                 </div>
                 <div id="tranfer_to" class="col-l-6 col-m-6 col-s-6 col-12"
@@ -250,8 +250,8 @@
                     </select>
                 </div>
                 <div id="docket_div" class="col-l-6 col-m-6 col-s-6 col-12"  style="float:left; padding:2px;">
-                    <label for="item_price">Docket No.</label>
-                    <input placeholder="Enter Docket No." class="inputstyle" id="docket" required>
+                    <label for="docket">Docket No.</label>
+                    <input placeholder="Enter Docket No" class="inputstyle" id="docket" required>
                 </div>
 
                 <div class="col-l-12 col-m-12 col-s-12 col-12" style="float:left; padding:2px;">
@@ -296,8 +296,7 @@
     let unit = JSON.parse('{{unit | escapejs }}');
 
     const order1_div = document.getElementById('accordion');
-    const mainDiv = document.getElementById('maindiv');
-   
+    const mainDiv = document.getElementById('maindiv');   
     const ord = document.getElementById('disp_div');
     ord.style.maxHeight = 350 + "px";
     let dataFromFetch = '';
@@ -334,7 +333,7 @@
 
 
     });
-
+    
     document.getElementById('show-order').addEventListener('click', function () {
         let con_id = selectedDatalistAttributeValue('consignee_input', 'datalist', 'data-id');
         let client_id1 = selectedDatalistAttributeValue('consignee_input', 'datalist', 'client-id');
@@ -358,6 +357,7 @@
                     })
                     .then(data1 => {
                         dataFromFetch = data1; //all jSON data to dataFromfetch assign
+                        console.log(data1);
                         orders('undispatched', dataFromFetch);
 
                     })
@@ -444,11 +444,11 @@
             }
 
             for (let un in unit) {
-                if (dataFromFetch['items'][i]['order_unit_id'] == unit[un]['unit_id']) {
+                if (dataFromFetch['items'][i]['order_unit_id_id'] == unit[un]['unit_id']) {
                     order_unit = unit[un]['unit_name']
 
                 }
-                if (dataFromFetch['items'][i]['price_per_unit_id'] == unit[un]['unit_id']) {
+                if (dataFromFetch['items'][i]['price_per_unit_id_id'] == unit[un]['unit_id']) {
                     per_unit = unit[un]['unit_name']
 
                 }
@@ -636,46 +636,51 @@
     })
 
     document.getElementById('status').addEventListener('change', function () {
-        if (document.getElementById('status').value == 'Transfer to Consignee') {
+        if (document.getElementById('status').value == 'Transfer to Consignee') 
+        {
+            document.getElementById('docket').setAttribute('required',false );
+            document.getElementById('docket').disabled=true;
+            document.getElementById('docket_div').style.display='none';
             document.getElementById('tranfer_to').setAttribute('required', true);
             document.getElementById('tranfer_to').style.display = 'block';
-            document.getElementById('docket').setAttribute('required',false)
-            document.getElementById('docket_div').style.display='none';
+           
         }
         else {
             document.getElementById('tranfer_to').setAttribute('required', false);
             document.getElementById('tranfer_to').style.display = 'none';
-            document.getElementById('docket').setAttribute('required',true)
+         
+            document.getElementById('docket').disabled=false;
+            document.getElementById('docket').setAttribute('required',true);
             document.getElementById('docket_div').style.display='block';
+           
         }
     })
 
     const submitorder = document.getElementById('dispatch-form');
-    submitorder.addEventListener('submit', function (e) {
-        e.preventDefault();
+    submitorder.addEventListener('submit', function (e) {     
+        e.preventDefault();      
         let item_qty = tablerowdata[3].split(' ');
         let data = '';
         let dispatch_transfer_date = document.getElementById("id_date");
-        let dispatch_qty = document.getElementById('dispatch_qty').value;
-        let dispatch_status = document.getElementById('status').value;
+        let dispatch_qty = parseFloat(document.getElementById('dispatch_qty').value);
+        let dispatch_status = document.getElementById('status').value.toLowerCase();
         let dispatch_comment = document.getElementById('dispatch_coments').value;
 
 
-
+        let t_con = document.getElementById('t_consignee').value;
         if (dispatch_status == 'Transfer to Consignee') {
-
-            let t_con = document.getElementById('t_consignee').value;
+        
 
             data = {
                 'client_id': tablerowdata[4],
                 'consignee_id': tablerowdata[5],
-
-                'order_item_id': tablerowdata[6],
-                'dispatch_date': dispatch_transfer_date.value,
-                'dispatch_qty': dispatch_qty,
-                'status': dispatch_status,
-                'trs_id': t_con,
+                'item_order_id': tablerowdata[6],
+                'date': dispatch_transfer_date.value,
+                'item_qty': dispatch_qty,
+                'status': 'transferred',
+                'transfer_id': t_con,
                 'dispatch_comment': dispatch_comment
+
             };
 
         }
@@ -683,21 +688,22 @@
             data = {
                 'client_id': tablerowdata[4],
                 'consignee_id': tablerowdata[5],
-                'order_item_id': tablerowdata[6],
-                'dispatch_date': dispatch_transfer_date.value,
-                'dispatch_qty': dispatch_qty,
-                'status': dispatch_status,
-                'trs_id': null,
+                'item_order_id': tablerowdata[6],
+                'date': dispatch_transfer_date.value,
+                'item_qty': dispatch_qty,
+                'status': 'dispatched',
+                'transfer_id': null,
                 'dispatch_comment': dispatch_comment
             };
 
         }
 
         if (parseFloat(item_qty[0]).toFixed(1) < dispatch_qty) {
-            alert('Balance Order Qty. is less then');
+            alert('Balance Order Qty. is less then '+dispatch_qty+" "+parseFloat(item_qty[0]).toFixed(1) );
         }
         else {
-            fetch('/ios/ios/', ajexcall.postoption(data))
+            console.log(data)
+            fetch('/orders/api/ios/', ajexcall.postoption(data))
                 .then(function (response) {
                     if (!response.ok) {
                         throw Error(response.statusText);
@@ -710,7 +716,7 @@
                     let con_id = selectedDatalistAttributeValue('consignee_input', 'datalist', 'data-id');
                     const data23 = { 'con_id': con_id };
 
-                    fetch('/ios/ios_by_client_id/' + client_id1r)
+                    fetch('/orders/api/ios_by_client_id/' + client_id1r)
                         .then(function (response) {
                             if (!response.ok) {
                                 throw Error(response.statusText);
@@ -730,7 +736,10 @@
                                     dataFromFetch = data1r; //all jSON data to dataFromfetch assign
                                     orders('undispatched', data1r);
                                     document.getElementById('dis_tran').style.display = 'none';
-                                    c_alert.render('Order Status','Order Dispatched Success',5000);
+                                    c_alert.render('Order Status','Order Dispatched Success',4000);
+                                    document.getElementById('docket').disabled=false;
+                                    document.getElementById('docket').setAttribute('required',true);
+                                    document.getElementById('docket_div').style.display='block';
                                 })
                                 .catch(err => { alert(err); })
 

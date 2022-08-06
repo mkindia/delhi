@@ -4,20 +4,17 @@
 {% block main_content %}
 
 <div class="basemodal">
-  <div class="base-modal-content col-l-6 col-m-9 col-s-11"  style="margin-top: 5px;">
+  <div class="base-modal-content col-l-6 col-m-9 col-s-11" style="margin-top: 5px;">
     <div class="base-modal-header">
-      <h style="position: relative; font-weight: bold; margin:0; top: 25%; -ms-transform: translateY(-50%);transform: translateY(-50%);" >
-                   
-      
+      <h
+        style="position: relative; font-weight: bold; margin:0; top: 25%; -ms-transform: translateY(-50%);transform: translateY(-50%);">
         ADD CONSIGNEE
-
-      
       </h>
 
     </div>
     <div class="base-modal-body">
-     
-      <form name="Consignee_form" id="consignee_form" method="POST" onsubmit="submitdata()"> 
+
+      <form name="Consignee_form" id="consignee_form" method="POST">
         {% csrf_token %}
 
         <div>
@@ -25,83 +22,54 @@
           <div class="col-l-6 col-m-6 col-s-6 col-" style="float:left; padding:2px">
             <label for="id_client_id">Client:</label>
 
-            <input name="client_id"  list="client_list" type="search" class="inputstyle validdatalist" placeholder="Select Client" style="text-transform:capitalize;" required id="id_client_id">
-            <datalist id="client_list" >
+            <input name="client_id" list="client_list" type="search" class="inputstyle validdatalist"
+              placeholder="Select Client" style="text-transform:capitalize;" required id="id_client_id">
+            <datalist id="client_list">
               {% for cli in clients %}
-           
+
               <option data-id="{{cli.id}}" value="{{cli.client_name}}"> </option>>
-             
+
               {% endfor %}
             </datalist>
-
-
           </div>
-
-
-
           <div class="col-l-6 col-m-6 col-s-6 col-" style="float:left; padding:2px">
             <label for="id_consignee_name">Consignee Name:</label>
 
-            <input type="text" name="consignee_name" placeholder="Enter Consignee Name" class="inputstyle" style="text-transform:capitalize;" required
-              id="id_consignee_name">
-
-
+            <input type="text" name="consignee_name" placeholder="Enter Consignee Name" class="inputstyle"
+              style="text-transform:capitalize;" required id="id_consignee_name">
           </div>
-
-          
-
           <div class="col-l-6 col-m-6 col-s-6 col-" style="float:left; padding:2px">
             <label for="id_station">Station:</label>
 
-            <input name="station" list="station_list" type="search" class="inputstyle" placeholder="Select Station" style="text-transform:capitalize;" required id="id_station">
+            <input name="station" list="station_list" type="search" class="inputstyle" placeholder="Select Station"
+              style="text-transform:capitalize;" required id="id_station">
             <datalist id="station_list">
               {% for cli in stations %}
-           
               <option data-id="{{cli.id}}" value="{{cli.station}}"> </option>>
-             
               {% endfor %}
-
             </datalist>
-
-
           </div>
 
           <div class="col-l-6 col-m-6 col-s-6 col-" style="float:left; padding:2px">
             <label for="id_transport">Transport:</label>
 
-            <input name="transport" list="transport_list" type="search" class="inputstyle" placeholder="Select Transport" style="text-transform:capitalize;" required id="id_transport">
+            <input name="transport" list="transport_list" type="search" class="inputstyle"
+              placeholder="Select Transport" style="text-transform:capitalize;" required id="id_transport">
             <datalist id="transport_list">
               {% for cli in transports %}
-           
+
               <option data-id="{{cli.id}}" value="{{cli.transport}}"> </option>>
-             
+
               {% endfor %}
 
             </datalist>
-
-
           </div>
-
-
-
-          
         </div>
-
-
-
-       
-
       </form>
     </div>
     <div class="base-modal-footer">
-      <!---
-        <a class="ancor smallbuttonstyleround" href="#"
-        style="text-decoration: none; margin-right: 3px; float: left; margin-top:30px;">Add Transport &#10009;</a>
-      <a class="ancor smallbuttonstyleround" href="#"
-        style="text-decoration: none; margin-right: 3px; float: left; margin-top:30px;">Add Station &#10009;</a>
-      -->
-      <button type="submit" class="buttonstyle" form="consignee_form" 
-        style="float:right; margin-right: 10px;">Submit</button>
+
+      <button class="buttonstyle" form="consignee_form" style="float:right; margin-right: 10px;">Submit</button>
 
       <a href="/" class="ancor" style="text-decoration: none; float:right; margin-right:10px;"><i>
           Exit </i></a>
@@ -114,22 +82,43 @@
 
 {% block main_scripts %}
 
-<script>
+<script type="module">
+  import * as ajexcall from '/static/core/js/modules/ajex.js';
 
-  if('{{user.is_user}}' == 'True'){
-  document.getElementById('id_client_id').value='{{user_client_name}}'
-  document.getElementById('id_client_id').disabled=true;
- }
-
-
- function submitdata(){
- document.getElementById('id_consignee_name').value=document.getElementById('id_consignee_name').value.trim();
- document.getElementById('id_transport').value=document.getElementById('id_transport').value.trim();
- document.getElementById('id_station').value=document.getElementById('id_station').value.trim();
-  
- 
+  if ('{{user.is_user}}' == 'True') {
+    document.getElementById('id_client_id').value = '{{user_client_name}}'
+    document.getElementById('id_client_id').disabled = true;
   }
-  
-  </script>
+  document.getElementById('consignee_form').addEventListener('submit', submitdata)
+
+  function submitdata(e) {
+    e.preventDefault()
+    const consigneedata = {
+      'client_id': selectedDatalistAttributeValue('id_client_id', 'client_list', 'data-id'),
+      'consignee_name': document.getElementById('id_consignee_name').value.trim(),
+      'station': document.getElementById('id_station').value.trim(),
+      'transport': document.getElementById('id_transport').value.trim()
+    }
+
+    fetch('/clients/api/consignee/', ajexcall.postoption(consigneedata))
+      .then(function (response) {
+        if (!response.ok) {
+          throw Error(response.statusText);
+        }
+        return response.json();
+      })
+      .then(data => {
+        // console.log(data);
+        alert('Consignee Add Success');
+        document.getElementById('id_client_id').value = '';
+        document.getElementById('id_consignee_name').value = '';
+        document.getElementById('id_station').value = '';
+        document.getElementById('id_transport').value = '';
+      })
+      .catch(error => { alert(error); })
+
+  }
+
+</script>
 
 {% endblock main_scripts %}

@@ -1,4 +1,5 @@
 from email.policy import default
+from enum import unique
 from random import choices
 from django.db import models
 from django.core.validators import RegexValidator
@@ -40,9 +41,9 @@ class Client(models.Model) :
     city = LowerCase("city", max_length=64, blank=True, null=True)
     state = LowerCase('state',max_length=64, blank=True, null=True)
     zipcode = models.CharField("zipcode", max_length=10, default="", blank=True, null=True)
-    email=models.EmailField(blank=True, null=True, verbose_name='email address',max_length=255,unique=True)   
+    email=models.EmailField(blank=True, null=True, verbose_name='email address',max_length=255,unique=True,default=None)   
     phoneNumberRegex = RegexValidator(regex = r"^\+?1?\d{9,15}$")
-    phone_number = models.CharField(validators = [phoneNumberRegex], null=True, blank=True,  max_length = 16, unique = True)   
+    phone_number = models.CharField(validators = [phoneNumberRegex], null=True, blank=True,  max_length = 16, unique=True, default=None)   
     client_des = models.CharField(max_length=150,blank=True,null=True)
     date_joined = models.DateTimeField(auto_now_add=True, blank=True ,null=True)
     def __str__(self):
@@ -69,7 +70,7 @@ class Consignee(models.Model):
     consignee_name = LowerCase(max_length=150,
     error_messages={
             'unique': "A consignee already exists.",
-        },)
+        })
     state = LowerCase('state',max_length=64, blank=True, null=True)
     station=LowerCase('station',max_length=64,null=True,blank=True)
     transport=LowerCase('transport',max_length=64,null=True,blank=True)
