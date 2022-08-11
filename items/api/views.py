@@ -25,7 +25,7 @@ class items(viewsets.ModelViewSet):
     queryset = Item.objects.all()
     serializer_class = itemSerializers
     permission_classes = (CustomPermissions,)
-    http_method_names = ['post','get']
+    http_method_names = ['post','get','put']
   
     """
     def perform_create(self, serializer):
@@ -52,6 +52,7 @@ class item_varient_by_item_id(viewsets.ModelViewSet):
     def get_queryset(self):       
         query_set = Item_Variant.objects.all()       
         return query_set
+        
     def retrieve(self, request, *args, **kwargs):
         params= kwargs       
         clients=Item_Variant.objects.filter(item_id=params['pk'])

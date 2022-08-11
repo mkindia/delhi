@@ -17,5 +17,5 @@ class Item(admin.ModelAdmin):
 
 @admin.register(Item_Variant)
 class Item_Variant(admin.ModelAdmin):   
-    list_display = ['variant_name','con_factor','alternate_unit','variant_price_a',
-    'variant_price_b','variant_price_c','variant_price_d','comment']
+    list_display = ['variant_name','con_factor','alternate_unit','client_price_a',
+    'client_price_b','client_price_c','client_price_d','comment']

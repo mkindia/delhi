@@ -3,8 +3,7 @@
     height: 45px;
     left:0;
     top: 0;      
-    background-color: rgba(0, 0, 0, 0.7);
-    color: whitesmoke;
+    background-color: whitesmoke;    
     position: fixed;
     padding: 0;
     z-index: 1;
@@ -19,8 +18,7 @@
     .loginbtn{
         float: right;
         text-decoration: none;
-        position:relative; 
-        color: whitesmoke;
+        position:relative;        
         top:10px;  
         right: 10px;           
      
@@ -55,7 +53,7 @@
 
    .menuBtn{
         position: absolute;      
-        color: whitesmoke;
+       
         right: 70px;     
         padding: 0;
         margin-top:-5px;

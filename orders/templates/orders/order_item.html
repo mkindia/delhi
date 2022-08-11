@@ -68,7 +68,7 @@
                 <input type="hidden" name="next" value="{{ request.path }}">
                 <div id="Con_div">
                     <div class="col-l-6 col-m-6 col-s-6 col-7" style="float:left; padding:2px;">
-                        <label for="id_email">Select Consignee</label>
+                        <label for="id_email">Select Consignee/Client</label>
                         <input id="consignee_input" name="consignee_input" placeholder="Select Consignee" type="search"
                             value="" list="consignee_list" required style="text-transform:capitalize;" />
                         <datalist id="consignee_list" style="text-transform:capitalize; ">
@@ -76,7 +76,7 @@
                             {% for cli in consignes %}
 
                             <option data-id="{{cli.id}}" client-id="{{cli.client_id}}"
-                                value="{{cli.consignee_name}} / {{cli.client_id}}"> </option>
+                                value="{{cli.consignee_name}}{% if not user.is_user %}/{{cli.client_id}}{% endif %}"> </option>
 
                             {% endfor %}
                         </datalist>
@@ -115,7 +115,7 @@
                     <input type="text" name="itemname" id="comment" style="background-color: aliceblue; opacity: .7;"
                         placeholder="About Orders" class="inputstyle">
                 </div>
-
+                <!-- 
                 <div class="col-l-12 col-m-12 col-s-12 col-" style="float: left; padding: 2px;">
 
                     <a class="ancor smallbuttonstyleround"
@@ -124,7 +124,7 @@
                         &#10009;</a>
 
                 </div>
-
+                -->
 
             </form>
 
@@ -136,10 +136,10 @@
                 style="text-decoration: none; float:right; margin-right:10px;"><i> Exit
                 </i></button>
             <button id="submit" class="buttonstyle" form="order-item-form"
-                style="float:right; margin-right: 10px;">Submit</button>
+                style="float:right; margin-right: 10px;">Place-an-order</button>
             <button type="button" id="select_item" class="buttonstyle"
-                style="float:right; margin-right: 5px; background-color: aquamarine; display: none;">select
-                item</button>
+                style="float:right; margin-right: 5px; background-color: aquamarine; display: none;">Select
+                Items</button>
 
         </div>
     </div>
@@ -193,8 +193,13 @@
 
                     </div>
 
-                    <div class="col-l-6 col-m-6 col-s-6 col-6" style="float:left; padding:2px">
-                        <label for="per_unit">Per</label>
+                    <div div class="col-l-2 col-m-1 col-s-2 col-2" style="float:left; padding: 2px;">
+                        <label for="qty">.</label>
+                        <input class="inputstyle" disabled="true" style="text-align: center;" placeholder="Per">
+                    </div>
+
+                    <div class="col-l-4 col-m-5 col-s-4 col-4" style="float:left; padding:2px;">
+                        <label for="qty">.</label>
                         <input id="per_unit" type="text" class="validdatalist" value="Kg." disabled='True'
                             list="per_unit_list" required style="text-transform:capitalize;" />
                         <datalist id="per_unit_list" style="text-transform:capitalize;">
@@ -207,15 +212,16 @@
                     </div>
 
 
-                    <div class="col-l-6 col-m-6 col-s-6 col-6" style="float:left; padding:2px">
+                    <div class="col-l-6 col-m-6 col-s-6 col-6" style="float:left; padding:2px;">
 
                         <label for="qty">Qty.</label>
                         <input type="number" min="1" max="1000" step=".001" name="itemname" placeholder="Enter QTY."
                             class="inputstyle" required id="qty">
                     </div>
+                    
 
-                    <div class="col-l-6 col-m-6 col-s-6 col-6" style="float:left; padding: 2px;">
-                        <label for="order_unit">Unit</label>
+                    <div class="col-l-6 col-m-6 col-s-6 col-6" style="float:left; padding:2px;">
+                        <label for="order_unit">Order Unit</label>
                         <input id="order_unit" type="search" class="validdatalist" value="carton"
                             placeholder="select unit" list="unit_list" required style="text-transform:capitalize;" />
                         <datalist id="unit_list" style="text-transform:capitalize;">
@@ -280,6 +286,7 @@
     let item_varient_price = '';
     let client_phone_no = '';
     var jsonArr = [];
+  
     document.getElementById('item_input').addEventListener('change', getItemVariants);
     let item_variant = document.getElementById('item_variant');
     let consignee_input = document.getElementById('consignee_input');
@@ -295,7 +302,7 @@
 
     consignee_input.addEventListener('change', function (event) {
         let client_value = document.getElementById('client_id').value = selectedDatalistAttributeValue('consignee_input', 'consignee_list', 'client-id');
-        item_varient_price = 'variant_price_' + selectedDatalistAttributeValue('client_id', 'client_list', 'group-id');
+        item_varient_price = 'client_price_' + selectedDatalistAttributeValue('client_id', 'client_list', 'group-id');
         client_phone_no = selectedDatalistAttributeValue('client_id', 'client_list', 'mobile-no');
 
         if (typeof client_value != 'undefined') {
@@ -345,51 +352,6 @@
                 });
         }
     }
-    /*
-            function atri(e){
-                e.preventDefault();
-                let con_id = selecteddatalistid('consignee_input', 'consignee_id');
-                alert(con_id);
-            }
-    
-            function count(e){
-                e.preventDefault();
-                var table = document.getElementById('myTable');
-                
-                for(var i =1,row;row = table.rows[i];i++){
-                             var col = row.cells;
-                    var jsonObj = {                    
-                        item_name : col[1].innerHTML.trim(),
-                        item_variant : col[2].innerHTML.trim(),
-                        item_price : col[3].innerHTML.trim(),
-                        per : col[4].innerHTML.trim(),
-                        qty : col[5].innerHTML.trim(),
-                        unit : col[6].innerHTML.trim()
-                        }
-    
-                    jsonArr.push(jsonObj);
-            }
-            console.log(jsonArr);
-            }
-    
-        function addopt(e){
-            e.preventDefault();
-            var list = jsonArr;
-            
-            var sel = document.getElementById('consignee_id');
-            for(var i = 0; i < list.length; i++) {
-               // alert(list[i]['item_price']);
-             var opt = document.createElement('option');
-                    opt.setAttribute("data-id",list[i]['item_price']);
-    
-                     //opt.data-id = [i]['item_name'];
-                     opt.value = list[i]['item_name'];
-                     sel.appendChild(opt);
-            }
-    
-    
-        } */
-
     function reindex() {
         const ids = document.querySelectorAll("tr > td:nth-child(1)");
         ids.forEach((e, i) => { e.innerText = (i + 1) });
@@ -454,6 +416,15 @@
 
     function additem() {
         document.getElementById('item_modal').style.display = 'block';
+       
+        if('{{user.is_user}}' == "True"){
+            document.getElementById('order_unit').value='carton';
+            document.getElementById('order_unit').disabled = true;
+         }
+         else{
+            document.getElementById('order_unit').value='carton';
+            document.getElementById('order_unit').disabled = false;
+         }
     }
     function exit_item() {
         document.getElementById('item_modal').style.display = 'none';
@@ -530,7 +501,7 @@
                     })
                     .then(data => {
                       //  console.log(data);                    
-                      
+                      if('user.is_user'=='False'){
                         if (confirm('======= Order Saved ======\n\nWant to Send Whattsapp or Email ?')) {
                             let msg = '----- Order Confermed -----%0a';
                             for (var i = 0; i <for_info.length; i++) {
@@ -542,7 +513,9 @@
 
                             whats_app.whatsapp(client_phone_no, msg)
                         }
-                        
+                    }
+                    alert('Order Added Success');
+                    window.location.reload();
                     })
                     .catch(err => { alert(err); })
                 }

@@ -143,10 +143,13 @@ def genrate_client_token(request):
 def add_consignee(request):
 
        if request.user.is_authenticated:
-              client=Client.objects.filter(user_id=request.user.id)             
-              state=Consignee.objects.order_by('state').values('state').distinct()
+              
+              client=Client.objects.filter(user_id=request.user.id)
+              for cli in client:
+                     user_client_name=cli.client_name
+                     break
               station = Consignee.objects.order_by('station').values('station').distinct()
               trns = Consignee.objects.order_by('transport').values('transport').distinct()
-              return render(request,'clients/add_consignee.html/',{'clients':client,'stations':station,'transports':trns})
+              return render(request,'clients/add_consignee.html/',{'clients':client,'stations':station,'transports':trns,'user_client_name':user_client_name})
        else:
               return redirect('/')

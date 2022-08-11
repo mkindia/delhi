@@ -83,6 +83,7 @@
 {% block main_scripts %}
 
 <script type="module">
+
   import * as ajexcall from '/static/core/js/modules/ajex.js';
 
   if ('{{user.is_user}}' == 'True') {
@@ -93,30 +94,50 @@
 
   function submitdata(e) {
     e.preventDefault()
+    let client_id = selectedDatalistAttributeValue('id_client_id', 'client_list', 'data-id');
+    let consignee_name = document.getElementById('id_consignee_name').value.trim();
     const consigneedata = {
-      'client_id': selectedDatalistAttributeValue('id_client_id', 'client_list', 'data-id'),
-      'consignee_name': document.getElementById('id_consignee_name').value.trim(),
+      'client_id': client_id,
+      'consignee_name': consignee_name,
       'station': document.getElementById('id_station').value.trim(),
       'transport': document.getElementById('id_transport').value.trim()
     }
-
-    fetch('/clients/api/consignee/', ajexcall.postoption(consigneedata))
+    fetch('/clients/api/consignee_by_client_id/' + client_id)
       .then(function (response) {
         if (!response.ok) {
           throw Error(response.statusText);
         }
         return response.json();
       })
-      .then(data => {
-        // console.log(data);
-        alert('Consignee Add Success');
-        document.getElementById('id_client_id').value = '';
-        document.getElementById('id_consignee_name').value = '';
-        document.getElementById('id_station').value = '';
-        document.getElementById('id_transport').value = '';
+      .then(client_consignees => {
+        let consignee_exist = false;
+        for (let cc in client_consignees) {
+          if (client_consignees[cc]['consignee_name'] == consignee_name) {
+            consignee_exist = true;
+            alert('Consignee Allready Exist');
+
+          }
+        }
+        if (!consignee_exist) {
+          return fetch('/clients/api/consignee/', ajexcall.postoption(consigneedata))
+            .then(function (response) {
+              if (!response.ok) {
+                throw Error(response.statusText);
+              }
+              return response.json();
+            })
+            .then(data => {
+              // console.log(data);
+              alert('Consignee Add Success');
+              document.getElementById('id_client_id').value = '';
+              document.getElementById('id_consignee_name').value = '';
+              document.getElementById('id_station').value = '';
+              document.getElementById('id_transport').value = '';
+            })
+            .catch(error => { alert(error); })
+        }
       })
       .catch(error => { alert(error); })
-
   }
 
 </script>

@@ -29,7 +29,8 @@ class Unit(models.Model):
     
 class Item(models.Model):
     item_group=models.ForeignKey(Item_Group,on_delete=models.PROTECT)
-    item_name=LowerCase(max_length=100,unique=True)   
+    item_name=LowerCase(max_length=100,unique=True)
+    item_img = models.ImageField(upload_to='item', blank=True, null=True)
     item_unit=models.ForeignKey(Unit,on_delete=models.PROTECT)
     hsn_sac = LowerCase(max_length=50,blank=True,null=True)   
     comment = LowerCase(max_length=200,blank=True,null=True)
@@ -40,13 +41,14 @@ class Item(models.Model):
 
 class Item_Variant(models.Model):
     item_id = models.ForeignKey(Item,on_delete=models.PROTECT)
-    variant_name= LowerCase(max_length=100)   
+    variant_name= LowerCase(max_length=100)
+    item_variant_img = models.ImageField(upload_to='itemvariant', blank=True, null=True)   
     con_factor = models.DecimalField(default=1,max_digits=7,decimal_places=2, blank=True,null=True)
     alternate_unit = models.ForeignKey(Unit,on_delete=models.PROTECT,null=True,blank=True)   
-    variant_price_a=models.DecimalField(default=1,max_digits=7,decimal_places=2,null=True,blank=True)
-    variant_price_b=models.DecimalField(default=1,max_digits=7,decimal_places=2,null=True,blank=True)
-    variant_price_c=models.DecimalField(default=1,max_digits=7,decimal_places=2,null=True,blank=True)
-    variant_price_d=models.DecimalField(default=1,max_digits=7,decimal_places=2,null=True,blank=True)   
+    client_price_a=models.DecimalField(default=1,max_digits=7,decimal_places=2,null=True,blank=True)
+    client_price_b=models.DecimalField(default=1,max_digits=7,decimal_places=2,null=True,blank=True)
+    client_price_c=models.DecimalField(default=1,max_digits=7,decimal_places=2,null=True,blank=True)
+    client_price_d=models.DecimalField(default=1,max_digits=7,decimal_places=2,null=True,blank=True)   
     comment = LowerCase(max_length=200,blank=True,null=True)
 
     def __str__(self):

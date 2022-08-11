@@ -9,9 +9,7 @@ from rest_framework.routers import DefaultRouter
 router = DefaultRouter()
 router.register('clients',views.clients,basename='clients')
 router.register('consignee',views.consignee,basename='consignee')
-#router.register('consignees',views.consignee_by_client_id,basename='consignees')
-
-
+router.register('consignee_by_client_id',views.consignee_by_client_id,basename='consignee_by_client_id')
 
 urlpatterns = [
     path('', include(router.urls)),

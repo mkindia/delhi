@@ -90,16 +90,11 @@ def order_item(request):
 
                 data = json.loads(request.body.decode("utf-8"))                
                 is_client = Consignee.objects.get(pk=data['con_id'])
-                selected_consignes=Consignee.objects.filter(client_id=is_client.client_id)
-                                        
                 items=list(Item_Order.objects.filter(consignee_id=data['con_id']).values())
-                orders=list(Consignee_Order.objects.filter(consignee_id=data['con_id']).values())
                 selected_consignes=list(Consignee.objects.filter(client_id=is_client.client_id).values())
-
-               
                 msg='client not found'
                # print(items)
-                data={'items':items,'orders':orders,'msg':msg,'selected_consignes':selected_consignes}
+                data={'items':items,'msg':msg,'selected_consignes':selected_consignes}
 
                 return JsonResponse(data,safe=False)
                                     

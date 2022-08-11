@@ -6,111 +6,140 @@
 
 {% block main_content %}
 <div class="basemodal">
-  <div class="base-modal-content col-l-6 col-m-9 col-s-11" style="margin-top: 5px;" >
+  <div class="base-modal-content col-l-6 col-m-9 col-s-11" style="margin-top: 5px;">
     <div class="base-modal-header">
-      <h style="position: relative; font-weight: bold; margin:0; top: 25%; -ms-transform: translateY(-50%);transform: translateY(-50%);" >                   
-        ADD ITEMS Variant                       
+      <h
+        style="position: relative; font-weight: bold; margin:0; top: 25%; -ms-transform: translateY(-50%);transform: translateY(-50%);">
+        ADD ITEMS Variant
       </h>
-    
-    </div>        
-        <div class= "base-modal-body">
-        
-          <form method="POST" id="variant-form">
-            {% csrf_token %}
-            <input type="hidden" name="next" value="{{ request.GET.next }}">
-            
-            <div class="col-l-6 col-m-6 col-s-6 col-" style="float:left; padding:2px;">
-              <label for="id_item">Item Name:</label>              
-              <input name="item_name" class="validdatalist" placeholder="Select Item" type="search"  style="text-transform:capitalize;" list="item_list" required id="id_item">
-              <datalist id="item_list" style="text-transform:capitalize;">                   
-               {% for item in item_names %}
-               <option data-id="{{item.id}}" value="{{item.item_name}}"> </option>
-               {% endfor %}                    
-              </datalist>              
-            </div>    
-            
-            <div class="col-l-6 col-m-6 col-s-6 col-" style="float:left; padding:2px;">
-              <label for="id_Item_variant">Variant Name:</label>                    
-              <input type="text" name="variant" class="inputstyle" placeholder="Enter variant name" style="text-transform:capitalize;" required id="id_variant_name">                    
-            </div>                 
 
-          
+    </div>
+    <div class="base-modal-body">
 
-          <div class="col-l-3 col-m-3 col-s-3 col-" style="float:left; padding:2px;">
-            <label for="id_price_a">Price_A:</label>                    
-            <input type="number" min="1" max="1000" step=".01" name="price_a" required class="inputstyle" placeholder="enter Price a"  id="id_price_a">                    
-          </div>   
+      <form method="POST" id="variant-form">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{ request.GET.next }}">
 
-          <div class="col-l-3 col-m-3 col-s-3 col-" style="float:left; padding:2px;">
-            <label for="id_price_b">Price_B:</label>                    
-            <input type="number" min="1" max="1000" step=".01" name="price_a" required class="inputstyle" placeholder="enter Price b"  id="id_price_b">                    
-          </div>  
-          
-          <div class="col-l-3 col-m-3 col-s-3 col-" style="float:left; padding:2px;">
-            <label for="id_price_c">Price_C:</label>                    
-            <input type="number" min="1" max="1000" step=".01" name="price_c" required class="inputstyle" placeholder="enter Price c"  id="id_price_c">                    
-          </div>   
+        <div class="col-l-6 col-m-6 col-s-6 col-" style="float:left; padding:2px;">
+          <label for="id_item">Item Name:</label>
+          <input name="item_name" class="validdatalist" placeholder="Select Item" type="search"
+            style="text-transform:capitalize;" list="item_list" required id="id_item">
+          <datalist id="item_list" style="text-transform:capitalize;">
+            {% for item in item_names %}
+            <option data-id="{{item.id}}" value="{{item.item_name}}"> </option>
+            {% endfor %}
+          </datalist>
+        </div>
 
-          <div class="col-l-3 col-m-3 col-s-3 col-" style="float:left; padding:2px;">
-            <label for="id_peice_d">Price_D:</label>                    
-            <input type="number" min="1" max="1000" step=".01" name="price_d" required class="inputstyle" placeholder="enter Price d"  id="id_price_d">                    
-          </div>   
+        <div class="col-l-6 col-m-6 col-s-6 col-" style="float:left; padding:2px;">
+          <label for="id_Item_variant">Variant Name:</label>
+          <input type="text" name="variant" class="inputstyle" placeholder="Enter variant name"
+            style="text-transform:capitalize;" required id="id_variant_name">
+        </div>
 
-          <div class="col-l-12 col-m-12 col-s-12 col-" style="float:left; padding:2px;">
-            <label for="id_comment">Comments:</label>                    
-            <input type="text" name="comment" class="inputstyle" placeholder="Enter comment"  id="id_comment">                    
-          </div>       
-              
-          </form>
-        </div>             
-  
-  <div class="base-modal-footer">
-    <button id="ac_submit"  class="buttonstyle" form="variant-form" style="float:right; margin-right: 10px;">Submit</button>
-        
-    <a type="button" id="pageBack" class="ancor" onclick="history.back(-1)" style="text-decoration: none; float:right; margin-right:10px;" ><i> Exit </i></a>
+
+
+        <div class="col-l-3 col-m-3 col-s-3 col-" style="float:left; padding:2px;">
+          <label for="id_price_a">Price_A:</label>
+          <input type="number" min="1" max="1000" step=".01" name="price_a" required class="inputstyle"
+            placeholder="enter Price a" id="id_price_a">
+        </div>
+
+        <div class="col-l-3 col-m-3 col-s-3 col-" style="float:left; padding:2px;">
+          <label for="id_price_b">Price_B:</label>
+          <input type="number" min="1" max="1000" step=".01" name="price_a" required class="inputstyle"
+            placeholder="enter Price b" id="id_price_b">
+        </div>
+
+        <div class="col-l-3 col-m-3 col-s-3 col-" style="float:left; padding:2px;">
+          <label for="id_price_c">Price_C:</label>
+          <input type="number" min="1" max="1000" step=".01" name="price_c" required class="inputstyle"
+            placeholder="enter Price c" id="id_price_c">
+        </div>
+
+        <div class="col-l-3 col-m-3 col-s-3 col-" style="float:left; padding:2px;">
+          <label for="id_peice_d">Price_D:</label>
+          <input type="number" min="1" max="1000" step=".01" name="price_d" required class="inputstyle"
+            placeholder="enter Price d" id="id_price_d">
+        </div>
+
+        <div class="col-l-12 col-m-12 col-s-12 col-" style="float:left; padding:2px;">
+          <label for="id_comment">Comments:</label>
+          <input type="text" name="comment" class="inputstyle" placeholder="Enter comment" id="id_comment">
+        </div>
+
+      </form>
+    </div>
+
+    <div class="base-modal-footer">
+      <button id="ac_submit" class="buttonstyle" form="variant-form"
+        style="float:right; margin-right: 10px;">Submit</button>
+
+      <a type="button" id="pageBack" class="ancor" onclick="history.back(-1)"
+        style="text-decoration: none; float:right; margin-right:10px;"><i> Exit </i></a>
+    </div>
   </div>
-</div>
-{% endblock main_content%}
-{% block main_scripts %}
-<script type="module">
-import * as ajexcall from "/static/core/js/modules/ajex.js";
-let item_form =  document.getElementById('variant-form');
-item_form.addEventListener('submit',function(e){
-  let item_id = selectedDatalistAttributeValue('id_item', 'item_list', 'data-id');
- 
-  let variant_name = document.getElementById('id_variant_name').value.trim();
-  let price_a = document.getElementById('id_price_a').value.trim();
-  let price_b = document.getElementById('id_price_b').value.trim();
-  let price_c = document.getElementById('id_price_c').value.trim();
-  let price_d = document.getElementById('id_price_d').value.trim();
-  let comment=document.getElementById('id_comment').value.trim();
-  e.preventDefault()
- const data={'item_id':item_id,'variant_name':variant_name,'variant_price_a':price_a,'variant_price_b':price_b,
- 'variant_price_c':price_c,'variant_price_d':price_d,'comment':comment}
- console.log(data)
-  fetch('/items/api/item_variant/',ajexcall.postoption(data))
-  .then(function (response){
-    if (!response.ok) {
-         throw Error(response.statusText);
-        }
-        return response.json();
-  })
-  .then(data=>{
-   // console.log(data);
-   
-  document.getElementById('id_item').value='';
-  document.getElementById('id_variant_name').value='';
-  document.getElementById('id_price_a').value='';
-  document.getElementById('id_price_b').value='';
-  document.getElementById('id_price_c').value='';
-  document.getElementById('id_price_d').value='';
-  document.getElementById('id_comment').value='';
-   c_alert.render('Variant Status','Item Variant Created Success',5000);
-  })
-  .catch(err=>{if(err == 'Error: Bad Request'){alert('Item Variant Already Exist');}else alert(err);})
- 
-});
+  {% endblock main_content%}
+  {% block main_scripts %}
+  <script type="module">
+    import * as ajexcall from "/static/core/js/modules/ajex.js";
+    let item_form = document.getElementById('variant-form');
+    item_form.addEventListener('submit', function (e) {
+      let item_id = selectedDatalistAttributeValue('id_item', 'item_list', 'data-id');
+      let variant_name = document.getElementById('id_variant_name').value.trim();
+      let price_a = document.getElementById('id_price_a').value.trim();
+      let price_b = document.getElementById('id_price_b').value.trim();
+      let price_c = document.getElementById('id_price_c').value.trim();
+      let price_d = document.getElementById('id_price_d').value.trim();
+      let comment = document.getElementById('id_comment').value.trim();
+      e.preventDefault()
+      fetch('/items/api/itemvariant_by_item_id/' + item_id)
+        .then(function (response) {
+          if (!response.ok) {
+            throw Error(response.statusText);
+          }
+          return response.json();
+        })
+        .then(getitem_variant => {
+          let item_variant_exist = false;
+          for (let iv in getitem_variant) {
+            if (getitem_variant[iv]['variant_name'] == variant_name) {
+              item_variant_exist = true;
+              alert('item Variant Allready exist');
+            }
+          }
+          if (!item_variant_exist) {
+
+            const data = {
+              'item_id': item_id, 'variant_name': variant_name, 'client_price_a': price_a, 'client_price_b': price_b,
+              'client_price_c': price_c, 'client_price_d': price_d, 'comment': comment
+            }
+            console.log(data)
+            fetch('/items/api/item_variant/', ajexcall.postoption(data))
+              .then(function (response) {
+                if (!response.ok) {
+                  throw Error(response.statusText);
+                }
+                return response.json();
+              })
+              .then(data => {
+                // console.log(data);
+
+                document.getElementById('id_item').value = '';
+                document.getElementById('id_variant_name').value = '';
+                document.getElementById('id_price_a').value = '';
+                document.getElementById('id_price_b').value = '';
+                document.getElementById('id_price_c').value = '';
+                document.getElementById('id_price_d').value = '';
+                document.getElementById('id_comment').value = '';
+                c_alert.render('Variant Status', 'Item Variant Created Success', 4000);
+              })
+              .catch(err => { ialert(err); })
+          }
+        })
+
+    });
 
 
-</script>
-{% endblock main_scripts %}
+  </script>
+  {% endblock main_scripts %}

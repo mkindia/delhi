@@ -45,6 +45,7 @@ def home(request):
                      user_client=Client.objects.get(user_id=request.user)
                      client_name = user_client.client_name
                      client_id = user_client.id
+                    
               item_arry =[]
               item_variants_arry = []
               unit_arry =[]
@@ -68,7 +69,7 @@ def home(request):
                             'items':items,
                             'item_variants':item_variants,
                             'unit':unit,
-                            'orders':'Pandan/2 @120/Pcs.%0asinhasn 2no. : 150 Pcs. @320/Kg.'}
+                            }
               
               if request.user.is_admin :                    
                      return render(request,'clients/admin_dashboard.html',admin_context)

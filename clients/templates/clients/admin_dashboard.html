@@ -183,7 +183,7 @@
     <div class="base-modal-content col-l-12 col-m-12 col-s-12" style="margin-top:5px; padding: 5px;">
         <div class="base-modal-header" style="border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">
             <div class="col-l-8 col-m-8 col-s-8 col-6" style="float:left;">
-                <input id="consignee_input" placeholder="Select Consignee" type="search" multiple value=""
+                <input id="consignee_input" placeholder="Select Consignee / Client" type="search" multiple value=""
                     list="datalist" required style="text-transform:capitalize;" />
                 <datalist id="datalist">
                     {% for cli in consigne %}
@@ -238,8 +238,8 @@
                     <label for="status">Status</label>
                     <select id="status" placeholder="Select Status" class="inputstyle" required>
                         <option selected>Dispatched</option>
-                        <option >Transfer to Consignee</option>
-                        <option >Cancelled</option>
+                        <option>Transfer to Consignee</option>
+                        <option>Cancelled</option>
                     </select>
                 </div>
                 <div id="tranfer_to" class="col-l-6 col-m-6 col-s-6 col-12"
@@ -249,7 +249,7 @@
 
                     </select>
                 </div>
-                <div id="docket_div" class="col-l-6 col-m-6 col-s-6 col-12"  style="float:left; padding:2px;">
+                <div id="docket_div" class="col-l-6 col-m-6 col-s-6 col-12" style="float:left; padding:2px;">
                     <label for="docket">Docket No.</label>
                     <input placeholder="Enter Docket No" class="inputstyle" id="docket" required>
                 </div>
@@ -296,11 +296,11 @@
     let unit = JSON.parse('{{unit | escapejs }}');
 
     const order1_div = document.getElementById('accordion');
-    const mainDiv = document.getElementById('maindiv');   
+    const mainDiv = document.getElementById('maindiv');
     const ord = document.getElementById('disp_div');
     ord.style.maxHeight = 350 + "px";
     let dataFromFetch = '';
-  
+
     document.getElementById('show-comorder').addEventListener('click', function () {
         let con_id = selectedDatalistAttributeValue('consignee_input', 'datalist', 'data-id');
         let client_id1 = selectedDatalistAttributeValue('consignee_input', 'datalist', 'client-id');
@@ -333,7 +333,7 @@
 
 
     });
-    
+
     document.getElementById('show-order').addEventListener('click', function () {
         let con_id = selectedDatalistAttributeValue('consignee_input', 'datalist', 'data-id');
         let client_id1 = selectedDatalistAttributeValue('consignee_input', 'datalist', 'client-id');
@@ -357,7 +357,7 @@
                     })
                     .then(data1 => {
                         dataFromFetch = data1; //all jSON data to dataFromfetch assign
-                        console.log(data1);
+                        // console.log(data1);
                         orders('undispatched', dataFromFetch);
 
                     })
@@ -375,7 +375,9 @@
         let item_name = '';
         let variant_name = '';
         let order_unit = '';
+        let order_unit_id = '';
         let per_unit = '';
+        let per_unit_id = '';
         let t_con = "";
         let date = "";
         let ois = 0.0;
@@ -445,12 +447,12 @@
 
             for (let un in unit) {
                 if (dataFromFetch['items'][i]['order_unit_id_id'] == unit[un]['unit_id']) {
-                    order_unit = unit[un]['unit_name']
-
+                    order_unit = unit[un]['unit_name'];
+                    order_unit_id = unit[un]['unit_id'];
                 }
                 if (dataFromFetch['items'][i]['price_per_unit_id_id'] == unit[un]['unit_id']) {
-                    per_unit = unit[un]['unit_name']
-
+                    per_unit = unit[un]['unit_name'];
+                    per_unit_id = unit[un]['unit_id'];
                 }
 
             }
@@ -481,6 +483,8 @@
               <td hidden>${dataFromFetch['items'][i]['item_variant_id_id']}</td>
               <td hidden>${dataFromFetch['items'][i]['item_veriant_price']}</td>
               <td hidden>${dataFromFetch['items'][i]['item_qty']}</td>
+              <td hidden>${per_unit_id}</td>
+              <td hidden>${order_unit_id}</td>
               <td style="text-align: center; font-size: 12px;"><button class="optionBtn">&#8942;</button></td>      
               </tr>`;
 
@@ -506,6 +510,8 @@
               <td hidden>${dataFromFetch['items'][i]['item_variant_id_id']}</td>
               <td hidden>${dataFromFetch['items'][i]['item_veriant_price']}</td>
               <td hidden>${dataFromFetch['items'][i]['item_qty']}</td>
+              <td hidden>${per_unit_id}</td>
+              <td hidden>${order_unit_id}</td>
               <td style="text-align: center; font-size: 12px;"><button class="optionBtn">&#8942;</button></td>      
               </tr>`;
 
@@ -636,29 +642,28 @@
     })
 
     document.getElementById('status').addEventListener('change', function () {
-        if (document.getElementById('status').value == 'Transfer to Consignee') 
-        {
-            document.getElementById('docket').setAttribute('required',false );
-            document.getElementById('docket').disabled=true;
-            document.getElementById('docket_div').style.display='none';
+        if (document.getElementById('status').value == 'Transfer to Consignee') {
+            document.getElementById('docket').setAttribute('required', false);
+            document.getElementById('docket').disabled = true;
+            document.getElementById('docket_div').style.display = 'none';
             document.getElementById('tranfer_to').setAttribute('required', true);
             document.getElementById('tranfer_to').style.display = 'block';
-           
+
         }
         else {
             document.getElementById('tranfer_to').setAttribute('required', false);
             document.getElementById('tranfer_to').style.display = 'none';
-         
-            document.getElementById('docket').disabled=false;
-            document.getElementById('docket').setAttribute('required',true);
-            document.getElementById('docket_div').style.display='block';
-           
+
+            document.getElementById('docket').disabled = false;
+            document.getElementById('docket').setAttribute('required', true);
+            document.getElementById('docket_div').style.display = 'block';
+
         }
     })
 
     const submitorder = document.getElementById('dispatch-form');
-    submitorder.addEventListener('submit', function (e) {     
-        e.preventDefault();      
+    submitorder.addEventListener('submit', function (e) {
+        e.preventDefault();
         let item_qty = tablerowdata[3].split(' ');
         let data = '';
         let dispatch_transfer_date = document.getElementById("id_date");
@@ -668,8 +673,8 @@
 
 
         let t_con = document.getElementById('t_consignee').value;
-        if (dispatch_status == 'Transfer to Consignee') {
-        
+        if (dispatch_status == 'transfer to consignee') {
+
 
             data = {
                 'client_id': tablerowdata[4],
@@ -699,10 +704,10 @@
         }
 
         if (parseFloat(item_qty[0]).toFixed(1) < dispatch_qty) {
-            alert('Balance Order Qty. is less then '+dispatch_qty+" "+parseFloat(item_qty[0]).toFixed(1) );
+            alert('Balance Order Qty. is less then ' + dispatch_qty + " " + parseFloat(item_qty[0]).toFixed(1));
         }
         else {
-            console.log(data)
+            // console.log(data)
             fetch('/orders/api/ios/', ajexcall.postoption(data))
                 .then(function (response) {
                     if (!response.ok) {
@@ -711,7 +716,32 @@
                     return response.json(); // Convert response to json use text for text
                 })
                 .then(data3 => {
-                   // console.log(data3);
+                   
+                    if (data3['status'] == 'transferred') {
+                        let ordobj = {
+                            "date": data3['date'],
+                            "item_veriant_price": tablerowdata[9],
+                            "item_qty": data3['item_qty'],
+                            "client_id": data3['client_id'],
+                            "consignee_id": document.getElementById('t_consignee').value,
+                            "item_id": tablerowdata[7],
+                            "item_variant_id": tablerowdata[8],
+                            "price_per_unit_id": tablerowdata[11],
+                            "order_unit_id": tablerowdata[12],
+                            "order_type": "transferred",
+                            "comment": document.getElementById('dispatch_coments').value
+                        }
+                   
+                        fetch('/orders/api/item_order_by_consignee_id/', ajexcall.postoption(ordobj))
+                            .then(function (response) {
+                                if (!response.ok) {
+                                    throw Error(response.statusText);
+                                }
+                                return response.json();
+                            })
+                            .catch(err => { alert(err); })
+
+                    }
                     let client_id1r = selectedDatalistAttributeValue('consignee_input', 'datalist', 'client-id');
                     let con_id = selectedDatalistAttributeValue('consignee_input', 'datalist', 'data-id');
                     const data23 = { 'con_id': con_id };
@@ -736,17 +766,15 @@
                                     dataFromFetch = data1r; //all jSON data to dataFromfetch assign
                                     orders('undispatched', data1r);
                                     document.getElementById('dis_tran').style.display = 'none';
-                                    c_alert.render('Order Status','Order Dispatched Success',4000);
-                                    document.getElementById('docket').disabled=false;
-                                    document.getElementById('docket').setAttribute('required',true);
-                                    document.getElementById('docket_div').style.display='block';
+                                    c_alert.render('Order Status', 'Order Process Success', 4000);
+                                    document.getElementById('docket').disabled = false;
+                                    document.getElementById('docket').setAttribute('required', true);
+                                    document.getElementById('docket_div').style.display = 'block';
                                 })
                                 .catch(err => { alert(err); })
 
                         })
                         .catch(err => { alert(err); })
-
-
 
                 })
                 .catch(err => { alert(err); })
