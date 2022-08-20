@@ -42,10 +42,15 @@ def home(request):
               clients=Client.objects.filter(user_id=request.user)
               consignes = Consignee.objects.filter(client_id__in=clients)             
               if request.user.is_user:
-                     user_client=Client.objects.get(user_id=request.user)
-                     client_name = user_client.client_name
-                     client_id = user_client.id
-                    
+                     try:
+                            user_client=Client.objects.get(user_id=request.user)
+                            client_name = user_client.client_name
+                            client_id = user_client.id
+                     except:
+                            user_client =None
+                            client_name =''
+                            client_id =None
+                     
               item_arry =[]
               item_variants_arry = []
               unit_arry =[]
@@ -75,7 +80,7 @@ def home(request):
                      return render(request,'clients/admin_dashboard.html',admin_context)
               if request.user.is_staff :                    
                      return render(request,'core/staff_dashboard.html',{'client':clients})
-              else  :                     
+              if request.user.is_user :                  
                      return render(request,'clients/client_dashboard.html',{'client_id':client_id,'client_name':client_name})
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)

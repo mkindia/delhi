@@ -1,0 +1,208 @@
+{% extends 'core/base.html' %}
+{% block title %}edit status {% endblock title %}
+
+{% block main_content %}
+
+<div class="basemodal" id="item_modal" style="position: absolute;">
+    <div class="base-modal-content col-l-6 col-m-9 col-s-11" style="margin-top:5px;">
+        <div class="base-modal-header">
+            <h
+                style="position: relative; font-weight: bold; margin:0; top: 25%; -ms-transform: translateY(-50%);transform: translateY(-50%);">
+                Select Items
+            </h>
+        </div>
+        <div class="base-modal-body">
+            <form name="item_form" id="item-form" method="POST">
+                <div class="col-l-6 col-m-6 col-s-12 col-12" style="float:left; padding:2px">
+                    <label for="item_input">Item name</label>
+                    <input id="item_input" type="search" value="" class="validdatalist" placeholder="select item"
+                        list="item_list" required style="text-transform:capitalize;" />
+                    <datalist id="item_list" style="text-transform:capitalize;">
+                        
+                    </datalist>
+
+                </div>
+
+                <div class="col-l-6 col-m-6 col-s-12 col-12" style="float:left; padding:2px">
+
+                    <label for="item_variant">Item Variants</label>
+                    <input id="item_variant" type="search" class="validdatalist"
+                        placeholder="select variant" list="item_variant_list" required
+                        style="text-transform:capitalize;" />
+                    <datalist id="item_variant_list" style="text-transform:capitalize;">
+
+                    </datalist>
+
+
+                </div>
+
+                <div class="col-l-6 col-m-6 col-s-6 col-6" style="float:left; padding:2px;">
+                    <label for="item_price">Item Price</label>
+                    <input type="number" min="1" max="1000" step=".01" {% if user.is_user %} disabled="true" {% endif %} 
+                    name="itemprice" placeholder="Enter Price" class="inputstyle" required value="{{item_veriant_price}}"
+                        id="item_price">
+
+                </div>
+
+                <div div class="col-l-2 col-m-1 col-s-2 col-2" style="float:left; padding: 2px;">
+                    <label for="qty">.</label>
+                    <input class="inputstyle" disabled="true" style="text-align: center;" placeholder="Per">
+                </div>
+
+                <div class="col-l-4 col-m-5 col-s-4 col-4" style="float:left; padding:2px;">
+                    <label for="qty">.</label>
+                    <input id="per_unit" type="text" class="validdatalist" value="Kg." disabled='True'
+                        list="per_unit_list" required style="text-transform:capitalize;" />
+                    <datalist id="per_unit_list" style="text-transform:capitalize;">
+                        
+                    </datalist>
+                </div>
+
+
+                <div class="col-l-6 col-m-6 col-s-6 col-6" style="float:left; padding:2px;">
+
+                    <label for="qty">Qty.</label>
+                    <input type="number" min="1" max="1000" step=".001" name="itemname" placeholder="Enter QTY."
+                        class="inputstyle" required id="qty" value="{{item_qty}}">
+                </div>
+                
+
+                <div class="col-l-6 col-m-6 col-s-6 col-6" style="float:left; padding:2px;">
+                    <label for="order_unit">Order Unit</label>
+                    <input id="order_unit" type="search" class="validdatalist" value="carton"
+                        placeholder="select unit" list="unit_list" required style="text-transform:capitalize;" />
+                    <datalist id="unit_list" style="text-transform:capitalize;">
+                       
+                    </datalist>
+
+                </div>
+            </form>
+        </div>
+        <div class="base-modal-footer">
+            <button type="button" id="exit_item" class="buttonstyle"
+                style="float:right; margin-right: 10px; margin-bottom: 10px;" onclick=history.back()>Exit</button>
+            <button class="buttonstyle" form="item-form" id="add_item"
+                style="float:right; margin-right: 10px; margin-bottom: 10px;">Add Item</button>
+
+        </div>
+
+    </div>
+</div>
+{% endblock main_content%}
+
+{% block main_scripts %}
+<script type="module">
+    import * as ajexcall from "/static/core/js/modules/ajex.js";   
+    let items_data ;
+    let item_variant_data;
+    let unit ;
+    //get Unit
+    fetch('/items/api/units/')
+    .then(function(response){
+        if(!response.ok){throw Error(response.statusText);}
+        return response.json();
+    })
+    .then(units=>{
+        unit=units;
+        let order_unit= document.getElementById('unit_list');
+        let item_unit= document.getElementById('per_unit_list');
+        for(let u in units){
+            var opt = document.createElement('option');
+            opt.setAttribute("data-id", units[u]['id']);           
+            opt.value = units[u]['unit_name'];
+            item_unit.appendChild(opt);
+            order_unit.appendChild(opt);
+            if(units[u]['unit_name']=='{{price_per_unit_id}}'){
+                document.getElementById('per_unit').value = "{{price_per_unit_id}}";
+                
+            }
+            if(units[u]['unit_name']=='order_unit_id'){
+                document.getElementById('order_unit').value ='{{order_unit_id}}';
+            }
+        }
+    })
+    .catch(err=>{alert(err);})
+    // get item
+    fetch('/items/api/items/')
+    .then(function(response){
+        if(!response.ok){
+            throw Error(response.statusText);
+        }
+        return response.json();
+    })
+    .then(Items=>{
+        items_data=Items;
+        let itemlist= document.getElementById('item_list')
+        let item_id ;
+        for (var i = 0; i < Items.length; i++) {
+            // alert(list[i]['item_price']);
+            var opt = document.createElement('option');
+            opt.setAttribute("data-id", Items[i]['id']);
+            opt.setAttribute('unit-id',Items[i]['item_unit'])         
+            opt.value = Items[i]['item_name'];
+            itemlist.appendChild(opt);
+           // alert(Items[i]['id']);
+            if(Items[i]['item_name']=='{{item_id}}')
+            {
+                item_id =Items[i]['id'];
+              document.getElementById('item_input').value='{{item_id}}';
+            //  document.getElementById('per_unit').value=Items[i]['item_unit'];
+            }
+
+        }       
+        return get_item_variant_by_item_id(item_id);
+    })
+    .catch(err=>{alert(err);})
+
+    document.getElementById('item_input').addEventListener('change',function(){
+        let item_id = selectedDatalistAttributeValue('item_input','item_list','data-id');
+        let unit_id = selectedDatalistAttributeValue('item_input','item_list','unit-id');
+
+        for(let iui in unit){
+           if(unit[iui]['id']==unit_id){           
+            document.getElementById('per_unit').value = unit[iui]['unit_name'];
+           }
+        }
+
+        get_item_variant_by_item_id(item_id)
+        
+    })
+
+    document.getElementById('item_variant').addEventListener('change',function(){
+        let g_prce = selectedDatalistAttributeValue('item_variant','item_variant_list','price-g');
+        document.getElementById('item_price').value = g_prce;
+        
+       
+      //  console.log(item_variant_data);
+    })
+
+    function get_item_variant_by_item_id(pk){    
+    document.getElementById('item_variant_list').innerHTML = '';
+    document.getElementById('item_variant').value = '';
+    fetch('/items/api/itemvariant_by_item_id/'+pk)
+    .then(function(response){
+        if(!response.ok){throw Error(response.statusText);}
+        return response.json();
+    })
+    .then(Item_varient=>{
+        item_variant_data = Item_varient;
+       // console.log(Item_varient);
+        let variant_list = document.getElementById('item_variant_list');            
+        for(let variant in Item_varient){
+            var opt = document.createElement('option');
+            opt.setAttribute("data-id", Item_varient[variant]['id']);            
+            opt.setAttribute("price-g", Item_varient[variant]['client_price_'+'{{client_group}}']);            
+            opt.value = Item_varient[variant]['variant_name'];
+            variant_list.appendChild(opt);
+           // alert(Items[i]['id']);
+            if(Item_varient[variant]['variant_name']=='{{item_variant_id}}')
+            {
+              document.getElementById('item_variant').value='{{item_variant_id}}';
+            }
+            
+        }
+    })
+    .catch(err=>{alert(err);})
+}
+</script>
+{% endblock main_scripts %}

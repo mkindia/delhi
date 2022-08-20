@@ -126,14 +126,20 @@ def item_order_status(request):
                 item_order_status ={'item_qty':item_qty,'order_item_id':data['order_item_id']}
                 return JsonResponse(item_order_status)
 
-def dispatched_transfer_order(request):
+def edit_dispatched_transfer_order(request,id):
     if request.user.is_authenticated:
-        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-            if request.method == 'PUT':
-                data = json.loads(request.body.decode("utf-8"))
-                
-                disform = order_dispatchForm
-                return render(request,'orders/dispatch_transfer.html',{'fm':disform})
+       
+        itemorder= Item_Order.objects.get(pk=id)
+        client_group = Client.objects.get(client_name=itemorder.client_id)
+        orderdetails =  { 'client_group':client_group.client_group,
+            'item_id':itemorder.item_id,        
+        'item_variant_id':itemorder.item_variant_id,
+        'order_date':str(itemorder.date),'item_qty':itemorder.item_qty,
+        'item_veriant_price':itemorder.item_veriant_price,
+        'price_per_unit_id':itemorder.price_per_unit_id,
+        'item_qty':itemorder.item_qty}
+        print(itemorder.client_id)
 
+        return render(request,'orders/edit_dispatch_transfer.html',orderdetails)
     else :
         return redirect('/')

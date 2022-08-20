@@ -106,9 +106,7 @@ def add_client(request):
 
 #@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def genrate_client_token(request):
-       if request.user.is_authenticated:
-
-                            
+       if request.user.is_authenticated:                            
               if request.method == 'POST':
                      client=request.POST.get('client')
                      try:

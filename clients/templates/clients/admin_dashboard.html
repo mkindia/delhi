@@ -213,6 +213,8 @@
 
     </div>
 </div>
+<!--fetch html content-->
+<div id="fetch-html-content"></div>
 <!--for send/transfer-->
 <div class="basemodal" id="dis_tran" style="position: absolute; display:none">
     <div class="base-modal-content col-l-6 col-m-9 col-s-11" style="margin-top:5px;">
@@ -303,6 +305,8 @@
 
     document.getElementById('show-comorder').addEventListener('click', function () {
         let con_id = selectedDatalistAttributeValue('consignee_input', 'datalist', 'data-id');
+        if(con_id != null)
+        {
         let client_id1 = selectedDatalistAttributeValue('consignee_input', 'datalist', 'client-id');
         const data = { 'con_id': con_id };
 
@@ -330,12 +334,15 @@
 
             })
             .catch(err => { alert(err); })
-
+        }
+        else{alert('Please Select Consignee / Client');}
 
     });
 
     document.getElementById('show-order').addEventListener('click', function () {
         let con_id = selectedDatalistAttributeValue('consignee_input', 'datalist', 'data-id');
+        if(con_id != null)
+        {
         let client_id1 = selectedDatalistAttributeValue('consignee_input', 'datalist', 'client-id');
         const data = { 'con_id': con_id };
 
@@ -365,7 +372,8 @@
 
             })
             .catch(err => { alert(err); })
-
+        }
+        else{alert('Please Select Consignee / Client');}
     });
 
     function orders(status, dataFromFetch,) {
@@ -518,11 +526,7 @@
                 }
             }
         }
-
-
-        caltab('myTable');
-
-
+        caltab('myTable');    
     }
 
     function accordenmenu() {
@@ -601,6 +605,11 @@
 
     }
 
+    document.getElementById('edit_order').addEventListener('click',function(){
+      // console.log(tablerowdata);
+       window.location = '/orders/edit_disp_trans/'+tablerowdata[6];
+      
+    })
 
     document.getElementById('dispatch').addEventListener('click', function () {
         document.getElementById('status').value = 'Dispatched';
@@ -661,8 +670,7 @@
         }
     })
 
-    const submitorder = document.getElementById('dispatch-form');
-    submitorder.addEventListener('submit', function (e) {
+    document.getElementById('dispatch-form').addEventListener('submit', function (e) {
         e.preventDefault();
         let item_qty = tablerowdata[3].split(' ');
         let data = '';
@@ -716,7 +724,7 @@
                     return response.json(); // Convert response to json use text for text
                 })
                 .then(data3 => {
-                   
+                  
                     if (data3['status'] == 'transferred') {
                         let ordobj = {
                             "date": data3['date'],
@@ -742,11 +750,9 @@
                             .catch(err => { alert(err); })
 
                     }
-                    let client_id1r = selectedDatalistAttributeValue('consignee_input', 'datalist', 'client-id');
-                    let con_id = selectedDatalistAttributeValue('consignee_input', 'datalist', 'data-id');
-                    const data23 = { 'con_id': con_id };
-
-                    fetch('/orders/api/ios_by_client_id/' + client_id1r)
+                 
+                    const data23 = { 'con_id': data3['consignee_id'] };
+                    fetch('/orders/api/ios_by_client_id/' + data3['client_id'])
                         .then(function (response) {
                             if (!response.ok) {
                                 throw Error(response.statusText);
@@ -775,7 +781,7 @@
 
                         })
                         .catch(err => { alert(err); })
-
+                    
                 })
                 .catch(err => { alert(err); })
 

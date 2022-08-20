@@ -13,6 +13,11 @@ class CustomPermissions(BasePermission):
         if (request.user.is_admin or request.user.is_staff and request.user.is_authenticated):
             return True
         return False
+class unit(viewsets.ModelViewSet):
+    queryset=Unit.objects.all()
+    serializer_class = unitSerializers
+    permission_classes=(CustomPermissions,)
+    http_method_names =['get']
 
 class itemgroup(viewsets.ModelViewSet):
    
