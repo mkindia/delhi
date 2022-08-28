@@ -1,6 +1,3 @@
-
-from ast import pattern
-from logging import PlaceHolder
 from django import forms
 from django.contrib.auth import models
 from django.core.validators import RegexValidator

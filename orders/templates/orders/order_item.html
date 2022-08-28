@@ -231,7 +231,11 @@
 
                             {% endfor %}
                         </datalist>
-
+                    </div>
+                    <div class="col-l-12 col-m-12 col-s-12 col-" style="float:left; padding:2px;">
+                        <label for="id_email">Comment</label>
+                        <input type="text" name="itemname" id="comment" style="background-color: aliceblue; opacity: .7;"
+                            placeholder="About Orders" class="inputstyle">
                     </div>
                 </form>
             </div>
@@ -297,9 +301,7 @@
     tableEl.addEventListener('click', onDeleteRow);
     document.getElementById('select_item').addEventListener('click', additem);
     document.getElementById('exit_item').addEventListener('click', exit_item);
-    const submitorder = document.getElementById('order-item-form');
-    submitorder.addEventListener('submit', validateForm)
-
+   
     consignee_input.addEventListener('change', function (event) {
         let client_value = document.getElementById('client_id').value = selectedDatalistAttributeValue('consignee_input', 'consignee_list', 'client-id');
         item_varient_price = 'client_price_' + selectedDatalistAttributeValue('client_id', 'client_list', 'group-id');
@@ -430,7 +432,7 @@
         document.getElementById('item_modal').style.display = 'none';
     }
 
-    function validateForm(e) {
+    document.getElementById('order-item-form').addEventListener('submit', function(e) {
 
         e.preventDefault();
         var table = document.getElementById('myTable');
@@ -492,7 +494,7 @@
          //   console.log(data1);         
             if (is_duplicate == false) {
                
-                fetch('/orders/api/item_order_by_consignee_id/',ajexcall.postoption(data1))
+                fetch('/orders/api/order_item/',ajexcall.postoption(data1))
                     .then(function(response) {
                         if (!response.ok) {
                            throw Error(response.statusText);
@@ -501,7 +503,7 @@
                     })
                     .then(data => {
                       //  console.log(data);                    
-                      if('user.is_user'=='False'){
+                      if('{{user.is_user}}'=='False'){
                         if (confirm('======= Order Saved ======\n\nWant to Send Whattsapp or Email ?')) {
                             let msg = '----- Order Confermed -----%0a';
                             for (var i = 0; i <for_info.length; i++) {
@@ -522,7 +524,7 @@
      
             }
 
-    }
+    })
 
     item_variant.addEventListener('change', function () {
 

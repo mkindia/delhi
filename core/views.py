@@ -11,7 +11,9 @@ from django.conf.urls.static import static
 
 import uuid
 import json
-from .forms import *
+from .forms import (UserProfile_imgform,UserProfile_changeform
+,UserSetPasswordForm,ChangePasswordForm, UsersCreationForm,Userauthform)
+
 from .models import *
 from items.models import Item,Item_Variant,Unit
 from clients.models import Client, Client_Token,Consignee

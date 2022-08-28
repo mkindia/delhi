@@ -32,6 +32,22 @@ export function putoption(data) {
   return option;
 }
 
+export function patchoption(data) {
+  let option = {
+    method: "PATCH",
+    credentials: "same-origin",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json; charset=utf-8",
+      "X-Requested-With": "XMLHttpRequest", //Necessary to work with request.is_ajax()
+      "X-CSRFToken": csrftoken,
+    },
+    body: JSON.stringify(data), //JavaScript object of data to POST
+  };
+
+  return option;
+}
+
 function getCookie(name) {
   let cookieValue = null;
   if (document.cookie && document.cookie !== "") {

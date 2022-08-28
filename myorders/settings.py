@@ -168,8 +168,9 @@ MEDIA_URL = '/media/'
 # Backend Email by me
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'spangle.in'
-EMAIL_PORT = '25'
-EMAIL_HOST_USER = 'mail@spangle.in'
-EMAIL_HOST_PASSWORD = os.getenv('MAIL_PASS')
+EMAIL_HOST = 'mail.asimit.in'
+EMAIL_PORT = '465'
+EMAIL_HOST_USER = 'info@asimit.in'
+EMAIL_HOST_PASSWORD = '5235@Server' #os.getenv('info_asimit_mail')
+EMAIL_USE_SSL = True
 #EMAIL_USE_TLS = True

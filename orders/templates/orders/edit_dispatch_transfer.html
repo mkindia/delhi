@@ -4,15 +4,18 @@
 {% block main_content %}
 
 <div class="basemodal" id="item_modal" style="position: absolute;">
+
     <div class="base-modal-content col-l-6 col-m-9 col-s-11" style="margin-top:5px;">
+        
         <div class="base-modal-header">
             <h
                 style="position: relative; font-weight: bold; margin:0; top: 25%; -ms-transform: translateY(-50%);transform: translateY(-50%);">
-                Select Items
+                Update Order
             </h>
         </div>
+
         <div class="base-modal-body">
-            <form name="item_form" id="item-form" method="POST">
+            <form name="update_form" id="update-form" method="POST">
                 <div class="col-l-6 col-m-6 col-s-12 col-12" style="float:left; padding:2px">
                     <label for="item_input">Item name</label>
                     <input id="item_input" type="search" value="" class="validdatalist" placeholder="select item"
@@ -58,14 +61,12 @@
                     </datalist>
                 </div>
 
-
                 <div class="col-l-6 col-m-6 col-s-6 col-6" style="float:left; padding:2px;">
 
                     <label for="qty">Qty.</label>
                     <input type="number" min="1" max="1000" step=".001" name="itemname" placeholder="Enter QTY."
-                        class="inputstyle" required id="qty" value="{{item_qty}}">
+                        class="inputstyle" required id="qty" value="{{item_qty}}" id="qty">
                 </div>
-                
 
                 <div class="col-l-6 col-m-6 col-s-6 col-6" style="float:left; padding:2px;">
                     <label for="order_unit">Order Unit</label>
@@ -76,18 +77,27 @@
                     </datalist>
 
                 </div>
+
+                <div class="col-l-12 col-m-12 col-s-12 col-" style="float:left; padding:2px;">
+                    <label for="id_email">Comment</label>
+                    <input type="text" name="itemname" id="comment" style="background-color: aliceblue; opacity: .7;"
+                        placeholder="About Orders" class="inputstyle">
+                </div>
             </form>
         </div>
+
         <div class="base-modal-footer">
             <button type="button" id="exit_item" class="buttonstyle"
                 style="float:right; margin-right: 10px; margin-bottom: 10px;" onclick=history.back()>Exit</button>
-            <button class="buttonstyle" form="item-form" id="add_item"
-                style="float:right; margin-right: 10px; margin-bottom: 10px;">Add Item</button>
+            <button class="buttonstyle" form="update-form" id="add_item"
+                style="float:right; margin-right: 10px; margin-bottom: 10px;">Update</button>
 
         </div>
 
     </div>
+
 </div>
+
 {% endblock main_content%}
 
 {% block main_scripts %}
@@ -96,6 +106,7 @@
     let items_data ;
     let item_variant_data;
     let unit ;
+  //  alert('{{order_id}}');
     //get Unit
     fetch('/items/api/units/')
     .then(function(response){
@@ -134,8 +145,7 @@
         items_data=Items;
         let itemlist= document.getElementById('item_list')
         let item_id ;
-        for (var i = 0; i < Items.length; i++) {
-            // alert(list[i]['item_price']);
+        for (var i = 0; i < Items.length; i++) {            
             var opt = document.createElement('option');
             opt.setAttribute("data-id", Items[i]['id']);
             opt.setAttribute('unit-id',Items[i]['item_unit'])         
@@ -203,6 +213,27 @@
         }
     })
     .catch(err=>{alert(err);})
+
+    document.getElementById('update-form').addEventListener('submit',function(e){
+        e.preventDefault()
+        let item_id = selectedDatalistAttributeValue('item_input','item_list','data-id');
+        let item_variant_id = selectedDatalistAttributeValue('item_variant','item_variant_list','data-id');
+        let item_variant_price =document.getElementById('item_price').value;
+        let price_per_unit_id = selectedDatalistAttributeValue('item_input','item_list','unit-id');
+        let qty = document.getElementById('qty').value;
+        let comment = document.getElementById('comment').value;
+        let order_unit_id = selectedDatalistAttributeValue('order_unit','unit_list','data-id')
+        let order_update_data = { "date": "2022-08-21",
+    "item_veriant_price": item_variant_price,
+    "item_qty": qty,     
+    "comment": comment,   
+    "item_id": item_id,
+    "item_variant_id": item_variant_id,
+    "price_per_unit_id": price_per_unit_id,
+    "order_unit_id": order_unit_id
+    }
+    console.log(order_update_data);
+    })
 }
 </script>
 {% endblock main_scripts %}

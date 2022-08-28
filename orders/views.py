@@ -131,13 +131,16 @@ def edit_dispatched_transfer_order(request,id):
        
         itemorder= Item_Order.objects.get(pk=id)
         client_group = Client.objects.get(client_name=itemorder.client_id)
-        orderdetails =  { 'client_group':client_group.client_group,
+        orderdetails =  {
+            'order_id':itemorder.id,        
+            'client_group':client_group.client_group,
             'item_id':itemorder.item_id,        
         'item_variant_id':itemorder.item_variant_id,
         'order_date':str(itemorder.date),'item_qty':itemorder.item_qty,
         'item_veriant_price':itemorder.item_veriant_price,
         'price_per_unit_id':itemorder.price_per_unit_id,
         'item_qty':itemorder.item_qty}
+
         print(itemorder.client_id)
 
         return render(request,'orders/edit_dispatch_transfer.html',orderdetails)

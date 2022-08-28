@@ -740,7 +740,7 @@
                             "comment": document.getElementById('dispatch_coments').value
                         }
                    
-                        fetch('/orders/api/item_order_by_consignee_id/', ajexcall.postoption(ordobj))
+                        fetch('/orders/api/order_item/', ajexcall.postoption(ordobj))
                             .then(function (response) {
                                 if (!response.ok) {
                                     throw Error(response.statusText);

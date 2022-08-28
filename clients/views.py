@@ -26,6 +26,7 @@ def mail_for_verify_user(subject,message,email,url,token):
 
 def send_email(request):
        if request.user.is_authenticated:
+              from_email = settings.EMAIL_HOST_USER                           
               if request.headers.get('x-requested-with') == 'XMLHttpRequest':
                      data = json.loads(request.body.decode("utf-8"))
                      try:
@@ -35,8 +36,9 @@ def send_email(request):
                             if cli_email.email == None or cli_email.email == '':
                                    msg = 'Client not Found any email please check'
                             else:                                  
-                                   mail_for_verify_user(sub,msg,cli_email.email,None,'nottoken')                                  
-                                   msg = 'Email sent to Client'
+                                 # mail_for_verify_user(sub,msg,cli_email.email,None,'nottoken')
+                                  send_mail(subject=sub,message=msg,from_email=from_email,recipient_list=[cli_email.email,])                                
+                                  msg = 'Email sent to Client'
 
                             data={'message':msg}
                             return JsonResponse(data)

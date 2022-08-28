@@ -32,11 +32,25 @@ class ios_by_client_id(viewsets.ModelViewSet):
     def get_queryset(self):       
         query_set = Item_Order_Status.objects.all()       
         return query_set
+
     def retrieve(self, request, *args, **kwargs):
         params= kwargs       
         clients=Item_Order_Status.objects.filter(client_id=params['pk'])
         serializer=itemOrderStatus_serializers(clients,many=True)
         return Response(serializer.data)
+
+class order_item(viewsets.ModelViewSet):
+    queryset = Item_Order.objects.all()
+    serializer_class=order_item_serializers
+    permission_classes = (CustomPermissions,)
+    http_method_names = ['get','post','put','patch']
+
+    def create(self, request, *args, **kwargs): # for multiple instace creation
+        serializer = self.get_serializer(data=request.data, many=isinstance(request.data,list))
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)        
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
 
@@ -44,11 +58,7 @@ class item_order_by_consignee_id(viewsets.ModelViewSet):
     queryset = Item_Order.objects.all()
     serializer_class=order_item_serializers
     permission_classes = (CustomPermissions,)
-    http_method_names = ['get','post','put']
-
-    def get_queryset(self):       
-        query_set = Item_Order.objects.all()       
-        return query_set
+    http_method_names = ['get',]
 
     def retrieve(self, request, *args, **kwargs):
         params= kwargs       
@@ -62,7 +72,8 @@ class item_order_by_consignee_id(viewsets.ModelViewSet):
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)        
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-        
+
+    
         
 class consignee_order_by_client_id(viewsets.ViewSet):
     def list(self,request):
@@ -88,6 +99,8 @@ class order_item_by_order_id(viewsets.ViewSet):
         return Response(serializer.data)
 
     def retrieve(self,request,pk=None):
-        ord_item = Item_Order.objects.filter(order_id=pk)
+        ord_item = Item_Order.objects.filter(pk=pk)
         serializer = order_item_serializers(ord_item,many=True)
         return Response(serializer.data)
+    
+    

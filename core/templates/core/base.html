@@ -133,6 +133,14 @@
       }
     });
 
+    let menuModal = document.getElementById('menuModal');
+
+    window.addEventListener("click", function (event) {
+      if (event.target == menuModal) {
+        menuModal.style.display = "none";
+      }
+    });
+
 
   </script>
 {% endif %}
