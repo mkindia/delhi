@@ -109,13 +109,13 @@
                         <tbody></tbody>
                     </table>
                 </div>
-
+                <!--
                 <div class="col-l-12 col-m-12 col-s-12 col-" style="float:left; padding:2px;">
                     <label for="id_email">Comment</label>
                     <input type="text" name="itemname" id="comment" style="background-color: aliceblue; opacity: .7;"
                         placeholder="About Orders" class="inputstyle">
                 </div>
-                <!-- 
+                
                 <div class="col-l-12 col-m-12 col-s-12 col-" style="float: left; padding: 2px;">
 
                     <a class="ancor smallbuttonstyleround"
@@ -136,7 +136,7 @@
                 style="text-decoration: none; float:right; margin-right:10px;"><i> Exit
                 </i></button>
             <button id="submit" class="buttonstyle" form="order-item-form"
-                style="float:right; margin-right: 10px;">Place-an-order</button>
+                style="float:right; margin-right: 10px;">Place-Order</button>
             <button type="button" id="select_item" class="buttonstyle"
                 style="float:right; margin-right: 5px; background-color: aquamarine; display: none;">Select
                 Items</button>
@@ -233,8 +233,8 @@
                         </datalist>
                     </div>
                     <div class="col-l-12 col-m-12 col-s-12 col-" style="float:left; padding:2px;">
-                        <label for="id_email">Comment</label>
-                        <input type="text" name="itemname" id="comment" style="background-color: aliceblue; opacity: .7;"
+                        <label for="comment">Comment</label>
+                        <input type="text" name="itemname" id="variant_comment" style="background-color: aliceblue; opacity: .7;"
                             placeholder="About Orders" class="inputstyle">
                     </div>
                 </form>
@@ -372,7 +372,7 @@
         const item_qty = document.getElementById('qty').value;
         const order_qty = document.getElementById('order_unit').value;
         const order_qty_id = selectedDatalistAttributeValue('order_unit', 'unit_list','data-id');
-
+        const variant_comment = document.getElementById('variant_comment').value;
         tbodyEl.innerHTML += `
         <tr>
         <td style="text-align: center; font-size: 12px;"> </td>  
@@ -386,23 +386,24 @@
         <td hidden> ${item_id}</td>
         <td hidden> ${item_variant_id}</td>
         <td hidden> ${per_unit_id}</td>
-        <td hidden> ${order_qty_id}</td> 
+        <td hidden> ${order_qty_id}</td>
+        <td hidden> ${variant_comment}</td> 
         </tr>`;
 
+     //   alert(variant_comment);
         document.getElementById('item_input').value = '';
-
         document.getElementById('item_variant').value = '';
-
         document.getElementById('per_unit').value = '';
         //const per_unit_id = selecteddatalistid('per_unit', 'per_unit_list');
         document.getElementById('item_price').value = '';
         document.getElementById('qty').value = '';
+        document.getElementById('variant_comment').value ='';
         reindex();
 
         if (!confirm('add more item')) {
             document.getElementById('item_modal').style.display = 'none';
         }
-        console.log(item_price);
+        
         return false;
     }
 
@@ -449,7 +450,6 @@
             let is_duplicate = false;
             for (var i = 1, row; row = table.rows[i]; i++) {
                 var col = row.cells;
-
                 for (let d in duplicate) {
                     if (duplicate[d] == col[1].innerHTML.trim() + col[2].innerHTML.trim()) {
                         alert('Duplicate Entry Found Please Remove One :-  ' + col[1].innerHTML.trim() + " " + col[2].innerHTML.trim())
@@ -468,7 +468,8 @@
                     qty: col[5].innerHTML.trim(),
                     unit: col[6].innerHTML.trim(),
                     item_id: col[8].innerHTML.trim(),
-                    item_variant_id: col[9].innerHTML.trim()
+                    item_variant_id: col[9].innerHTML.trim(),
+                    comment:col[12].innerHTML.trim()
                 }
                     
                  let ordobj = { 
@@ -480,7 +481,8 @@
                         "item_id":col[8].innerHTML.trim(),
                         "item_variant_id":col[9].innerHTML.trim(),
                         "price_per_unit_id":col[10].innerHTML.trim(),
-                        "order_unit_id": col[11].innerHTML.trim()
+                        "order_unit_id": col[11].innerHTML.trim(),
+                        "comment":col[12].innerHTML.trim()
                     }
             
             
@@ -491,7 +493,7 @@
             
            
           //  console.log(data);
-         //   console.log(data1);         
+         //  console.log(data1);         
             if (is_duplicate == false) {
                
                 fetch('/orders/api/order_item/',ajexcall.postoption(data1))

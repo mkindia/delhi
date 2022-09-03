@@ -174,6 +174,35 @@
         }
     }
 </style>
+<style>
+    .comp {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 90px;
+        height: 30px;
+        padding-left: 33px;
+        margin: 0;
+        border-radius: 15px;
+        background: radial-gradient(circle 12px, white 100%, transparent calc(100% + 1px)) rgb(125, 125, 125) -30px;
+        transition: 0.3s ease-in-out;
+      }
+      
+      .comp::before {
+        content: "Unsent";      
+        font: bold 12px/32px Verdana;
+        color: white;             
+      }
+      
+      :checked {
+        padding-left: 8px;
+        background-color: dodgerBlue;
+        background-position: 30px;
+      }
+      
+      :checked::before {
+        content: "Sent";
+      }
+</style>
 {% endblock page_head %}
 
 
@@ -182,8 +211,8 @@
 <div style="padding:5px;">
     <div class="base-modal-content col-l-12 col-m-12 col-s-12" style="margin-top:5px; padding: 5px;">
         <div class="base-modal-header" style="border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">
-            <div class="col-l-8 col-m-8 col-s-8 col-6" style="float:left;">
-                <input id="consignee_input" placeholder="Select Consignee / Client" type="search" multiple value=""
+            <div class="col-l-10 col-m-10 col-s-9 col-8" style="float:left;">
+                <input id="consignee_input" placeholder="Select Consignee / Client" type="search"
                     list="datalist" required style="text-transform:capitalize;" />
                 <datalist id="datalist">
                     {% for cli in consigne %}
@@ -193,13 +222,10 @@
                     {% endfor %}
                 </datalist>
             </div>
-            <div class="col-l-4 col-m-4 col-s-4 col-6"
-                style="text-align: center; float:left;padding-right: 4px; padding-top:6px;">
-                <button id="show-order" class="buttonstyle"
-                    style="font-size: 12px; padding: 4px 6px; float: left; margin-left: 4px;"> show </button>
-                <button id="show-comorder" class="buttonstyle"
-                    style="font-size: 12px; padding: 4px 6px; float: right; margin-right: 2px;"> complited </button>
-
+            <div class="col-l-2 col-m-2 col-s-3 col-4" style="text-align: center; 
+                        float:left;padding-right: 4px; padding-top:2px;">  
+                        <input type="checkbox" id="sentunsent" class="comp" />              
+                               
             </div>
 
 
@@ -214,7 +240,9 @@
     </div>
 </div>
 <!--fetch html content-->
-<div id="fetch-html-content"></div>
+<div id="fetch-html-content" style="display:none;">
+ 
+</div>
 <!--for send/transfer-->
 <div class="basemodal" id="dis_tran" style="position: absolute; display:none">
     <div class="base-modal-content col-l-6 col-m-9 col-s-11" style="margin-top:5px;">
@@ -302,12 +330,25 @@
     const ord = document.getElementById('disp_div');
     ord.style.maxHeight = 350 + "px";
     let dataFromFetch = '';
+  
+   
+   
 
-    document.getElementById('show-comorder').addEventListener('click', function () {
+    document.getElementById('consignee_input').addEventListener('change', show);
+
+    let unshiped = document.getElementById('sentunsent');
+        unshiped.addEventListener('change',show)
+    
+    function show() {
+
         let con_id = selectedDatalistAttributeValue('consignee_input', 'datalist', 'data-id');
+        let client_id1 = selectedDatalistAttributeValue('consignee_input', 'datalist', 'client-id');
+
+        if(unshiped.checked){
+           
         if(con_id != null)
         {
-        let client_id1 = selectedDatalistAttributeValue('consignee_input', 'datalist', 'client-id');
+       
         const data = { 'con_id': con_id };
 
         fetch('/orders/api/ios_by_client_id/' + client_id1)
@@ -337,13 +378,13 @@
         }
         else{alert('Please Select Consignee / Client');}
 
-    });
 
-    document.getElementById('show-order').addEventListener('click', function () {
-        let con_id = selectedDatalistAttributeValue('consignee_input', 'datalist', 'data-id');
+        }        
+        else{
+       
         if(con_id != null)
         {
-        let client_id1 = selectedDatalistAttributeValue('consignee_input', 'datalist', 'client-id');
+      
         const data = { 'con_id': con_id };
 
         fetch('/orders/api/ios_by_client_id/' + client_id1)
@@ -374,7 +415,8 @@
             .catch(err => { alert(err); })
         }
         else{alert('Please Select Consignee / Client');}
-    });
+        }
+    };
 
     function orders(status, dataFromFetch,) {
         let client_id = 0;
@@ -605,10 +647,36 @@
 
     }
 
+
     document.getElementById('edit_order').addEventListener('click',function(){
       // console.log(tablerowdata);
-       window.location = '/orders/edit_disp_trans/'+tablerowdata[6];
+       let item_qty = tablerowdata[2].split(' ');
+       let sent_qty = tablerowdata[3].split(' ');
       
+        if( parseFloat(item_qty[0]).toFixed(1) ==  parseFloat(sent_qty[0]).toFixed(1))
+        {
+         window.location = '/orders/edit_disp_trans/'+tablerowdata[6];    
+        }
+        else{
+            alert('Item not edit able');
+        }
+    })
+
+    document.getElementById('dispatch_details').addEventListener('click',function(){
+        document.getElementById('fetch-html-content').style.display = 'block';
+        fetch('orders/item_order_status/'+tablerowdata[6]+'/')
+        .then(function(response){
+            if(!response.ok){
+                throw Error(response.statusText);
+            }
+            return response.text();
+        })
+        .then(order_sent=>{
+            document.getElementById('fetch-html-content').innerHTML=order_sent;
+            hide();
+        })        
+        .catch(err=>{alert(err);})
+        document.getElementById('popupdiv').style.display = 'none';
     })
 
     document.getElementById('dispatch').addEventListener('click', function () {
@@ -794,6 +862,21 @@
 </script>
 <script>
 
+  //  alert(document.getElementById('fetch-html-content').style.display);
+
+    if(document.getElementById('fetch-html-content').style.display!='none')
+    {     
+      hide();
+    }
+   
+    function hide(){
+        document.getElementById('hide').addEventListener('click',function(){
+            document.getElementById('fetch-html-content').style.display='none';
+        })
+    }
+
+    
+
     function popupclose() {
         let popupdiv = document.getElementById('popupdiv');
         popupdiv.style.display = 'none';
@@ -805,7 +888,7 @@
         }
     }
 
-
+  
 
 </script>
 

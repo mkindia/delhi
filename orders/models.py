@@ -63,6 +63,10 @@ class Item_Order_Status(models.Model):
     create_date=models.DateField(auto_now_add=True,null=True,blank=True)
     status = LowerCase(max_length=30,blank=True, null=True, choices=order_status,default='dispatched')
     docket_number = LowerCase(max_length=50,blank=True,null=True)
+    state = LowerCase('state',max_length=64, blank=True, null=True)
+    station=LowerCase('station',max_length=64,null=True,blank=True)
+    transport=LowerCase('transport',max_length=64,null=True,blank=True)
+    private_marka = models.CharField(max_length=100,null=True,blank=True)
     comment = LowerCase(max_length=200,null=True,blank=True)
     def __str__(self):
         return str(self.pk)

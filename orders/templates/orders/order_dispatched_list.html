@@ -1,4 +1,5 @@
 
+<div class="basemodal" style="position: absolute;">
 
     <div class="base-modal-content col-l-6 col-m-9 col-s-11" style="margin-top:5px;">
         <div class="base-modal-header">
@@ -11,19 +12,22 @@
             <table id="sent-details-table" class="myTable" style="text-align:center;">
                 <thead style="text-align: center; font-size: 12px;">
                     <tr>
-                        <th>Item</th>
-                        <th>Price</th>
-                        <th>Order</th>
-                        <th>Bal</th>
+                        <th>Date</th>
+                        <th>Qty</th>
+                        <th>Status</th>
+                        <th>.</th>
                     </tr>
                 </thead>
                 <tbody>
+                    {% for status in dispatched %}                    
                     <tr>
-                        <td>crusher</td>
-                        <td>crusher</td>
-                        <td>crusher</td>
-                        <td>crusher</td>
+                    <td>{{status.date}}</td>
+                    <td> {{status.item_qty}} </td>
+                    <td style="text-transform:capitalize;">{{status.status}} {% if status.transfer_id != None  %} to {{status.transfer_id}} {% else %} Docket No. {{status.docket_number}} {% endif %} </td>
+                    <td>.</td>
                     </tr>
+                    {% endfor %}
+                   
                 </tbody>
             </table>
         </div>
@@ -33,3 +37,4 @@
            
         </div>
     </div>
+</div>

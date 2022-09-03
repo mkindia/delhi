@@ -109,22 +109,13 @@ def order_item(request):
 
         return redirect('/')
 
-def item_order_status(request):
+def item_order_status(request,pk=None):
      if request.user.is_authenticated:
-        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-            if request.method == 'PUT':
-                data = json.loads(request.body.decode("utf-8"))
-               # print(data['order_item_id'])
-                
-                Item_Order_status=Item_Order_Status.objects.filter(item_order_id=data['order_item_id'])
-                item_qty=0
-                for qty in Item_Order_status:
-                    if qty.item_qty != None:
-                        item_qty += qty.item_qty
-                    else:
-                        item_qty=0
-                item_order_status ={'item_qty':item_qty,'order_item_id':data['order_item_id']}
-                return JsonResponse(item_order_status)
+       
+        if pk != None:
+                Item_Order_status=Item_Order_Status.objects.filter(item_order_id=pk)
+               
+                return render(request,'orders/order_dispatched_list.html',{'dispatched':Item_Order_status})
 
 def edit_dispatched_transfer_order(request,id):
     if request.user.is_authenticated:
