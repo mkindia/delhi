@@ -1,89 +1,29 @@
 {% extends 'core/base.html' %}
 {% block title %}admin{% endblock title %}
 {% block page_head %}
-<style>
-    .accordion {
-        background-color: rgb(209, 252, 233);
-        color: rgb(51, 51, 51);
-        cursor: pointer;
-        padding: 7px;
-        width: 100%;
-        border: none;
-        text-align: left;
-        outline: none;
-        font-size: 15px;
-        transition: 0.4s;
-        margin-bottom: 2px;
-    }
 
-    .active,
-    .accordion:hover {
-        background-color: rgb(148, 214, 253);
-    }
-
-    .accordion:after {
-        content: '\002B';
-        color: #777;
-        font-weight: bold;
-        float: right;
-        margin-left: 5px;
-    }
-
-    .active:after {
-        content: "\2212";
-    }
-
-    .panel {
-        padding: 5 10px;
-        background-color: whitesmoke;
-        max-height: 0;
-        overflow: hidden;
-        transition: max-height 0.2s ease-out;
-    }
-</style>
-<style>
-    .myTable {
-        font-family: Arial, Helvetica, sans-serif;
+<style type="text/css">              
+    /* Basic CSS to design table */
+    table {
         border-collapse: collapse;
         width: 100%;
-        font-size: 12px;
+    }
+
+    table th {
+        padding: 6px;
         text-align: center;
-
-
-    }
-
-    .myTable th:first-child {
-
-        border-radius: 0 0 0 0;
-    }
-
-    .myTable th:last-child {
-
-        border-radius: 0 0 0 0;
-    }
-
-    .myTable td,
-    .customers th {
-        border: 1px solid #ddd;
-        padding: 2px;
-    }
-
-    .myTable tr:nth-child(even) {
-        background-color: #f2f2f2;
-    }
-
-    /*
-    #myTable tr:hover {background-color: #ddd;}
-    */
-    .myTable th {
-        padding-top: 6px;
-        padding-bottom: 6px;
-        font-size: 12px;
-        text-align: center;
+        border-bottom: 1px solid #ddd;
         background-color: rgb(148, 214, 253);
-        color: rgb(34, 33, 33);
+    }
+    td {
+        padding: 6px;
+        text-align: center;
+        text-transform:capitalize;
+        border-bottom: 1px solid #ddd;
     }
 </style>
+    
+
 <style>
     .popupdiv {
         display: none;
@@ -126,14 +66,11 @@
         border-radius: 6px;
         padding: 0px 0px;
         position: absolute;
-        top: 0;
-        right: 6vw;
+        top: 0;        
         z-index: 99999999;
-
-
     }
 
-    /* Popup arrow */
+    /* Popup arrow 
     .popuptext::after {
         content: "";
         position: absolute;
@@ -143,7 +80,7 @@
         border-width: 5px;
         border-style: solid;
         border-color: #555 transparent transparent transparent;
-    }
+    } */
 
     /* Toggle this class when clicking on the popup container (hide and show the popup) */
     .showpopup {
@@ -185,23 +122,23 @@
         border-radius: 15px;
         background: radial-gradient(circle 12px, white 100%, transparent calc(100% + 1px)) rgb(125, 125, 125) -30px;
         transition: 0.3s ease-in-out;
-      }
-      
-      .comp::before {
-        content: "Unsent";      
+    }
+
+    .comp::before {
+        content: "Unsent";
         font: bold 12px/32px Verdana;
-        color: white;             
-      }
-      
-      :checked {
+        color: white;
+    }
+
+    :checked {
         padding-left: 8px;
         background-color: dodgerBlue;
         background-position: 30px;
-      }
-      
-      :checked::before {
+    }
+
+    :checked::before {
         content: "Sent";
-      }
+    }
 </style>
 {% endblock page_head %}
 
@@ -212,8 +149,8 @@
     <div class="base-modal-content col-l-12 col-m-12 col-s-12" style="margin-top:5px; padding: 5px;">
         <div class="base-modal-header" style="border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">
             <div class="col-l-10 col-m-10 col-s-9 col-8" style="float:left;">
-                <input id="consignee_input" placeholder="Select Consignee / Client" type="search"
-                    list="datalist" required style="text-transform:capitalize;" />
+                <input id="consignee_input" placeholder="Select Consignee / Client" type="search" list="datalist"
+                    required style="text-transform:capitalize;" />
                 <datalist id="datalist">
                     {% for cli in consigne %}
                     <option data-id="{{cli.id}}" client-id="{{cli.client_id_id}}"
@@ -223,25 +160,27 @@
                 </datalist>
             </div>
             <div class="col-l-2 col-m-2 col-s-3 col-4" style="text-align: center; 
-                        float:left;padding-right: 4px; padding-top:2px;">  
-                        <input type="checkbox" id="sentunsent" class="comp" />              
-                               
+                        float:left;padding-right: 4px; padding-top:2px;">
+                <input type="checkbox" id="sentunsent" class="comp" />
+
             </div>
 
 
         </div>
-        <div class="base-modal-body">
-            <div id="disp_div" class="col-l-12 col-m-12 col-s-12 col-">
+        <div class="base-modal-body" >
+            <div id="disp_div" style="top:0;bottom:0;max-height:75vh;" class="col-l-12 col-m-12 col-s-12 col-">
 
 
             </div>
         </div>
-
+        <div class="base-modal-footer" style="height: auto;">
+                      
+        </div>
     </div>
 </div>
 <!--fetch html content-->
 <div id="fetch-html-content" style="display:none;">
- 
+
 </div>
 <!--for send/transfer-->
 <div class="basemodal" id="dis_tran" style="position: absolute; display:none">
@@ -309,6 +248,8 @@
         <button style="width:12%; float: left; border-radius: 6px;" id="popupclose" onclick=popupclose()>X</button>
     </div>
 </div>
+
+
 {% endblock main_content%}
 
 
@@ -328,93 +269,91 @@
     const order1_div = document.getElementById('accordion');
     const mainDiv = document.getElementById('maindiv');
     const ord = document.getElementById('disp_div');
-    ord.style.maxHeight = 350 + "px";
+   // ord.style.maxHeight = 100+'vh';
     let dataFromFetch = '';
-  
-   
-   
+
+
+
 
     document.getElementById('consignee_input').addEventListener('change', show);
 
     let unshiped = document.getElementById('sentunsent');
-        unshiped.addEventListener('change',show)
-    
+    unshiped.addEventListener('change', show)
+
     function show() {
 
         let con_id = selectedDatalistAttributeValue('consignee_input', 'datalist', 'data-id');
         let client_id1 = selectedDatalistAttributeValue('consignee_input', 'datalist', 'client-id');
 
-        if(unshiped.checked){
-           
-        if(con_id != null)
-        {
-       
-        const data = { 'con_id': con_id };
+        if (unshiped.checked) {
 
-        fetch('/orders/api/ios_by_client_id/' + client_id1)
-            .then(function (response) {
-                if (!response.ok) {
-                    throw Error(response.statusText);
-                }
-                return response.json();
-            })
-            .then(data2 => {
-                consignee_ios = data2;
-                return fetch('/orders/order_item/', ajexcall.putoption(data))
+            if (con_id != null) {
+
+                const data = { 'con_id': con_id };
+
+                fetch('/orders/api/ios_by_client_id/' + client_id1)
                     .then(function (response) {
                         if (!response.ok) {
                             throw Error(response.statusText);
                         }
                         return response.json();
                     })
-                    .then(data1 => {
-                        dataFromFetch = data1; //all jSON data to dataFromfetch assign
-                        orders('dispatched', dataFromFetch);
+                    .then(data2 => {
+                        consignee_ios = data2;
+                        return fetch('/orders/order_item/', ajexcall.putoption(data))
+                            .then(function (response) {
+                                if (!response.ok) {
+                                    throw Error(response.statusText);
+                                }
+                                return response.json();
+                            })
+                            .then(data1 => {
+                                dataFromFetch = data1; //all jSON data to dataFromfetch assign
+                                orders('dispatched', dataFromFetch);
+                            })
+                            .catch(err => { alert(err); })
+
                     })
                     .catch(err => { alert(err); })
+            }
+            else { alert('Please Select Consignee / Client'); }
 
-            })
-            .catch(err => { alert(err); })
+
         }
-        else{alert('Please Select Consignee / Client');}
+        else {
 
+            if (con_id != null) {
 
-        }        
-        else{
-       
-        if(con_id != null)
-        {
-      
-        const data = { 'con_id': con_id };
+                const data = { 'con_id': con_id };
 
-        fetch('/orders/api/ios_by_client_id/' + client_id1)
-            .then(function (response) {
-                if (!response.ok) {
-                    throw Error(response.statusText);
-                }
-                return response.json();
-            })
-            .then(data2 => {
-                consignee_ios = data2;
-                return fetch('/orders/order_item/', ajexcall.putoption(data))
+                fetch('/orders/api/ios_by_client_id/' + client_id1)
                     .then(function (response) {
                         if (!response.ok) {
                             throw Error(response.statusText);
                         }
                         return response.json();
                     })
-                    .then(data1 => {
-                        dataFromFetch = data1; //all jSON data to dataFromfetch assign
-                        // console.log(data1);
-                        orders('undispatched', dataFromFetch);
+                    .then(data2 => {
+                        consignee_ios = data2;
+                        return fetch('/orders/order_item/', ajexcall.putoption(data))
+                            .then(function (response) {
+                                if (!response.ok) {
+                                    throw Error(response.statusText);
+                                }
+                                return response.json();
+                            })
+                            .then(data1 => {
+                                dataFromFetch = data1; //all jSON data to dataFromfetch assign
+                                // console.log(data1);
+                                orders('undispatched', dataFromFetch);
+
+                            })
+                            .catch(err => { alert(err); })
 
                     })
                     .catch(err => { alert(err); })
-
-            })
-            .catch(err => { alert(err); })
-        }
-        else{alert('Please Select Consignee / Client');}
+            }
+            else { alert('Please Select Consignee / Client'); }
         }
     };
 
@@ -434,36 +373,36 @@
         ord.innerHTML = '';
         let tb = document.createElement('table');
         tb.id = 'myTable';
-        tb.className = 'myTable';
+       
         tb.style = "text-align: center;";
         let the = document.createElement('thead');
-        the.style = 'text-align: center; font-size: 12px;';
+        the.style = 'text-align: center;';
         let tr = document.createElement('tr');
 
         let th0 = document.createElement('th');
         let th1 = document.createElement('th');
         let th2 = document.createElement('th');
         let th3 = document.createElement('th');
-        let th4 = document.createElement('th');
+       
 
         let tbody = document.createElement('tbody')
         let tht0 = document.createTextNode('Item');
         let tht1 = document.createTextNode('Price');
         let tht2 = document.createTextNode('Order');
         let tht3 = document.createTextNode('Bal');
-        let tht4 = document.createTextNode('');
+       
 
         th0.appendChild(tht0);
         th1.appendChild(tht1);
         th2.appendChild(tht2);
         th3.appendChild(tht3);
-        th4.appendChild(tht4);
+       
 
         tr.appendChild(th0);
         tr.appendChild(th1);
         tr.appendChild(th2);
         tr.appendChild(th3);
-        tr.appendChild(th4);
+       
 
         the.appendChild(tr);
         tb.appendChild(the);
@@ -520,12 +459,12 @@
                     //parseInt((data['items'][i]['item_qty'])-ois);
                     // alert(bal);
                     tbody.innerHTML += `
-              <tr><td colspan=5 style="text-align: left; padding:4px; font-weight:bold; background-color:lightgray;">${consignee_name + ' - ' + date}</td></tr>            
+              <tr><td colspan=4 style="text-align: left; font-weight:bold; background-color:lightgray;">${consignee_name + ' - ' + date}</td></tr>            
               <tr>        
-              <td style="text-align: center; font-size: 12px;">${item_name + ' ' + variant_name}</td>
-              <td style="text-align: center; font-size: 12px;">${dataFromFetch['items'][i]['item_veriant_price'] + ' /' + per_unit}</td>
-              <td style="text-align: center; font-size: 12px;">${dataFromFetch['items'][i]['item_qty'] + ' ' + order_unit}</td>
-              <td style="text-align: center; font-size: 12px;">${parseFloat((dataFromFetch['items'][i]['item_qty']) - ois).toFixed(1) + ' ' + order_unit}</td>          
+              <td style="text-align: center; ">${item_name + ' ' + variant_name}</td>
+              <td style="text-align: center; ">${dataFromFetch['items'][i]['item_veriant_price'] + ' /' + per_unit}</td>
+              <td style="text-align: center; ">${dataFromFetch['items'][i]['item_qty'] + ' ' + order_unit}</td>
+              <td style="text-align: center; ">${parseFloat((dataFromFetch['items'][i]['item_qty']) - ois).toFixed(1) + ' ' + order_unit}</td>          
               <td hidden>${client_id}</td>
               <td hidden>${consignee_id}</td>
               <td hidden>${dataFromFetch['items'][i]['id']}</td>
@@ -535,7 +474,7 @@
               <td hidden>${dataFromFetch['items'][i]['item_qty']}</td>
               <td hidden>${per_unit_id}</td>
               <td hidden>${order_unit_id}</td>
-              <td style="text-align: center; font-size: 12px;"><button class="optionBtn">&#8942;</button></td>      
+              <td hidden></td>      
               </tr>`;
 
                 }
@@ -547,12 +486,12 @@
                 if (parseFloat((dataFromFetch['items'][i]['item_qty']) - ois).toFixed(1) != 0.0 || parseFloat((dataFromFetch['items'][i]['item_qty']) - ois).toFixed(1) < 0.0) {
 
                     tbody.innerHTML += `
-              <tr><td colspan=5 style="text-align: left; padding:4px; font-weight:bold; background-color:lightgray;">${consignee_name + ' - ' + date}</td></tr>            
+              <tr><td colspan=4 style="text-align:left; font-weight:bold; background-color:lightgray;">${consignee_name + ' - ' + date}</td></tr>            
               <tr>        
-              <td style="text-align: center; font-size: 12px;">${item_name + ' ' + variant_name}</td>
-              <td style="text-align: center; font-size: 12px;">${dataFromFetch['items'][i]['item_veriant_price'] + ' /' + per_unit}</td>
-              <td style="text-align: center; font-size: 12px;">${dataFromFetch['items'][i]['item_qty'] + ' ' + order_unit}</td>
-              <td style="text-align: center; font-size: 12px;">${parseFloat((dataFromFetch['items'][i]['item_qty']) - ois).toFixed(1) + ' ' + order_unit}</td>          
+              <td style="text-align: center;">${item_name + ' ' + variant_name}</td>
+              <td style="text-align: center;">${dataFromFetch['items'][i]['item_veriant_price'] + ' /' + per_unit}</td>
+              <td style="text-align: center;">${dataFromFetch['items'][i]['item_qty'] + ' ' + order_unit}</td>
+              <td style="text-align: center;">${parseFloat((dataFromFetch['items'][i]['item_qty']) - ois).toFixed(1) + ' ' + order_unit}</td>          
               <td hidden>${client_id}</td>
               <td hidden>${consignee_id}</td>
               <td hidden>${dataFromFetch['items'][i]['id']}</td>
@@ -562,46 +501,21 @@
               <td hidden>${dataFromFetch['items'][i]['item_qty']}</td>
               <td hidden>${per_unit_id}</td>
               <td hidden>${order_unit_id}</td>
-              <td style="text-align: center; font-size: 12px;"><button class="optionBtn">&#8942;</button></td>      
+              <td hidden></td>      
               </tr>`;
 
                 }
             }
         }
-        caltab('myTable');    
-    }
-
-    function accordenmenu() {
-        var acc = document.getElementsByClassName("accordion");
-        var pa = document.getElementsByClassName('panel');
-        var i;
-        var p1;
-        for (i = 0; i < acc.length; i++) {
-
-            acc[i].addEventListener("click", function () {
-                this.classList.toggle("active");
-                var panel = this.nextElementSibling;
-                if (panel.style.maxHeight) {
-                    panel.style.maxHeight = null;
-                } else {
-                    for (let j = 0; j < acc.length; j++) {
-                        if (pa[j].style.maxHeight) {
-                            pa[j].style.maxHeight = null;
-                            acc[j].classList.remove("active");
-                        }
-                    }
-                    panel.style.maxHeight = panel.scrollHeight + "px";
-                    // alert( panel.style.maxHeight);
-                }
-            });
-        }
+        caltab('myTable');
     }
 
     function caltab(table_id) {
         document.getElementById(table_id)
             .addEventListener('click', function (e) {
                 tablerowdata = '';
-                if (e.target.classList.contains('optionBtn')) {
+              //  if (e.target.classList.contains('optionBtn')) {
+                
                     e = e || window.event;
                     var data = [];
                     var target = e.srcElement || e.target;
@@ -616,11 +530,20 @@
                         }
 
                     }
-                    popupcordinate(e);
-                    tablerowdata = data;
+                    if (!cells.length || target.parentNode.nodeName == 'THEAD') { // if clicked row is within thead
+            return;
+        }
+                  let  select_cells=cells.length;
+
+                    if(select_cells%2==0)
+                    {
+                   popupcordinate(e);
+                   tablerowdata = data;
+                  //alert(select_cells)
+                    }
                     // alert(data);        
 
-                }
+              //  }
 
 
             });
@@ -640,7 +563,16 @@
     function popupcordinate(event) {
         var x = event.offsetX;
         var y = event.offsetY;
-        popup.style.marginTop = event.clientY - 75 - y + "px";
+        var w = event.offsetWidth;
+        popup.style.marginTop = event.clientY - 70 - y + "px";
+        if(event.clientX<100){
+        popup.style.marginLeft = event.clientX+"px";
+        }
+        else if(event.clientX>100 && event.clientX<200){popup.style.marginLeft = event.clientX-100 +"px";}
+        else if(event.clientX>200 && event.clientX<290){popup.style.marginLeft = event.clientX-200 +"px";}
+        else{ popup.style.marginLeft = event.clientX-300 +"px";}
+       // alert(event.clientX +" " + x);
+      //  popup.style.marginTop = event.screenY - 195-y + "px";
         // popup.style.marginLeft=event.clientX-230-x +"px";
         // popup.style.right=event.clientX-x +"px";
         popupdiv.style.display = 'block';
@@ -648,34 +580,79 @@
     }
 
 
-    document.getElementById('edit_order').addEventListener('click',function(){
-      // console.log(tablerowdata);
-       let item_qty = tablerowdata[2].split(' ');
-       let sent_qty = tablerowdata[3].split(' ');
-      
-        if( parseFloat(item_qty[0]).toFixed(1) ==  parseFloat(sent_qty[0]).toFixed(1))
-        {
-         window.location = '/orders/edit_disp_trans/'+tablerowdata[6];    
+    document.getElementById('edit_order').addEventListener('click', function () {
+        // console.log(tablerowdata);
+        let item_qty = tablerowdata[2].split(' ');
+        let sent_qty = tablerowdata[3].split(' ');
+
+        if (parseFloat(item_qty[0]).toFixed(1) == parseFloat(sent_qty[0]).toFixed(1)) {
+           // window.location = '/orders/edit_disp_trans/' + tablerowdata[6];
+
+           fetch('orders/edit_disp_trans/' + tablerowdata[6]+'/')
+            .then(function (response) {
+                if (!response.ok) {
+                    throw Error(response.statusText);
+                }
+                return response.text();
+            })
+            .then( function (edit_order)  {
+                document.getElementById('fetch-html-content').innerHTML = edit_order;
+                var scripts = document.getElementById("fetch-html-content").querySelectorAll("script");
+                for (var i = 0; i < scripts.length; i++) {
+                    if (scripts[i].innerText) {
+                        eval(scripts[i].innerText);
+                    } else {
+                        fetch(scripts[i].src).then(function (data) {
+                            data.text().then(function (r) {
+                                eval(r);
+                            })
+                        });
+
+                    }
+                    // To not repeat the element
+                    scripts[i].parentNode.removeChild(scripts[i]);
+                }
+                hide();
+                document.getElementById('fetch-html-content').style.display = 'block';
+            })
+            .catch(err => { alert(err); })
+        document.getElementById('popupdiv').style.display = 'none';
         }
-        else{
+        else {
             alert('Item not edit able');
         }
     })
 
-    document.getElementById('dispatch_details').addEventListener('click',function(){
-        document.getElementById('fetch-html-content').style.display = 'block';
-        fetch('orders/item_order_status/'+tablerowdata[6]+'/')
-        .then(function(response){
-            if(!response.ok){
-                throw Error(response.statusText);
-            }
-            return response.text();
-        })
-        .then(order_sent=>{
-            document.getElementById('fetch-html-content').innerHTML=order_sent;
-            hide();
-        })        
-        .catch(err=>{alert(err);})
+    document.getElementById('dispatch_details').addEventListener('click', function () {
+       
+        fetch('orders/item_order_status/' + tablerowdata[6] + '/')
+            .then(function (response) {
+                if (!response.ok) {
+                    throw Error(response.statusText);
+                }
+                return response.text();
+            })
+            .then( function (order_sent)  {
+                document.getElementById('fetch-html-content').innerHTML = order_sent;
+                var scripts = document.getElementById("fetch-html-content").querySelectorAll("script");
+                for (var i = 0; i < scripts.length; i++) {
+                    if (scripts[i].innerText) {
+                        eval(scripts[i].innerText);
+                    } else {
+                        fetch(scripts[i].src).then(function (data) {
+                            data.text().then(function (r) {
+                                eval(r);
+                            })
+                        });
+
+                    }
+                    // To not repeat the element
+                    scripts[i].parentNode.removeChild(scripts[i]);
+                }
+                hide();
+                document.getElementById('fetch-html-content').style.display = 'block';
+            })
+            .catch(err => { alert(err); })
         document.getElementById('popupdiv').style.display = 'none';
     })
 
@@ -792,7 +769,7 @@
                     return response.json(); // Convert response to json use text for text
                 })
                 .then(data3 => {
-                  
+
                     if (data3['status'] == 'transferred') {
                         let ordobj = {
                             "date": data3['date'],
@@ -807,7 +784,7 @@
                             "order_type": "transferred",
                             "comment": document.getElementById('dispatch_coments').value
                         }
-                   
+
                         fetch('/orders/api/order_item/', ajexcall.postoption(ordobj))
                             .then(function (response) {
                                 if (!response.ok) {
@@ -818,7 +795,7 @@
                             .catch(err => { alert(err); })
 
                     }
-                 
+
                     const data23 = { 'con_id': data3['consignee_id'] };
                     fetch('/orders/api/ios_by_client_id/' + data3['client_id'])
                         .then(function (response) {
@@ -849,7 +826,7 @@
 
                         })
                         .catch(err => { alert(err); })
-                    
+
                 })
                 .catch(err => { alert(err); })
 
@@ -862,20 +839,15 @@
 </script>
 <script>
 
-  //  alert(document.getElementById('fetch-html-content').style.display);
+    //  alert(document.getElementById('fetch-html-content').style.display);
 
-    if(document.getElementById('fetch-html-content').style.display!='none')
-    {     
-      hide();
-    }
-   
-    function hide(){
-        document.getElementById('hide').addEventListener('click',function(){
-            document.getElementById('fetch-html-content').style.display='none';
+    function hide() {
+        document.getElementById('hide').addEventListener('click', function () {
+            document.getElementById('fetch-html-content').style.display = 'none';
         })
     }
 
-    
+
 
     function popupclose() {
         let popupdiv = document.getElementById('popupdiv');
@@ -888,7 +860,7 @@
         }
     }
 
-  
+
 
 </script>
 

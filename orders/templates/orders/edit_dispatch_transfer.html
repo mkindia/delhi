@@ -1,7 +1,4 @@
-{% extends 'core/base.html' %}
-{% block title %}edit status {% endblock title %}
 
-{% block main_content %}
 
 <div class="basemodal" id="item_modal" style="position: absolute;">
 
@@ -87,8 +84,8 @@
         </div>
 
         <div class="base-modal-footer">
-            <button type="button" id="exit_item" class="buttonstyle"
-                style="float:right; margin-right: 10px; margin-bottom: 10px;" onclick=history.back()>Exit</button>
+            <button type="button" id="hide" class="buttonstyle"
+                style="float:right; margin-right: 10px; margin-bottom: 10px;">Exit</button>
             <button class="buttonstyle" form="update-form" id="add_item"
                 style="float:right; margin-right: 10px; margin-bottom: 10px;">Update</button>
 
@@ -98,11 +95,11 @@
 
 </div>
 
-{% endblock main_content%}
 
-{% block main_scripts %}
+
+
 <script type="module">
-    import * as ajexcall from "/static/core/js/modules/ajex.js";   
+   // import * as ajexcall from "/static/core/js/modules/ajex.js";   
     let items_data ;
     let item_variant_data;
     let unit ;
@@ -236,4 +233,3 @@
     })
 }
 </script>
-{% endblock main_scripts %}

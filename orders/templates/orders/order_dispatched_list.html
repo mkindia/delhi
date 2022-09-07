@@ -1,35 +1,67 @@
 
+                <style type="text/css">
+                   
+                    h1 {
+                        color: green;
+                    }
+              
+                    /* Basic CSS to design table */
+                    table {
+                        border-collapse: collapse;
+                        width: 100%;
+                    }
+              
+                    table th {
+                        padding: 6px;
+                        text-align: center;
+                        border-bottom: 1px solid #ddd;
+                        background-color: rgb(148, 214, 253);
+                    }
+                    td {
+                        padding: 6px;
+                        text-align: center;
+                        text-transform:capitalize;
+                        border-bottom: 1px solid #ddd;
+                    }
+              
+                    /* CSS command for the row to highlight */
+                    .highlight {
+                        background-color: #b8b8b8;
+                    }
+                </style>
+            
 <div class="basemodal" style="position: absolute;">
 
     <div class="base-modal-content col-l-6 col-m-9 col-s-11" style="margin-top:5px;">
         <div class="base-modal-header">
             <h
                 style="position: relative; font-weight: bold; margin:0; top: 25%; -ms-transform: translateY(-50%);transform: translateY(-50%);">
-                Sent Details
+                Dispatched/Tranfred Details
             </h>
         </div>
         <div class="base-modal-body">
-            <table id="sent-details-table" class="myTable" style="text-align:center;">
-                <thead style="text-align: center; font-size: 12px;">
-                    <tr>
-                        <th>Date</th>
-                        <th>Qty</th>
-                        <th>Status</th>
-                        <th>.</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for status in dispatched %}                    
-                    <tr>
-                    <td>{{status.date}}</td>
-                    <td> {{status.item_qty}} </td>
-                    <td style="text-transform:capitalize;">{{status.status}} {% if status.transfer_id != None  %} to {{status.transfer_id}} {% else %} Docket No. {{status.docket_number}} {% endif %} </td>
-                    <td>.</td>
-                    </tr>
-                    {% endfor %}
-                   
-                </tbody>
-            </table>
+                         
+                <table id="table_to_highlight" style="text-align:center;">
+                    <thead style="text-align: center;">
+                        <tr>
+                            <th>Date</th>
+                            <th>Qty</th>
+                            <th>Status</th>
+                           
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for status in dispatched %}                    
+                        <tr>
+                        <td>{{status.date}}</td>
+                        <td> {{status.item_qty}} </td>
+                        <td>{{status.status}} {% if status.transfer_id != None  %} to {{status.transfer_id}} {% else %} Docket No. {{status.docket_number}} {% endif %} </td>
+                       
+                        </tr>                    
+                        {% endfor %}
+                       
+                    </tbody></table>
+              
         </div>
         <div class="base-modal-footer">
             <button type="button" id="hide" class="buttonstyle"
@@ -38,3 +70,26 @@
         </div>
     </div>
 </div>
+
+
+
+<script type="text/javascript">
+              
+    // JavaScript Code to Highlight any
+    // row in the given table.
+    document.getElementById('table_to_highlight')
+        .addEventListener('click', function (event) {      
+        event = event || window.event; //for IE8 backward compatibility
+        let target = event.target || event.srcElement; //for IE8 backward compatibility
+        while (target && target.nodeName != 'TR') {
+            target = target.parentElement;
+        }
+        let cells = target.cells; //cells collection
+        //var cells = target.getElementsByTagName('td'); //alternative
+        if (!cells.length || target.parentNode.nodeName == 'THEAD') { // if clicked row is within thead
+            return;
+        }
+
+        alert(cells[1].innerHTML+' | '+cells[2].innerHTML + document.getElementById('table_to_highlight').rows.length);
+        });
+</script>
