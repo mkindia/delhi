@@ -42,6 +42,7 @@ def home(request):
        else:
               
               clients=Client.objects.filter(user_id=request.user)
+              allClients = Client.objects.all()
               consignes = Consignee.objects.filter(client_id__in=clients)             
               if request.user.is_user:
                      try:
@@ -56,7 +57,11 @@ def home(request):
               item_arry =[]
               item_variants_arry = []
               unit_arry =[]
-              consignee_arry =[]
+              consignee_arry =[] 
+              allConsignee_arry =[] 
+              for allcon in Consignee.objects.all():
+                     allConsignee_arry.append({'consignee_id':allcon.id,'consignee_name':allcon.consignee_name})
+              allconsignee_names=json.dumps(allConsignee_arry)            
               for con in Consignee.objects.filter(client_id__in=clients):
                      consignee_arry.append({'consignee_id':con.id,'consignee_name':con.consignee_name})
               consigne_names=json.dumps(consignee_arry)
@@ -77,7 +82,15 @@ def home(request):
                             'item_variants':item_variants,
                             'unit':unit,
                             }
-              
+              manager_context ={'client':allClients,
+                            'consigne':Consignee.objects.filter(client_id__in=allClients),
+                            'consignee_names':allconsignee_names,
+                            'items':items,
+                            'item_variants':item_variants,
+                            'unit':unit,
+                            }
+              if request.user.is_manager:
+                     return render(request,'core/manager_dashboard.html',manager_context)
               if request.user.is_admin :                    
                      return render(request,'clients/admin_dashboard.html',admin_context)
               if request.user.is_staff :                    

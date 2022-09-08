@@ -73,6 +73,7 @@ class Custom_User(AbstractBaseUser):
     password = models.CharField(max_length=150)
     is_admin = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
+    is_manager = models.BooleanField(default=False)
     is_user =  models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)   
     date_joined = models.DateTimeField(auto_now_add=True, blank=True,null=True)
@@ -100,14 +101,20 @@ class Custom_User(AbstractBaseUser):
     @property
     def staff(self):
         "Is the user a member of staff?"
-        # Simplest possible answer: All admins are staff
+        # Simplest possible answer: All staff are staff
         return self.is_staff 
     
     @property
     def admin(self):
-        "Is the user a member of staff?"
-        # Simplest possible answer: All admins are staff
+        "Is the user a member of admin?"
+        # Simplest possible answer: All admins are admin
         return self.is_admin
+
+    @property
+    def manager(self):
+        "Is the user a member of admin?"
+        # Simplest possible answer: All admins are admin
+        return self.is_manager
 
     @property
     def user(self):

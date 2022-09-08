@@ -47,24 +47,24 @@ class UsersChangeForm(forms.ModelForm):
 
     class Meta:
         model = Custom_User
-        fields = ('email', 'password', 'is_active', 'is_staff', 'is_user')
+        fields = ('email', 'password', 'is_active', 'is_staff','is_admin','is_manager' , 'is_user')
 
 
 
 class UsersAdmin(BaseUserAdmin):
     form = UsersChangeForm
     add_form = UsersCreationForm   
-    list_display = ('user_name','email', 'first_name', 'last_name', 'is_admin','is_staff','is_user','is_active','date_joined')
+    list_display = ('user_name','email', 'first_name', 'last_name', 'is_admin','is_staff','is_manager','is_user','is_active','date_joined')
     list_filter = ('user_name',)
     fieldsets = (
         (None, {'fields': ('email',)}),
         ('Personal info',{'fields':('user_img','first_name','last_name',)}),
-        ('Permissions', {'fields': ('is_admin','is_staff', 'is_active', 'is_user')}),
+        ('Permissions', {'fields': ('is_admin','is_staff','is_manager','is_active', 'is_user')}),
     )
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('user_name','email', 'first_name' , 'last_name' , 'password1', 'password2', 'is_admin','is_staff', 'is_active')}
+            'fields': ('user_name','email', 'first_name' , 'last_name' , 'password1', 'password2', 'is_admin','is_staff','is_manager','is_active')}
         ),
     )
     search_fields = ('user_name',)
