@@ -15,7 +15,7 @@ from .forms import (UserProfile_imgform,UserProfile_changeform
 ,UserSetPasswordForm,ChangePasswordForm, UsersCreationForm,Userauthform)
 
 from .models import *
-from items.models import Item,Item_Variant,Unit
+from items.models import Item,Item_Variant
 from clients.models import Client, Client_Token,Consignee
 import os
 
@@ -71,8 +71,7 @@ def home(request):
               for iv in Item_Variant.objects.all():
                      item_variants_arry.append({'variant_id':iv.id,'variant_name':iv.variant_name})
               item_variants =json.dumps(item_variants_arry)
-              for u in Unit.objects.all():
-                     unit_arry.append({'unit_id':u.id,'unit_name':u.unit_name})        
+              
               unit=json.dumps(unit_arry)
               
               admin_context ={'client':clients,
@@ -80,14 +79,14 @@ def home(request):
                             'consignee_names':consigne_names,
                             'items':items,
                             'item_variants':item_variants,
-                            'unit':unit,
+                           
                             }
               manager_context ={'client':allClients,
                             'consigne':Consignee.objects.filter(client_id__in=allClients),
                             'consignee_names':allconsignee_names,
                             'items':items,
                             'item_variants':item_variants,
-                            'unit':unit,
+                          
                             }
               if request.user.is_manager:
                      return render(request,'core/manager_dashboard.html',manager_context)

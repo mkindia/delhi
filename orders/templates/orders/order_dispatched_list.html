@@ -1,9 +1,5 @@
 
-                <style type="text/css">
-                   
-                    h1 {
-                        color: green;
-                    }
+                <style type="text/css">                  
               
                     /* Basic CSS to design table */
                     table {
@@ -15,7 +11,7 @@
                         padding: 6px;
                         text-align: center;
                         border-bottom: 1px solid #ddd;
-                        background-color: rgb(148, 214, 253);
+                        background-color: rgb(148, 214, 253); 
                     }
                     td {
                         padding: 6px;
@@ -36,7 +32,7 @@
         <div class="base-modal-header">
             <h
                 style="position: relative; font-weight: bold; margin:0; top: 25%; -ms-transform: translateY(-50%);transform: translateY(-50%);">
-                Dispatched/Tranfred Details
+                Dispatched / Transfred Details
             </h>
         </div>
         <div class="base-modal-body">
@@ -44,6 +40,7 @@
                 <table id="table_to_highlight" style="text-align:center;">
                     <thead style="text-align: center;">
                         <tr>
+                            <th hidden>id</th>
                             <th>Date</th>
                             <th>Qty</th>
                             <th>Status</th>
@@ -53,9 +50,11 @@
                     <tbody>
                         {% for status in dispatched %}                    
                         <tr>
+                        <td hidden>{{status.id}}</td>
+                        <td hidden>{{status.item_order_id}}</td>
                         <td>{{status.date}}</td>
                         <td> {{status.item_qty}} </td>
-                        <td>{{status.status}} {% if status.transfer_id != None  %} to {{status.transfer_id}} {% else %} Docket No. {{status.docket_number}} {% endif %} </td>
+                        <td> {% if status.transfer_id != None  %} {{status.status}} to {{status.transfer_id}} {% else %} {{status.transport}} / {{status.docket_number}} {% endif %} </td>
                        
                         </tr>                    
                         {% endfor %}
@@ -71,14 +70,25 @@
     </div>
 </div>
 
+<div class="popupdiv" id="option_div" style="display:none;">
+    <div class="popuptext" id="myOption" style="width: 150px;">
+        <button style="width:38%; float: left; border-radius: 6px;" id="edit_dispatched">Edit</button>       
+        <button style="width:38%; float: left; border-radius: 6px;" id="delete_order">Delete</button>        
+        <button style="width:24%; float: left; border-radius: 6px;" id="statusoption">X</button>
+    </div>
+</div>
+<div id="edit_order_status" style="display:none;">
 
+</div>
 
 <script type="text/javascript">
-              
+    
+    let dis_trn_details_row = [];
+   
     // JavaScript Code to Highlight any
     // row in the given table.
-    document.getElementById('table_to_highlight')
-        .addEventListener('click', function (event) {      
+    document.getElementById('table_to_highlight').addEventListener('click', function (event) {
+        dis_trn_details_row = []  ;
         event = event || window.event; //for IE8 backward compatibility
         let target = event.target || event.srcElement; //for IE8 backward compatibility
         while (target && target.nodeName != 'TR') {
@@ -89,7 +99,81 @@
         if (!cells.length || target.parentNode.nodeName == 'THEAD') { // if clicked row is within thead
             return;
         }
+        for (let d in cells)
+        {
+            dis_trn_details_row.push(cells[d].innerHTML);
+            
+        }
+    
+        var x = event.offsetX;
+        var y = event.offsetY;
+        var w = event.offsetWidth;
+        myOption.style.marginTop = event.clientY - 70 - y + "px";
+        if (event.clientX < 75) {
+            myOption.style.marginLeft = event.clientX + "px";
+        }
+        else if (event.clientX > 75 && event.clientX < 100) { myOption.style.marginLeft = event.clientX - 75 + "px"; }
+        else if (event.clientX > 100 && event.clientX < 140) { myOption.style.marginLeft = event.clientX - 100 + "px"; }
+        else { myOption.style.marginLeft = event.clientX - 150 + "px"; }       
+        option_div.style.display = 'block';      
+      edit_dispatched();
+    });
 
-        alert(cells[1].innerHTML+' | '+cells[2].innerHTML + document.getElementById('table_to_highlight').rows.length);
-        });
+
+function edit_dispatched(){
+    document.getElementById('edit_dispatched').addEventListener('click', function () {  
+         
+        let item_qty = tablerowdata[3].split(' ');
+        
+        fetch('orders/order_status_edit/' + dis_trn_details_row[0] + '/')
+            .then(function (response) {
+                if (!response.ok) {
+                    throw Error(response.statusText);
+                }
+                return response.text();
+            })
+            .then(function (order_sent) {
+                document.getElementById('edit_order_status').innerHTML = order_sent;
+                var scripts = document.getElementById("edit_order_status").querySelectorAll("script");
+                for (var i = 0; i < scripts.length; i++) {
+                    if (scripts[i].innerText) {
+                        eval(scripts[i].innerText);
+                    } else {
+                        fetch(scripts[i].src).then(function (dispatch_transfer) {
+                            dispatch_transfer.text().then(function (r) {
+                                eval(r);
+                            })
+                        });
+
+                    }
+                    // To not repeat the element
+                    scripts[i].parentNode.removeChild(scripts[i]);
+                }
+                hide();
+                document.getElementById('edit_order_status').style.display = 'block';
+            })
+            .catch(err => { alert(err); })
+        document.getElementById('popupdiv').style.display = 'none';               
+           
+    })
+
+}
+    const option_div = document.getElementById('option_div');
+    const myOption = document.getElementById("myOption");
+
+   
+    document.getElementById('statusoption').addEventListener('click',function(){
+
+        document.getElementById('option_div').style.display = 'none';    
+        console.log(dis_trn_details_row);
+    })
+
+    window.onclick = function (event) {
+        if (event.target.className == 'popupdiv') {
+           // alert(event.target.id);
+            document.getElementById(event.target.id).style.display = 'none';    
+        }
+    }
+   
+
 </script>

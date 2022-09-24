@@ -11,15 +11,15 @@
     <a id="backbtn" onclick="showhide1()" class="noselect hide">&#10094;</a>
   </div>
   <div id="menuitembody" class="menuitembody">
-    {% if user.is_admin or user.is_staff %}
+    {% if user.is_admin or user.is_staff  or user.is_manager %}
     <a id="party_menu" class="amenuitembtn" onclick="showhide('party_menu','party_menu_items')">Clients</a>
     {% endif %}
     <a id="consignee_menu" class="amenuitembtn" onclick="showhide('consignee_menu','consignee_menu_items')">Consignees</a>
-    {% if user.is_staff or user.is_admin %}
+    {% if user.is_staff or user.is_admin or user.is_manager %}
     <a id="items_menu" class="amenuitembtn" onclick="showhide('items_menu','items_menu_items')">Items</a>
     {% endif %}
     <a id="som" class="amenuitembtn" onclick="showhide('som','som_item')">Orders</a>
-    {% if user.is_staff or user.is_admin %}
+    {% if user.is_staff or user.is_admin or user.is_manager %}
     <a id="pom" class="amenuitembtn" onclick="showhide('pom','pom_item')">Purchase</a>
     {% endif %}
   </div>
@@ -41,7 +41,7 @@
   <div id="party_menu_items" class="showdiv">
     <a href="{% url 'add_client' %}" id="add-party" onclick="menumodelHide()" class="asubmenuitem">Add Client</a>
     <a id="edit-party" class="asubmenuitem">Edit Client</a>
-    {% if user.is_staff %}
+    {% if user.is_staff or user.is_manager%}
     <a href="{% url 'add_client' %}"  id="delete-party1" class="asubmenuitem">Delete Client</a>
     {% endif %}
     <a id="genrate-token" href="{% url 'genrate_client_token' %}" class="asubmenuitem">Genrate Client Token</a>

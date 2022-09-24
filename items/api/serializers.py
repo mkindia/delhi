@@ -1,6 +1,6 @@
 
 from rest_framework import serializers
-from items.models import Item_Group,Unit,Item,Item_Variant
+from items.models import Item_Group,Item,Item_Variant
 
 class itemGroupSerializers(serializers.ModelSerializer):   
     class Meta:
@@ -13,10 +13,7 @@ class itemSerializers(serializers.ModelSerializer):
         model=Item
         fields='__all__'
 
-class unitSerializers(serializers.ModelSerializer):
-    class Meta:
-        model=Unit
-        fields='__all__'
+
 
 class itemVariantSerializers(serializers.ModelSerializer):
     class Meta:

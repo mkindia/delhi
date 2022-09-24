@@ -1,115 +1,147 @@
-{% extends 'core/base.html' %}
-{% load static %}
-{% block title %}neworders{% endblock title %}
-
-{% block page_head %}
+{% extends 'core/base.html' %} {% load static %} {% block title %}neworders
+{% endblock title %} {% block page_head %}
 <style>
-    #myTable {
-        font-family: Arial, Helvetica, sans-serif;
-        border-collapse: collapse;
-        width: 100%;
-        font-size: 12px;
-        text-align: center;
+  #myTable {
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 12px;
+    text-align: center;
+  }
 
+  #myTable th:first-child {
+    border-radius: 0 0 0 0;
+  }
 
-    }
+  #myTable th:last-child {
+    border-radius: 0 0 0 0;
+  }
 
-    #myTable th:first-child {
+  #myTable td,
+  #customers th {
+    border: 1px solid #ddd;
+    padding: 2px;
+  }
 
-        border-radius: 0 0 0 0;
-    }
+  #myTable tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
 
-    #myTable th:last-child {
-
-        border-radius: 0 0 0 0;
-    }
-
-    #myTable td,
-    #customers th {
-        border: 1px solid #ddd;
-        padding: 2px;
-    }
-
-    #myTable tr:nth-child(even) {
-        background-color: #f2f2f2;
-    }
-
-    /*
+  /*
     #myTable tr:hover {background-color: #ddd;}
     */
-    #myTable th {
-        padding-top: 6px;
-        padding-bottom: 6px;
-        font-size: 12px;
-        text-align: center;
-        background-color: #047eaa;
-        color: white;
-    }
+  #myTable th {
+    padding-top: 6px;
+    padding-bottom: 6px;
+    font-size: 12px;
+    text-align: center;
+    background-color: #047eaa;
+    color: white;
+  }
 </style>
-{% endblock page_head %}
-
-
-{% block main_content %}
+{% endblock page_head %} {% block main_content %}
 
 <div class="basemodal">
-    <!-- Modal content -->
-    <div class="base-modal-content col-l-6 col-m-9 col-s-11" style="margin-top:5px;">
-        <div class="base-modal-header">
-            <h
-                style="position: relative; font-weight: bold; margin:0; top: 25%; -ms-transform: translateY(-50%);transform: translateY(-50%);">
-                Add Orders
-            </h>
+  <!-- Modal content -->
+  <div
+    class="base-modal-content col-l-6 col-m-9 col-s-11"
+    style="margin-top: 5px"
+  >
+    <div class="base-modal-header">
+      <h
+        style="
+          position: relative;
+          font-weight: bold;
+          margin: 0;
+          top: 25%;
+          -ms-transform: translateY(-50%);
+          transform: translateY(-50%);
+        "
+      >
+        Add Orders
+      </h>
+    </div>
+    <input type="hidden" name="clientgroup" id="h_cg" />
+    <div class="base-modal-body">
+      <form id="order-item-form" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{ request.path }}" />
+        <div id="Con_div">
+          <div
+            class="col-l-6 col-m-6 col-s-6 col-7"
+            style="float: left; padding: 2px"
+          >
+            <label for="id_email">Select Consignee/Client</label>
+            <input
+              id="consignee_input"
+              name="consignee_input"
+              placeholder="Select Consignee"
+              type="search"
+              value=""
+              list="consignee_list"
+              required
+              style="text-transform: capitalize"
+            />
+            <datalist id="consignee_list" style="text-transform: capitalize">
+              {% for cli in consignes %}
 
+              <option
+                data-id="{{cli.id}}"
+                client-id="{{cli.client_id}}"
+                value="{{cli.consignee_name}}{% if not user.is_user %}/{{cli.client_id}}{% endif %}"
+              ></option>
+
+              {% endfor %}
+            </datalist>
+          </div>
+
+          <div
+            class="col-l-6 col-m-6 col-s-6 col-5"
+            style="float: left; padding: 1px"
+          >
+            <label for="id_email">Date</label>
+            <input
+              type="Date"
+              name="date"
+              class="inputstyle"
+              style="padding: 3px"
+              {% if user.is_user %}
+              disabled="True"
+              {% endif %}
+              required
+              id="id_date"
+            />
+          </div>
         </div>
-        <input type="hidden" name="clientgroup" id="h_cg">
-        <div class="base-modal-body">
-            <form id="order-item-form" method="POST">
-                {% csrf_token %}
-                <input type="hidden" name="next" value="{{ request.path }}">
-                <div id="Con_div">
-                    <div class="col-l-6 col-m-6 col-s-6 col-7" style="float:left; padding:2px;">
-                        <label for="id_email">Select Consignee/Client</label>
-                        <input id="consignee_input" name="consignee_input" placeholder="Select Consignee" type="search"
-                            value="" list="consignee_list" required style="text-transform:capitalize;" />
-                        <datalist id="consignee_list" style="text-transform:capitalize; ">
 
-                            {% for cli in consignes %}
-
-                            <option data-id="{{cli.id}}" client-id="{{cli.client_id}}"
-                                value="{{cli.consignee_name}}{% if not user.is_user %}/{{cli.client_id}}{% endif %}"> </option>
-
-                            {% endfor %}
-                        </datalist>
-
-                    </div>
-
-                    <div class="col-l-6 col-m-6 col-s-6 col-5" style="float:left; padding:1px;">
-                        <label for="id_email">Date</label>
-                        <input type="Date" name="date" class="inputstyle" style="padding: 3px;" {% if user.is_user %}
-                            disabled="True" {% endif %} required id="id_date">
-                    </div>
-                </div>
-
-
-                <div id="orders_div" class="col-l-12 col-m-12 col-s-12 col-"
-                    style="float:left; border-radius: 5px; padding:2px; height: 150px; overflow-y: auto;">
-                    <table id="myTable">
-                        <thead>
-                            <tr style="font-size: 12px;">
-                                <th>SN.</th>
-                                <th>Item Name</th>
-                                <th>Varient</th>
-                                <th>Price</th>
-                                <th>Per</th>
-                                <th>Qty.</th>
-                                <th>Order Unit</th>
-                                <th>&#8942;</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
-                <!--
+        <div
+          id="orders_div"
+          class="col-l-12 col-m-12 col-s-12 col-"
+          style="
+            float: left;
+            border-radius: 5px;
+            padding: 2px;
+            height: 150px;
+            overflow-y: auto;
+          "
+        >
+          <table id="myTable">
+            <thead>
+              <tr style="font-size: 12px">
+                <th>SN.</th>
+                <th>Item Name</th>
+                <th>Varient</th>
+                <th>Price</th>
+                <th>Per</th>
+                <th>Qty.</th>
+                <th>Order Unit</th>
+                <th>&#8942;</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <!--
                 <div class="col-l-12 col-m-12 col-s-12 col-" style="float:left; padding:2px;">
                     <label for="id_email">Comment</label>
                     <input type="text" name="itemname" id="comment" style="background-color: aliceblue; opacity: .7;"
@@ -125,255 +157,388 @@
 
                 </div>
                 -->
-
-            </form>
-
-
-        </div>
-        <div class="base-modal-footer">
-
-            <button type="button" class="buttonstyle" onclick="history.back()"
-                style="text-decoration: none; float:right; margin-right:10px;"><i> Exit
-                </i></button>
-            <button id="submit" class="buttonstyle" form="order-item-form"
-                style="float:right; margin-right: 10px;">Place-Order</button>
-            <button type="button" id="select_item" class="buttonstyle"
-                style="float:right; margin-right: 5px; background-color: aquamarine; display: none;">Select
-                Items</button>
-
-        </div>
+      </form>
     </div>
-
+    <div class="base-modal-footer">
+      <button
+        type="button"
+        class="buttonstyle"
+        onclick="history.back()"
+        style="text-decoration: none; float: right; margin-right: 10px"
+      >
+        <i> Exit </i>
+      </button>
+      <button
+        id="submit"
+        class="buttonstyle"
+        form="order-item-form"
+        style="float: right; margin-right: 10px"
+      >
+        Place-Order
+      </button>
+      <button
+        type="button"
+        id="select_item"
+        class="buttonstyle"
+        style="
+          float: right;
+          margin-right: 5px;
+          background-color: aquamarine;
+          display: none;
+        "
+      >
+        Select Items
+      </button>
+    </div>
+  </div>
 </div>
 
 <!-- item add model  -->
 <div>
-    <div class="basemodal" id="item_modal" style="position: absolute; display: none;">
-        <div class="base-modal-content col-l-6 col-m-9 col-s-11" style="margin-top:5px;">
-            <div class="base-modal-header">
-                <h
-                    style="position: relative; font-weight: bold; margin:0; top: 25%; -ms-transform: translateY(-50%);transform: translateY(-50%);">
-                    Select Items
-                </h>
-            </div>
-            <div class="base-modal-body">
-                <form name="item_form" id="item-form" method="POST">
-                    <div class="col-l-6 col-m-6 col-s-12 col-12" style="float:left; padding:2px">
-                        <label for="item_input">Item name</label>
-                        <input id="item_input" type="search" value="" class="validdatalist" placeholder="select item"
-                            list="item_list" required style="text-transform:capitalize;" />
-                        <datalist id="item_list" style="text-transform:capitalize;">
-                            {% for item in items %}
+  <div
+    class="basemodal"
+    id="item_modal"
+    style="position: absolute; display: none"
+  >
+    <div
+      class="base-modal-content col-l-6 col-m-9 col-s-11"
+      style="margin-top: 5px"
+    >
+      <div class="base-modal-header">
+        <h
+          style="
+            position: relative;
+            font-weight: bold;
+            margin: 0;
+            top: 25%;
+            -ms-transform: translateY(-50%);
+            transform: translateY(-50%);
+          "
+        >
+          Select Items
+        </h>
+      </div>
+      <div class="base-modal-body">
+        <form name="item_form" id="item-form" method="POST">
+          <div
+            class="col-l-6 col-m-6 col-s-12 col-12"
+            style="float: left; padding: 2px"
+          >
+            <label for="item_input">Item name</label>
+            <input
+              id="item_input"
+              type="search"
+              value=""
+              class="validdatalist"
+              placeholder="select item"
+              list="item_list"
+              required
+              style="text-transform: capitalize"
+            />
+            <datalist id="item_list" style="text-transform: capitalize">
+              {% for item in items %}
 
-                            <option data-id="{{item.id}}" item-unit="{{item.item_unit}}" value="{{item.item_name}}">
-                            </option>>
+              <option
+                data-id="{{item.id}}"
+                item-unit="{{item.item_unit}}"
+                value="{{item.item_name}}"
+              ></option>
+              > {% endfor %}
+            </datalist>
+          </div>
 
-                            {% endfor %}
-                        </datalist>
+          <div
+            class="col-l-6 col-m-6 col-s-12 col-12"
+            style="float: left; padding: 2px"
+          >
+            <label for="item_variant">Item Variants</label>
+            <input
+              id="item_variant"
+              type="search"
+              value=""
+              class="validdatalist"
+              placeholder="select variant"
+              list="item_variant_list"
+              required
+              style="text-transform: capitalize"
+            />
+            <datalist id="item_variant_list" style="text-transform: capitalize">
+            </datalist>
+          </div>
 
-                    </div>
+          <div
+            class="col-l-8 col-m-7 col-s-8 col-8"
+            style="float: left; padding: 2px"
+          >
+            <label for="item_price">Item Price</label>
+            <input
+              type="number"
+              min="1"
+              max="1000"
+              step=".01"
+              {% if user.is_user %}
+              disabled="true"
+              {% endif %}
+              name="itemprice"
+              placeholder="Enter Price"
+              class="inputstyle"
+              required
+              id="item_price"
+            />
+          </div>
 
-                    <div class="col-l-6 col-m-6 col-s-12 col-12" style="float:left; padding:2px">
+          <div
+            class="col-l-4 col-m-5 col-s-4 col-4"
+            style="float: left; padding: 2px"
+          >
+            <label for="qty">.</label>
+            <input
+              id="per_unit"
+              type="text"
+              class="validdatalist"
+              value="Kg."
+              disabled="True"
+              list="per_unit_list"
+              required
+              style="text-transform: capitalize"
+            />
+            <datalist id="per_unit_list" style="text-transform: capitalize">
+              {% for unit in units %}
 
-                        <label for="item_variant">Item Variants</label>
-                        <input id="item_variant" type="search" value="" class="validdatalist"
-                            placeholder="select variant" list="item_variant_list" required
-                            style="text-transform:capitalize;" />
-                        <datalist id="item_variant_list" style="text-transform:capitalize;">
+              <option data-id="{{unit.id}}" value="{{unit.unit_name}}"></option>
+              > {% endfor %}
+            </datalist>
+          </div>
 
-                        </datalist>
+          <div
+            class="col-l-6 col-m-6 col-s-6 col-6"
+            style="float: left; padding: 2px"
+          >
+            <label for="qty">Qty.</label>
+            <input
+              type="number"
+              min="1"
+              max="1000"
+              step=".001"
+              name="itemname"
+              placeholder="Enter QTY."
+              class="inputstyle"
+              required
+              id="qty"
+            />
+          </div>
 
-
-                    </div>
-
-                    <div class="col-l-6 col-m-6 col-s-6 col-6" style="float:left; padding:2px;">
-                        <label for="item_price">Item Price</label>
-                        <input type="number" min="1" max="1000" step=".01" {% if user.is_user %} disabled="true" {% endif %} name="itemprice" placeholder="Enter Price" class="inputstyle" required
-                            id="item_price">
-
-                    </div>
-
-                    <div div class="col-l-2 col-m-1 col-s-2 col-2" style="float:left; padding: 2px;">
-                        <label for="qty">.</label>
-                        <input class="inputstyle" disabled="true" style="text-align: center;" placeholder="Per">
-                    </div>
-
-                    <div class="col-l-4 col-m-5 col-s-4 col-4" style="float:left; padding:2px;">
-                        <label for="qty">.</label>
-                        <input id="per_unit" type="text" class="validdatalist" value="Kg." disabled='True'
-                            list="per_unit_list" required style="text-transform:capitalize;" />
-                        <datalist id="per_unit_list" style="text-transform:capitalize;">
-                            {% for unit in units %}
-
-                            <option data-id="{{unit.id}}" value="{{unit.unit_name}}"></option>>
-
-                            {% endfor %}
-                        </datalist>
-                    </div>
-
-
-                    <div class="col-l-6 col-m-6 col-s-6 col-6" style="float:left; padding:2px;">
-
-                        <label for="qty">Qty.</label>
-                        <input type="number" min="1" max="1000" step=".001" name="itemname" placeholder="Enter QTY."
-                            class="inputstyle" required id="qty">
-                    </div>
-                    
-
-                    <div class="col-l-6 col-m-6 col-s-6 col-6" style="float:left; padding:2px;">
-                        <label for="order_unit">Order Unit</label>
-                        <input id="order_unit" type="search" class="validdatalist" value="carton"
-                            placeholder="select unit" list="unit_list" required style="text-transform:capitalize;" />
-                        <datalist id="unit_list" style="text-transform:capitalize;">
-                            {% for unit in units %}
-
-                            <option data-id="{{unit.id}}" value="{{unit.unit_name}}"></option>>
-
-                            {% endfor %}
-                        </datalist>
-                    </div>
-                    <div class="col-l-12 col-m-12 col-s-12 col-" style="float:left; padding:2px;">
-                        <label for="comment">Comment</label>
-                        <input type="text" name="itemname" id="variant_comment" style="background-color: aliceblue; opacity: .7;"
-                            placeholder="About Orders" class="inputstyle">
-                    </div>
-                </form>
-            </div>
-            <div class="base-modal-footer">
-                <button type="button" id="exit_item" class="buttonstyle"
-                    style="float:right; margin-right: 10px; margin-bottom: 10px;">Exit</button>
-                <button class="buttonstyle" form="item-form" id="add_item"
-                    style="float:right; margin-right: 10px; margin-bottom: 10px;">Add Item</button>
-
-            </div>
-
-        </div>
+          <div
+            class="col-l-6 col-m-6 col-s-6 col-6"
+            style="float: left; padding: 2px"
+          >
+            <label for="order_unit">Order unit</label>
+            <select
+              id="order_unit"
+              class="inputstyle"
+              style="text-transform: capitalize"
+            ></select>
+          </div>
+          <div
+            class="col-l-12 col-m-12 col-s-12 col-"
+            style="float: left; padding: 2px"
+          >
+            <label for="comment">Comment</label>
+            <input
+              type="text"
+              name="itemname"
+              id="variant_comment"
+              style="background-color: aliceblue; opacity: 0.7"
+              placeholder="About Orders"
+              class="inputstyle"
+            />
+          </div>
+        </form>
+      </div>
+      <div class="base-modal-footer">
+        <button
+          type="button"
+          id="exit_item"
+          class="buttonstyle"
+          style="float: right; margin-right: 10px; margin-bottom: 10px"
+        >
+          Exit
+        </button>
+        <button
+          class="buttonstyle"
+          form="item-form"
+          id="add_item"
+          style="float: right; margin-right: 10px; margin-bottom: 10px"
+        >
+          Add Item
+        </button>
+      </div>
     </div>
+  </div>
 </div>
-<div id="showpage1" style="position: absolute; z-index: 999999;">
-
-</div>
+<div id="showpage1" style="position: absolute; z-index: 999999"></div>
 <div type="hidden">
+  <input
+    id="client_id"
+    name="consignee_input"
+    type="hidden"
+    value=""
+    list="consignee_list"
+  />
+  <datalist id="client_list">
+    {% for cli in clients %}
 
-    <input id="client_id" name="consignee_input" type="hidden" value="" list="consignee_list" />
-    <datalist id="client_list">
-        {% for cli in clients %}
+    <option
+      data-id="{{cli.id}}"
+      group-id="{{cli.client_group}}"
+      mobile-no="{{cli.phone_number}}"
+      value="{{cli.client_name}}"
+    ></option>
 
-        <option data-id="{{cli.id}}" group-id="{{cli.client_group}}" mobile-no="{{cli.phone_number}}"
-            value="{{cli.client_name}}"> </option>
-
-        {% endfor %}
-    </datalist>
-
-
+    {% endfor %}
+  </datalist>
 </div>
 
-
-{% endblock main_content %}
-
-
-
-{% block main_scripts %}
+{% endblock main_content %} {% block main_scripts %}
 <script type="module">
+  let client = "{{clients}}";
 
-    let client = '{{clients}}';
-
-   // console.log('{{jclients}}');
-
-
-
+  // console.log('{{jclients}}');
 </script>
 <script type="module">
-    import * as ajexcall from "/static/core/js/modules/ajex.js";
-    import * as whats_app from "/static/core/js/modules/whatsapp.js";
-    document.getElementById("id_date").valueAsDate = new Date();
-    let item_varient_price = '';
-    let client_phone_no = '';
-    var jsonArr = [];
-  
-    document.getElementById('item_input').addEventListener('change', getItemVariants);
-    let item_variant = document.getElementById('item_variant');
-    let consignee_input = document.getElementById('consignee_input');
-    const formEl = document.getElementById('item-form');
-    const tbodyEl = document.querySelector('tbody');
-    const tableEl = document.querySelector('table');
-    formEl.addEventListener('submit', onAddItems);
-    tableEl.addEventListener('click', onDeleteRow);
-    document.getElementById('select_item').addEventListener('click', additem);
-    document.getElementById('exit_item').addEventListener('click', exit_item);
-   
-    consignee_input.addEventListener('change', function (event) {
-        let client_value = document.getElementById('client_id').value = selectedDatalistAttributeValue('consignee_input', 'consignee_list', 'client-id');
-        item_varient_price = 'client_price_' + selectedDatalistAttributeValue('client_id', 'client_list', 'group-id');
-        client_phone_no = selectedDatalistAttributeValue('client_id', 'client_list', 'mobile-no');
+  import * as ajexcall from "/static/core/js/modules/ajex.js";
+  import * as whats_app from "/static/core/js/modules/whatsapp.js";
+  document.getElementById("id_date").valueAsDate = new Date();
+  let item_varient_price = "";
+  let client_phone_no = "";
+  var jsonArr = [];
 
-        if (typeof client_value != 'undefined') {
-            document.getElementById('select_item').style.display = 'block';
-        } else { document.getElementById('select_item').style.display = 'none'; }
+  async function unitsjson() {
+    let url = '{% static "core/json/units.json" %}';
+    let units = await (await fetch(url)).json();
+    //   console.log(units['packing_type'])
+    for (let key in units["packing_type"]) {
+      document.getElementById("order_unit").innerHTML +=
+        "<option value=" + key + ">" + units["packing_type"][key] + "</option>";
+    }
+  }
 
-        document.getElementById('item_input').value='';       
-        document.getElementById('item_variant').value='';        
-        document.getElementById('per_unit').value=''
-        //const per_unit_id = selecteddatalistid('per_unit', 'per_unit_list');
-        document.getElementById('item_price').value='';
-        document.getElementById('qty').value='';
-        document.getElementById('order_unit').value='';
+  document
+    .getElementById("item_input")
+    .addEventListener("change", getItemVariants);
+  let item_variant = document.getElementById("item_variant");
+  let consignee_input = document.getElementById("consignee_input");
+  const formEl = document.getElementById("item-form");
+  const tbodyEl = document.querySelector("tbody");
+  const tableEl = document.querySelector("table");
+  formEl.addEventListener("submit", onAddItems);
+  tableEl.addEventListener("click", onDeleteRow);
+  document.getElementById("select_item").addEventListener("click", additem);
+  document.getElementById("exit_item").addEventListener("click", exit_item);
 
+  consignee_input.addEventListener("change", function (event) {
+    let client_value = (document.getElementById("client_id").value =
+      selectedDatalistAttributeValue(
+        "consignee_input",
+        "consignee_list",
+        "client-id"
+      ));
+    item_varient_price =
+      "client_price_" +
+      selectedDatalistAttributeValue("client_id", "client_list", "group-id");
+    client_phone_no = selectedDatalistAttributeValue(
+      "client_id",
+      "client_list",
+      "mobile-no"
+    );
 
+    if (typeof client_value != "undefined") {
+      document.getElementById("select_item").style.display = "block";
+    } else {
+      document.getElementById("select_item").style.display = "none";
+    }
+
+    document.getElementById("item_input").value = "";
+    document.getElementById("item_variant").value = "";
+    document.getElementById("per_unit").value = "";
+    //const per_unit_id = selecteddatalistid('per_unit', 'per_unit_list');
+    document.getElementById("item_price").value = "";
+    document.getElementById("qty").value = "";
+    //   document.getElementById('order_unit').value='';
+  });
+
+  function getItemVariants() {
+    // alert(item_varient_price);
+    item_varient_price = item_varient_price;
+    // console.log(item_unit);
+    document.getElementById("item_variant").value = "";
+    //let item_at=document.getElementById('item_input');
+
+    let item_id = selectedDatalistAttributeValue(
+      "item_input",
+      "item_list",
+      "data-id"
+    );
+    var element = (document.getElementById("item_variant_list").innerHTML = "");
+    // var item_unit = selecteddatalistid('item_input','item_list');
+    var sel = document.getElementById("item_variant_list");
+    let item_unit = selectedDatalistAttributeValue(
+      "item_input",
+      "item_list",
+      "item-unit"
+    );
+
+    document.getElementById("per_unit").value = " /" + item_unit;
+    if (typeof item_id != "undefined") {
+      fetch("/items/api/itemvariant_by_item_id/" + item_id)
+        .then((response) => {
+          return response.json();
+        })
+        .then((data) => {
+          for (var i = 0; i < data.length; i++) {
+            // alert(list[i]['item_price']);
+            var opt = document.createElement("option");
+            opt.setAttribute("data-id", data[i]["id"]);
+            opt.setAttribute("varientprice", data[i][item_varient_price]);
+            opt.value = data[i]["variant_name"];
+            sel.appendChild(opt);
+          }
+        });
+    }
+  }
+  function reindex() {
+    const ids = document.querySelectorAll("tr > td:nth-child(1)");
+    ids.forEach((e, i) => {
+      e.innerText = i + 1;
     });
+  }
 
-    function getItemVariants() {
-
-        // alert(item_varient_price);
-        item_varient_price = item_varient_price;
-        // console.log(item_unit);
-        document.getElementById('item_variant').value = '';
-        //let item_at=document.getElementById('item_input');      
-
-        let item_id = selectedDatalistAttributeValue('item_input', 'item_list', 'data-id');
-        var element = document.getElementById('item_variant_list').innerHTML = '';
-        // var item_unit = selecteddatalistid('item_input','item_list');
-        var sel = document.getElementById('item_variant_list');
-        let item_unit = selectedDatalistAttributeValue('item_input', 'item_list', 'item-unit');
-
-        document.getElementById('per_unit').value = item_unit;
-        if (typeof item_id != 'undefined') {
-            fetch('/items/api/itemvariant_by_item_id/'+item_id)
-                .then((response) => { return response.json(); })
-                .then((data) => {
-                
-                    for (var i = 0; i < data.length; i++) {
-                        // alert(list[i]['item_price']);
-                        var opt = document.createElement('option');
-                        opt.setAttribute("data-id", data[i]['id']);
-                        opt.setAttribute('varientprice', data[i][item_varient_price])
-                        opt.value = data[i]['variant_name'];
-                        sel.appendChild(opt);
-
-                    }
-                });
-        }
-    }
-    function reindex() {
-        const ids = document.querySelectorAll("tr > td:nth-child(1)");
-        ids.forEach((e, i) => { e.innerText = (i + 1) });
-    }
-
-    function onAddItems(e) {
-
-        e.preventDefault();
-        const item_name = document.getElementById('item_input').value;
-        const item_id = selectedDatalistAttributeValue('item_input', 'item_list', 'data-id');
-        const item_variant_name = document.getElementById('item_variant').value;
-        const item_variant_id = selectedDatalistAttributeValue('item_variant', 'item_variant_list', 'data-id');
-        const per = document.getElementById('per_unit').value;
-        const per_unit_id = selectedDatalistAttributeValue('per_unit', 'per_unit_list','data-id');
-        const item_price = document.getElementById('item_price').value;
-        const item_qty = document.getElementById('qty').value;
-        const order_qty = document.getElementById('order_unit').value;
-        const order_qty_id = selectedDatalistAttributeValue('order_unit', 'unit_list','data-id');
-        const variant_comment = document.getElementById('variant_comment').value;
-        tbodyEl.innerHTML += `
+  function onAddItems(e) {
+    e.preventDefault();
+    const item_name = document.getElementById("item_input").value;
+    const item_id = selectedDatalistAttributeValue(
+      "item_input",
+      "item_list",
+      "data-id"
+    );
+    const item_variant_name = document.getElementById("item_variant").value;
+    const item_variant_id = selectedDatalistAttributeValue(
+      "item_variant",
+      "item_variant_list",
+      "data-id"
+    );
+    const per = document.getElementById("per_unit").value;
+    const per_unit = selectedDatalistAttributeValue(
+      "per_unit",
+      "per_unit_list",
+      "data-id"
+    );
+    const item_price = document.getElementById("item_price").value;
+    const item_qty = document.getElementById("qty").value;
+    const order_type = "or";
+    const packing_type = document.getElementById("order_unit").value; //selectedDatalistAttributeValue('order_unit', 'unit_list','data-id');
+    const variant_comment = document.getElementById("variant_comment").value;
+    tbodyEl.innerHTML += `
         <tr>
         <td style="text-align: center; font-size: 12px;"> </td>  
         <td style="text-align: center; font-size: 12px;"> ${item_name}</td>            
@@ -381,165 +546,174 @@
         <td style="text-align: center; font-size: 12px;"> ${item_price}</td>          
         <td style="text-align: center; font-size: 12px;"> ${per}</td>    
         <td style="text-align: center; font-size: 12px;"> ${item_qty}</td>   
-        <td style="text-align: center; font-size: 12px;"> ${order_qty}</td>    
+        <td style="text-align: center; font-size: 12px;"> ${packing_type}</td>    
         <td style="text-align: center; font-size: 12px;"><button class="deleteBtn">X</button></td>
         <td hidden> ${item_id}</td>
         <td hidden> ${item_variant_id}</td>
-        <td hidden> ${per_unit_id}</td>
-        <td hidden> ${order_qty_id}</td>
+        <td hidden> ${per_unit}</td>
+        <td hidden> ${order_type}</td>
         <td hidden> ${variant_comment}</td> 
         </tr>`;
 
-     //   alert(variant_comment);
-        document.getElementById('item_input').value = '';
-        document.getElementById('item_variant').value = '';
-        document.getElementById('per_unit').value = '';
-        //const per_unit_id = selecteddatalistid('per_unit', 'per_unit_list');
-        document.getElementById('item_price').value = '';
-        document.getElementById('qty').value = '';
-        document.getElementById('variant_comment').value ='';
-        reindex();
+    //   alert(variant_comment);
+    document.getElementById("item_input").value = "";
+    document.getElementById("item_variant").value = "";
+    document.getElementById("per_unit").value = "";
+    //const per_unit_id = selecteddatalistid('per_unit', 'per_unit_list');
+    document.getElementById("item_price").value = "";
+    document.getElementById("qty").value = "";
+    document.getElementById("variant_comment").value = "";
+    reindex();
 
-        if (!confirm('add more item')) {
-            document.getElementById('item_modal').style.display = 'none';
-        }
-        
-        return false;
+    if (!confirm("add more item")) {
+      document.getElementById("item_modal").style.display = "none";
     }
 
-    function onDeleteRow(e) {
-        if (!e.target.classList.contains('deleteBtn')) {
-            return;
-        }
-        const btn = e.target;
-        btn.closest('tr').remove();
-        reindex();
+    return false;
+  }
 
+  function onDeleteRow(e) {
+    if (!e.target.classList.contains("deleteBtn")) {
+      return;
     }
+    const btn = e.target;
+    btn.closest("tr").remove();
+    reindex();
+  }
 
-    function additem() {
-        document.getElementById('item_modal').style.display = 'block';
-       
-        if('{{user.is_user}}' == "True"){
-            document.getElementById('order_unit').value='carton';
-            document.getElementById('order_unit').disabled = true;
-         }
-         else{
-            document.getElementById('order_unit').value='carton';
-            document.getElementById('order_unit').disabled = false;
-         }
-    }
-    function exit_item() {
-        document.getElementById('item_modal').style.display = 'none';
-    }
+  function additem() {
+    document.getElementById("item_modal").style.display = "block";
+    unitsjson();
+  }
 
-    document.getElementById('order-item-form').addEventListener('submit', function(e) {
+  function exit_item() {
+    document.getElementById("item_modal").style.display = "none";
+  }
 
-        e.preventDefault();
-        var table = document.getElementById('myTable');
-        if (table.rows.length <= 1) {
-            alert('Plese Select an Item')
-        }
-        else {
-            let for_info = []
-            let data1=[]
-            let dataObj1=[]
-            var duplicate = []
-          
-         
-            let is_duplicate = false;
-            for (var i = 1, row; row = table.rows[i]; i++) {
-                var col = row.cells;
-                for (let d in duplicate) {
-                    if (duplicate[d] == col[1].innerHTML.trim() + col[2].innerHTML.trim()) {
-                        alert('Duplicate Entry Found Please Remove One :-  ' + col[1].innerHTML.trim() + " " + col[2].innerHTML.trim())
-                        is_duplicate = true;
-                    }
-                }
-                duplicate.push(col[1].innerHTML.trim() + col[2].innerHTML.trim())
-                var jsonObj = {
-                    cli_id: selectedDatalistAttributeValue('client_id', 'client_list', 'data-id').trim(),
-                    con_id: selectedDatalistAttributeValue('consignee_input', 'consignee_list', 'data-id').trim(),
-                    date: document.getElementById('id_date').value.trim(),
-                    item_name: col[1].innerHTML.trim(),
-                    item_variant: col[2].innerHTML.trim(),
-                    item_price: col[3].innerHTML.trim(),
-                    per: col[4].innerHTML.trim(),
-                    qty: col[5].innerHTML.trim(),
-                    unit: col[6].innerHTML.trim(),
-                    item_id: col[8].innerHTML.trim(),
-                    item_variant_id: col[9].innerHTML.trim(),
-                    comment:col[12].innerHTML.trim()
-                }
-                    
-                 let ordobj = { 
-                        "date": document.getElementById('id_date').value.trim(),       
-                        "item_veriant_price": col[3].innerHTML.trim(),
-                        "item_qty": col[5].innerHTML.trim(),
-                        "client_id": selectedDatalistAttributeValue('client_id', 'client_list', 'data-id').trim(),
-                        "consignee_id": selectedDatalistAttributeValue('consignee_input', 'consignee_list', 'data-id').trim(),
-                        "item_id":col[8].innerHTML.trim(),
-                        "item_variant_id":col[9].innerHTML.trim(),
-                        "price_per_unit_id":col[10].innerHTML.trim(),
-                        "order_unit_id": col[11].innerHTML.trim(),
-                        "comment":col[12].innerHTML.trim()
-                    }
-            
-            
-                for_info.push(jsonObj);
-               data1.push(ordobj);
+  document
+    .getElementById("order-item-form")
+    .addEventListener("submit", function (e) {
+      e.preventDefault();
+      var table = document.getElementById("myTable");
+      if (table.rows.length <= 1) {
+        alert("Plese Select an Item");
+      } else {
+        let data1 = [];
+        let dataObj1 = [];
+        var duplicate = [];
+
+        let is_duplicate = false;
+        for (var i = 1, row; (row = table.rows[i]); i++) {
+          var col = row.cells;
+          for (let d in duplicate) {
+            if (
+              duplicate[d] ==
+              col[1].innerHTML.trim() + col[2].innerHTML.trim()
+            ) {
+              alert(
+                "Duplicate Entry Found Please Remove One :-  " +
+                  col[1].innerHTML.trim() +
+                  " " +
+                  col[2].innerHTML.trim()
+              );
+              is_duplicate = true;
             }
+          }
+          duplicate.push(col[1].innerHTML.trim() + col[2].innerHTML.trim());
 
-            
-           
-          //  console.log(data);
-         //  console.log(data1);         
-            if (is_duplicate == false) {
-               
-                fetch('/orders/api/order_item/',ajexcall.postoption(data1))
-                    .then(function(response) {
-                        if (!response.ok) {
-                           throw Error(response.statusText);
-                        }
-                        return response.json(); // Convert response to json use text for text
-                    })
-                    .then(data => {
-                      //  console.log(data);                    
-                      if('{{user.is_user}}'=='False'){
-                        if (confirm('======= Order Saved ======\n\nWant to Send Whattsapp or Email ?')) {
-                            let msg = '----- Order Confermed -----%0a';
-                            for (var i = 0; i <for_info.length; i++) {
-                                msg += for_info[i]['item_name'] + " "
-                                    + for_info[i]['item_variant'] + " "
-                                    + for_info[i]['qty'] + for_info[i]['unit'] + "@"
-                                    + for_info[i]['item_price'] + "/" + for_info[i]['per'] + " ," + "%0a"
-                            }
+          let ordobj = {
+            client_group: selectedDatalistAttributeValue(
+              "client_id",
+              "client_list",
+              "group-id"
+            ),
+            order_date: document.getElementById("id_date").value.trim(),
+            item_veriant_price: col[3].innerHTML.trim(),
+            item_qty: col[5].innerHTML.trim(),
+            client_id: selectedDatalistAttributeValue(
+              "client_id",
+              "client_list",
+              "data-id"
+            ).trim(),
+            consignee_id: selectedDatalistAttributeValue(
+              "consignee_input",
+              "consignee_list",
+              "data-id"
+            ).trim(),
+            item_id: col[8].innerHTML.trim(),
+            item_variant_id: col[9].innerHTML.trim(),
+            price_per_unit: col[4].innerHTML.trim(),
+            packing_type: col[6].innerHTML.trim(),
+            comment: col[12].innerHTML.trim(),
+          };
 
-                            whats_app.whatsapp(client_phone_no, msg)
-                        }
-                    }
-                    alert('Order Added Success');
-                    window.location.reload();
-                    })
-                    .catch(err => { alert(err); })
-                }
-     
-            }
-
-    })
-
-    item_variant.addEventListener('change', function () {
-
-        let ite = selectedDatalistAttributeValue('item_variant', 'item_variant_list', 'data-id')
-
-        if (typeof ite != 'undefined') {
-
-            let aValue = selectedDatalistAttributeValue('item_variant', 'item_variant_list', 'varientprice');
-
-            document.getElementById('item_price').value = aValue;
+          data1.push(ordobj);
         }
-    })
 
+        //  console.log(data);
+        console.log(data1);
+        if (is_duplicate == false) {
+          fetch("/orders/api/order_item/", ajexcall.postoption(data1))
+            .then(function (response) {
+              if (!response.ok) {
+                throw Error(response.statusText);
+              }
+              return response.json(); // Convert response to json use text for text
+            })
+            .then((data) => {
+              //  console.log(data);
+              if ("{{user.is_user}}" == "False") {
+                if (
+                  confirm(
+                    "======= Order Saved ======\n\nWant to Send Whattsapp or Email ?"
+                  )
+                ) {
+                  let msg = "----- Order Confermed -----%0a";
+                  for (var i = 0; i < for_info.length; i++) {
+                    msg +=
+                      for_info[i]["item_name"] +
+                      " " +
+                      for_info[i]["item_variant"] +
+                      " " +
+                      for_info[i]["qty"] +
+                      for_info[i]["unit"] +
+                      "@" +
+                      for_info[i]["item_price"] +
+                      "/" +
+                      for_info[i]["per"] +
+                      " ," +
+                      "%0a";
+                  }
 
+                  whats_app.whatsapp(client_phone_no, msg);
+                }
+              }
+              alert("Order Added Success");
+              window.location.reload();
+            })
+            .catch((err) => {
+              alert(err);
+            });
+        }
+      }
+    });
+
+  item_variant.addEventListener("change", function () {
+    let ite = selectedDatalistAttributeValue(
+      "item_variant",
+      "item_variant_list",
+      "data-id"
+    );
+
+    if (typeof ite != "undefined") {
+      let aValue = selectedDatalistAttributeValue(
+        "item_variant",
+        "item_variant_list",
+        "varientprice"
+      );
+
+      document.getElementById("item_price").value = aValue;
+    }
+  });
 </script>
 {% endblock main_scripts %}

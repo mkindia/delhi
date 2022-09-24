@@ -4,9 +4,8 @@ from django.views.decorators.cache import cache_control
 
 
 from clients.models import Client, Consignee
-from items.models import Item,Item_Variant, Unit
+from items.models import Item,Item_Variant
 from .models import Consignee_Order,Item_Order,Item_Order_Status
-from .forms import order_dispatchForm
 import json
 
 # Create your views here.
@@ -42,6 +41,12 @@ def add_order(request):
     else :
         return redirect('/')
         
+def dispatch_transfer(request,pk=None,bal=None):
+    if request.user.is_authenticated:       
+        return render(request,'orders/dispatch_transfer.html',{'item_order_id':pk,'bal':bal})
+    else:
+        return redirect('/')
+
 #@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def order_item(request):
     
@@ -74,8 +79,7 @@ def order_item(request):
                                             item_qty=item['qty'],
                                             order_unit=Unit.objects.only('unit_name').get(unit_name=item['unit']))
                # create_order.save()
-                #con_id = data['item_name']
-                order_id=None
+                #con_id = data['item_name']               
                 clientsall=[]
 
                 
@@ -92,18 +96,17 @@ def order_item(request):
                 is_client = Consignee.objects.get(pk=data['con_id'])
                 items=list(Item_Order.objects.filter(consignee_id=data['con_id']).values())
                 selected_consignes=list(Consignee.objects.filter(client_id=is_client.client_id).values())
-                msg='client not found'
-               # print(items)
+                msg='client not found'                
                 data={'items':items,'msg':msg,'selected_consignes':selected_consignes}
-
+              #  print(data)
                 return JsonResponse(data,safe=False)
                                     
         else :            
             client=Client.objects.filter(user_id=request.user)
-            units=Unit.objects.all()          
+                    
             consigne = Consignee.objects.filter(client_id__in=client) # client_id__in = client filter use
-            Items=Item.objects.all()
-            return render(request,'orders/order_item.html/',{'clients':client,'consignes':consigne,'items':Items,'units':units})
+            Items=Item.objects.all()           
+            return render(request,'orders/order_item.html/',{'clients':client,'consignes':consigne,'items':Items})
     
     else :
 
@@ -117,22 +120,24 @@ def item_order_status(request,pk=None):
                
                 return render(request,'orders/order_dispatched_list.html',{'dispatched':Item_Order_status})
 
+def  order_status_edit(request,pk=None):
+
+    if request.user.is_authenticated:       
+        if pk != None:           
+            return render(request,'orders/order_status_update.html',{'status_id':pk})
+
+
+
 def edit_dispatched_transfer_order(request,id):
     if request.user.is_authenticated:
        
         itemorder= Item_Order.objects.get(pk=id)
         client_group = Client.objects.get(client_name=itemorder.client_id)
-        orderdetails =  {
+        orderdetails =  {            
             'order_id':itemorder.id,        
             'client_group':client_group.client_group,
-            'item_id':itemorder.item_id,        
-        'item_variant_id':itemorder.item_variant_id,
-        'order_date':str(itemorder.date),'item_qty':itemorder.item_qty,
-        'item_veriant_price':itemorder.item_veriant_price,
-        'price_per_unit_id':itemorder.price_per_unit_id,
-        'item_qty':itemorder.item_qty}
-
-        print(itemorder.client_id)
+        }
+      #  print(itemorder.client_id)
 
         return render(request,'orders/edit_dispatch_transfer.html',orderdetails)
     else :

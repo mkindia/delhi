@@ -1,13 +1,11 @@
 from django.shortcuts import redirect, render
-from items.models import Item,Item_Variant,Item_Group,Unit
+from items.models import Item,Item_Variant,Item_Group
 from django.http import JsonResponse
 
 def add_item(request):
     if request.user.is_authenticated:
-        item_groups=Item_Group.objects.all()
-        item_units=Unit.objects.all()
-
-        return render(request,'items/add_item.html',{'item_groups':item_groups,'item_units':item_units})
+        item_groups=Item_Group.objects.all()       
+        return render(request,'items/add_item.html',{'item_groups':item_groups})
 
 def add_item_variant(request):
     if request.user.is_authenticated:

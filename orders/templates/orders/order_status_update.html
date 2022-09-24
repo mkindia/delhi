@@ -1,0 +1,166 @@
+{%load static%}
+
+<div class="basemodal" id="dis_tran" style="position: absolute;">
+    <div class="base-modal-content col-l-6 col-m-9 col-s-11" style="margin-top:5px;">
+        <div class="base-modal-header">
+            <h
+                style="position: relative; font-weight: bold; margin:0; top: 25%; -ms-transform: translateY(-50%);transform: translateY(-50%);">
+                Dispatch / Transfer Update
+            </h>
+        </div>
+        <div class="base-modal-body">
+            <form id="dispatch-form" method="POST">
+                {% csrf_token %}
+                <div class="col-l-6 col-m-6 col-s-6 col-6" style="float:left; padding:1px;">
+                    <label for="id_date">Date</label>
+                    <input type="Date" name="date" class="inputstyle" style="padding: 3px;" required id="status_update_date">
+                </div>
+                <div class="col-l-6 col-m-6 col-s-6 col-6" style="float:left; padding:2px;">
+                    <label for="dippatch_qty">Qty</label>
+                    <input type="number" min="1" max="1000" step=".1" name="itemprice" placeholder="Enter Qty"
+                        class="inputstyle" required id="dispatch_qty">
+                </div>
+                <div class="col-l-6 col-m-6 col-s-6 col-6" style="float:left; padding:2px;">
+                    <label for="status">Status</label>
+                    <select id="status" placeholder="Select Status" class="inputstyle" required>
+                        <option value="dis" selected>Dispatched</option>
+                        <option value="trn">Transfer to Consignee</option>
+                        <option value="can">Cancelled</option>
+                    </select>
+                </div>
+                <div id="tranfer_to" class="col-l-6 col-m-6 col-s-6 col-6"
+                    style="float:left; padding:2px; display: none;">
+                    <label for="t_consignee">Transfer_to</label>
+                    <select id="t_consignee" placeholder="Select Consignee" class="inputstyle">
+
+                    </select>
+                </div>
+                <div id="docket_div" class="col-l-6 col-m-6 col-s-6 col-6" style="float:left; padding:2px;">
+                    <label for="docket">Docket No.</label>
+                    <input placeholder="Enter Docket No" class="inputstyle" id="docket" required>
+                </div>
+
+                <div id="station_div" class="col-l-6 col-m-6 col-s-6 col-6" style="float:left; padding:2px">
+                    <label for="Satation">Station</label>
+                    <input id="station" type="search" placeholder="station" class="inputstyle"
+                        required style="text-transform:capitalize;" />
+                  
+                </div>
+
+                <div id="transport_div" class="col-l-6 col-m-6 col-s-6 col-6" style="float:left; padding:2px">
+                    <label for="transport">Transport</label>
+                    <input id="transport" type="search" class="inputstyle" placeholder="transport"
+                         required style="text-transform:capitalize;" />                    
+                </div>
+
+                <div class="col-l-12 col-m-12 col-s-12 col-12" style="float:left; padding:2px;">
+                    <label for="dispatch_comments">Comments</label>
+                    <input class="inputstyle" placeholder="add comments" id="status_coments">
+                </div>
+            </form>
+        </div>
+        <div class="base-modal-footer">
+            <button type="button" id="edit_order_status_hide" class="buttonstyle"
+                style="float:right; margin-right: 10px; margin-bottom: 10px;">Exit</button>
+            <button class="buttonstyle" form="dispatch-form" id="order_status_update_submit"
+                style="float:right; margin-right: 10px; margin-bottom: 10px;">Submit</button>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    let s_i = '{{ status_id }}'  ; 
+    let status_consignees = ' ' ;
+    let status_consignee_id = ' ';
+    function getorder_status(){
+        let t_con = document.getElementById('t_consignee');
+        t_con.innerHTML = '';
+
+        fetch('/orders/api/ios/'+s_i+'/')
+        .then(function(response){
+            if(!response.ok){
+                throw Error(response.statusText);
+            }
+            return response.json();
+        })
+        .then(function(getstatus){
+          //  console.log(getstatus);
+            status_consignee_id = getstatus['consignee_id'];
+            document.getElementById('status_update_date').value=getstatus['date'];
+            document.getElementById('dispatch_qty').value=getstatus['item_qty'];
+            document.getElementById('status').value=getstatus['status'];
+            document.getElementById('docket').value=getstatus['docket_number'];
+            document.getElementById('station').value=getstatus['station'];
+            document.getElementById('transport').value=getstatus['transport'];
+            document.getElementById('status_coments').value=getstatus['comment'];
+            if(getstatus['status'] == 'trn'){
+                document.getElementById('docket_div').style.display='none';
+                document.getElementById('station_div').style.display='none'
+                document.getElementById('transport_div').style.display='none';
+                document.getElementById('tranfer_to').style.display='block';
+            }
+
+            return fetch('/clients/api/consignee_by_client_id/'+getstatus['client_id']+'/')
+            .then(function(response){
+                if(!response.ok){
+                    throw Error(response.statusText);
+                }
+                return response.json();
+            })
+            .then(function(getconsignees){
+                status_consignees = getconsignees;
+              //  console.log(getconsignees);
+                for(let con in getconsignees){                  
+                  if( getstatus['consignee_id'] == getconsignees[con]['id'])
+                  {
+                  document.getElementById('station').value=getconsignees[con]['station'];
+                  document.getElementById('transport').value=getconsignees[con]['transport'];
+                  }
+                  else{
+                  let opt = document.createElement('option');
+                  opt.innerHTML = getconsignees[con]['consignee_name'];
+                  opt.value = getconsignees[con]['id'];
+                  t_con.appendChild(opt);
+                  }
+              }
+            })
+            .catch(err=>{alert(err);})
+
+        })
+        .catch(err=>{alert(err);})
+    }
+
+    getorder_status();
+
+    document.getElementById('status').addEventListener('change', function () {
+        if (document.getElementById('status').value == 'trn') {
+            document.getElementById('docket').setAttribute('required', false);
+            document.getElementById('docket').disabled = true;
+            document.getElementById('docket_div').style.display = 'none';
+            document.getElementById('tranfer_to').setAttribute('required', true);
+            document.getElementById('tranfer_to').style.display = 'block';
+            document.getElementById('station_div').style.display = 'none';
+            document.getElementById('transport_div').style.display = 'none';
+
+        }
+        else {
+            document.getElementById('tranfer_to').setAttribute('required', false);
+            document.getElementById('tranfer_to').style.display = 'none';
+            document.getElementById('docket').disabled = false;
+            document.getElementById('docket').setAttribute('required', true);
+            document.getElementById('docket_div').style.display = 'block';
+            document.getElementById('station_div').style.display = 'block';
+            document.getElementById('transport_div').style.display = 'block';
+
+        }
+    })
+   
+    document.getElementById('edit_order_status_hide').addEventListener('click', function () {
+            document.getElementById('edit_order_status').style.display = 'none';
+        })
+    
+   
+
+   // console.log(orderstatus);
+</script>

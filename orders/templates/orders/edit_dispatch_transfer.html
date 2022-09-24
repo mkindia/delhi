@@ -1,9 +1,9 @@
-
+{%load static%}
 
 <div class="basemodal" id="item_modal" style="position: absolute;">
 
     <div class="base-modal-content col-l-6 col-m-9 col-s-11" style="margin-top:5px;">
-        
+
         <div class="base-modal-header">
             <h
                 style="position: relative; font-weight: bold; margin:0; top: 25%; -ms-transform: translateY(-50%);transform: translateY(-50%);">
@@ -12,23 +12,29 @@
         </div>
 
         <div class="base-modal-body">
-            <form name="update_form" id="update-form" method="POST">
-                <div class="col-l-6 col-m-6 col-s-12 col-12" style="float:left; padding:2px">
+            <form id="update-form" method="POST">
+                {% csrf_token %}
+                <div class="col-l-4 col-m-4 col-s-4 col-6" style="float:left; padding:1px;">
+                    <label for="id_email">Date</label>
+                    <input type="Date" name="date"  class="inputstyle"
+                    style="padding: 3px;" {% if user.is_user %} disabled="True" {% endif %} required id="order_date">
+                </div>
+
+                <div class="col-l-8 col-m-8 col-s-8 col-6" style="float:left; padding:2px">
                     <label for="item_input">Item name</label>
                     <input id="item_input" type="search" value="" class="validdatalist" placeholder="select item"
                         list="item_list" required style="text-transform:capitalize;" />
                     <datalist id="item_list" style="text-transform:capitalize;">
-                        
+
                     </datalist>
 
                 </div>
 
-                <div class="col-l-6 col-m-6 col-s-12 col-12" style="float:left; padding:2px">
+                <div class="col-l-7 col-m-7 col-s-7 col-7" style="float:left; padding:2px">
 
                     <label for="item_variant">Item Variants</label>
-                    <input id="item_variant" type="search" class="validdatalist"
-                        placeholder="select variant" list="item_variant_list" required
-                        style="text-transform:capitalize;" />
+                    <input id="item_variant" type="search" class="validdatalist" placeholder="select variant"
+                        list="item_variant_list" required style="text-transform:capitalize;" />
                     <datalist id="item_variant_list" style="text-transform:capitalize;">
 
                     </datalist>
@@ -36,48 +42,45 @@
 
                 </div>
 
-                <div class="col-l-6 col-m-6 col-s-6 col-6" style="float:left; padding:2px;">
-                    <label for="item_price">Item Price</label>
-                    <input type="number" min="1" max="1000" step=".01" {% if user.is_user %} disabled="true" {% endif %} 
-                    name="itemprice" placeholder="Enter Price" class="inputstyle" required value="{{item_veriant_price}}"
-                        id="item_price">
+                <div class="col-l-2 col-m-2 col-s-2 col-2" style="float:left; padding:2px;">
+                    <label for="item_price">Price</label>
+                    <input type="number" min="1" max="1000" step=".01" {% if user.is_user %} disabled="true" {% endif %}
+                        name="itemprice" placeholder="Enter Price" class="inputstyle" required id="item_price">
 
                 </div>
 
-                <div div class="col-l-2 col-m-1 col-s-2 col-2" style="float:left; padding: 2px;">
-                    <label for="qty">.</label>
-                    <input class="inputstyle" disabled="true" style="text-align: center;" placeholder="Per">
+                <div class="col-l-1 col-m-1 col-s-1 col-1" style="float:left; padding:2px;">
+                    <label for="per">.</label>
+                    <input id="per" type="text" class="inputstyle" placeholder=" / " disabled='True'
+                        style="text-transform:capitalize; text-align:center;" />
+
                 </div>
 
-                <div class="col-l-4 col-m-5 col-s-4 col-4" style="float:left; padding:2px;">
+
+                <div class="col-l-2 col-m-2 col-s-2 col-2" style="float:left; padding:2px;">
                     <label for="qty">.</label>
-                    <input id="per_unit" type="text" class="validdatalist" value="Kg." disabled='True'
-                        list="per_unit_list" required style="text-transform:capitalize;" />
-                    <datalist id="per_unit_list" style="text-transform:capitalize;">
-                        
-                    </datalist>
+                    <input id="per_unit" type="text" class="inputstyle" disabled='True' required
+                        style="text-transform:capitalize;" />
+
                 </div>
 
                 <div class="col-l-6 col-m-6 col-s-6 col-6" style="float:left; padding:2px;">
 
                     <label for="qty">Qty.</label>
                     <input type="number" min="1" max="1000" step=".001" name="itemname" placeholder="Enter QTY."
-                        class="inputstyle" required id="qty" value="{{item_qty}}" id="qty">
+                        class="inputstyle" required id="qty" />
                 </div>
 
                 <div class="col-l-6 col-m-6 col-s-6 col-6" style="float:left; padding:2px;">
                     <label for="order_unit">Order Unit</label>
-                    <input id="order_unit" type="search" class="validdatalist" value="carton"
-                        placeholder="select unit" list="unit_list" required style="text-transform:capitalize;" />
-                    <datalist id="unit_list" style="text-transform:capitalize;">
-                       
-                    </datalist>
+                    <select id="order_unit" class="inputstyle" required style="text-transform:capitalize;" />
+                    </select>
 
                 </div>
 
                 <div class="col-l-12 col-m-12 col-s-12 col-" style="float:left; padding:2px;">
                     <label for="id_email">Comment</label>
-                    <input type="text" name="itemname" id="comment" style="background-color: aliceblue; opacity: .7;"
+                    <input type="text" name="itemname" id="comment" style="text-transform:capitalize; background-color: aliceblue; opacity: .7;"
                         placeholder="About Orders" class="inputstyle">
                 </div>
             </form>
@@ -86,7 +89,7 @@
         <div class="base-modal-footer">
             <button type="button" id="hide" class="buttonstyle"
                 style="float:right; margin-right: 10px; margin-bottom: 10px;">Exit</button>
-            <button class="buttonstyle" form="update-form" id="add_item"
+            <button class="buttonstyle" form="update-form" id="update-order"
                 style="float:right; margin-right: 10px; margin-bottom: 10px;">Update</button>
 
         </div>
@@ -95,141 +98,207 @@
 
 </div>
 
-
-
-
 <script type="module">
-   // import * as ajexcall from "/static/core/js/modules/ajex.js";   
-    let items_data ;
+    // import * as ajexcall from "/static/core/js/modules/ajex.js";   
+    let items_data;
     let item_variant_data;
-    let unit ;
-  //  alert('{{order_id}}');
-    //get Unit
-    fetch('/items/api/units/')
-    .then(function(response){
-        if(!response.ok){throw Error(response.statusText);}
-        return response.json();
-    })
-    .then(units=>{
-        unit=units;
-        let order_unit= document.getElementById('unit_list');
-        let item_unit= document.getElementById('per_unit_list');
-        for(let u in units){
-            var opt = document.createElement('option');
-            opt.setAttribute("data-id", units[u]['id']);           
-            opt.value = units[u]['unit_name'];
-            item_unit.appendChild(opt);
-            order_unit.appendChild(opt);
-            if(units[u]['unit_name']=='{{price_per_unit_id}}'){
-                document.getElementById('per_unit').value = "{{price_per_unit_id}}";
-                
-            }
-            if(units[u]['unit_name']=='order_unit_id'){
-                document.getElementById('order_unit').value ='{{order_unit_id}}';
-            }
+    let unit = '';
+    let order_id = "{{order_id}}";
+    let order_data = '';
+
+    document.getElementById("order_date").valueAsDate = new Date();
+
+    async function unitsjson() {
+        let opt = "";
+        let url = '{% static "core/json/units.json" %}';
+        let json_contents = await (await fetch(url)).json();
+        unit = json_contents['units'];
+
+        for (let pu in json_contents['packing_type']) {
+            opt += "<option value=" + pu + ">" + json_contents['packing_type'][pu] + "</option>"
+
         }
-    })
-    .catch(err=>{alert(err);})
-    // get item
-    fetch('/items/api/items/')
-    .then(function(response){
-        if(!response.ok){
-            throw Error(response.statusText);
-        }
-        return response.json();
-    })
-    .then(Items=>{
-        items_data=Items;
-        let itemlist= document.getElementById('item_list')
-        let item_id ;
-        for (var i = 0; i < Items.length; i++) {            
-            var opt = document.createElement('option');
-            opt.setAttribute("data-id", Items[i]['id']);
-            opt.setAttribute('unit-id',Items[i]['item_unit'])         
-            opt.value = Items[i]['item_name'];
-            itemlist.appendChild(opt);
-           // alert(Items[i]['id']);
-            if(Items[i]['item_name']=='{{item_id}}')
-            {
-                item_id =Items[i]['id'];
-              document.getElementById('item_input').value='{{item_id}}';
-            //  document.getElementById('per_unit').value=Items[i]['item_unit'];
-            }
-
-        }       
-        return get_item_variant_by_item_id(item_id);
-    })
-    .catch(err=>{alert(err);})
-
-    document.getElementById('item_input').addEventListener('change',function(){
-        let item_id = selectedDatalistAttributeValue('item_input','item_list','data-id');
-        let unit_id = selectedDatalistAttributeValue('item_input','item_list','unit-id');
-
-        for(let iui in unit){
-           if(unit[iui]['id']==unit_id){           
-            document.getElementById('per_unit').value = unit[iui]['unit_name'];
-           }
-        }
-
-        get_item_variant_by_item_id(item_id)
-        
-    })
-
-    document.getElementById('item_variant').addEventListener('change',function(){
-        let g_prce = selectedDatalistAttributeValue('item_variant','item_variant_list','price-g');
-        document.getElementById('item_price').value = g_prce;
-        
-       
-      //  console.log(item_variant_data);
-    })
-
-    function get_item_variant_by_item_id(pk){    
-    document.getElementById('item_variant_list').innerHTML = '';
-    document.getElementById('item_variant').value = '';
-    fetch('/items/api/itemvariant_by_item_id/'+pk)
-    .then(function(response){
-        if(!response.ok){throw Error(response.statusText);}
-        return response.json();
-    })
-    .then(Item_varient=>{
-        item_variant_data = Item_varient;
-       // console.log(Item_varient);
-        let variant_list = document.getElementById('item_variant_list');            
-        for(let variant in Item_varient){
-            var opt = document.createElement('option');
-            opt.setAttribute("data-id", Item_varient[variant]['id']);            
-            opt.setAttribute("price-g", Item_varient[variant]['client_price_'+'{{client_group}}']);            
-            opt.value = Item_varient[variant]['variant_name'];
-            variant_list.appendChild(opt);
-           // alert(Items[i]['id']);
-            if(Item_varient[variant]['variant_name']=='{{item_variant_id}}')
-            {
-              document.getElementById('item_variant').value='{{item_variant_id}}';
-            }
-            
-        }
-    })
-    .catch(err=>{alert(err);})
-
-    document.getElementById('update-form').addEventListener('submit',function(e){
-        e.preventDefault()
-        let item_id = selectedDatalistAttributeValue('item_input','item_list','data-id');
-        let item_variant_id = selectedDatalistAttributeValue('item_variant','item_variant_list','data-id');
-        let item_variant_price =document.getElementById('item_price').value;
-        let price_per_unit_id = selectedDatalistAttributeValue('item_input','item_list','unit-id');
-        let qty = document.getElementById('qty').value;
-        let comment = document.getElementById('comment').value;
-        let order_unit_id = selectedDatalistAttributeValue('order_unit','unit_list','data-id')
-        let order_update_data = { "date": "2022-08-21",
-    "item_veriant_price": item_variant_price,
-    "item_qty": qty,     
-    "comment": comment,   
-    "item_id": item_id,
-    "item_variant_id": item_variant_id,
-    "price_per_unit_id": price_per_unit_id,
-    "order_unit_id": order_unit_id
+        document.getElementById("order_unit").innerHTML = opt;
     }
-    console.log(order_update_data);
+    unitsjson();
+
+
+
+    fetch('/items/api/items/')
+        .then(function (response) {
+            if (!response.ok) {
+                throw Error(response.statusText);
+            }
+            return response.json();
+        })
+        .then(Items => {
+            items_data = Items;
+            let itemlist = document.getElementById('item_list')
+            let item_id;
+            for (var i = 0; i < Items.length; i++) {
+                var opt = document.createElement('option');
+                opt.setAttribute("data-id", Items[i]['id']);
+                opt.setAttribute('unit-id', Items[i]['item_unit'])
+                opt.value = Items[i]['item_name'];
+                itemlist.appendChild(opt);              
+
+            }
+            return fetch('/orders/api/order_item/' + order_id + '/')
+                .then(function (response) {
+                    if (!response.ok) { throw Error(response.statusText); }
+                    return response.json();
+                })
+                .then(orders => {
+                    order_data=orders;
+                  //  console.log(orders);
+                    document.getElementById('item_price').value = orders['item_veriant_price'];
+                    document.getElementById('qty').value = orders['item_qty'];
+                    document.getElementById('order_date').value = orders['order_date'];
+                    document.getElementById('per_unit').value = orders['price_per_unit'];
+                    document.getElementById('comment').value =orders['comment'];
+                    for(let it in Items)
+                    {
+                        if(Items[it]['id']==orders['item_id'])
+                        {
+                            document.getElementById('item_input').value = Items[it]['item_name'];
+                        }
+                       
+                    }
+                    
+
+                    fetch('/items/api/itemvariant_by_item_id/' + orders['item_id'])
+                        .then(function (response) {
+                            if (!response.ok) { throw Error(response.statusText); }
+                            return response.json();
+                        })
+                        .then(Item_varient => {
+                            // document.getElementById('item_variant_list').innerHTML = '';       
+                            item_variant_data = Item_varient;
+                            // console.log(Item_varient);
+                            let variant_list = document.getElementById('item_variant_list');
+                            variant_list.innerHTML = '';
+                            for (let variant in Item_varient) {
+                                var opt = document.createElement('option');
+                                opt.setAttribute("data-id", Item_varient[variant]['id']);
+                                opt.setAttribute("price-g", Item_varient[variant]['client_price_' + '{{client_group}}']);
+                                opt.value = Item_varient[variant]['variant_name'];
+                                variant_list.appendChild(opt);
+                                // alert(Items[i]['id']);
+                                if (Item_varient[variant]['id'] == orders['item_variant_id']) {
+                                    document.getElementById('item_variant').value = Item_varient[variant]['variant_name'];
+                                }
+
+                            }
+                        })
+                        .catch(err => { alert(err); })
+
+                })
+                .catch(err => { alert(err); })
+
+        })
+        .catch(err => { alert(err); })
+
+
+
+
+    document.getElementById('item_input').addEventListener('change', function () {
+        let item_id = selectedDatalistAttributeValue('item_input', 'item_list', 'data-id');    
+        for (let it in items_data) {
+
+            if (items_data[it]['id'] == item_id) { document.getElementById('per_unit').value = items_data[it]['item_unit']; }
+
+        }
+        document.getElementById('item_price').value = "";
+      
+        if (typeof item_id != "undefined") {
+            get_item_variant_by_item_id(item_id)
+        }
+
     })
-}
+
+    document.getElementById('item_variant').addEventListener('change', function () {
+        let g_prce = selectedDatalistAttributeValue('item_variant', 'item_variant_list', 'price-g');
+        if (typeof g_prce != "undefined") {
+            document.getElementById('item_price').value = g_prce;
+        }
+      
+    })
+
+    function get_item_variant_by_item_id(pk) {
+        item_variant_data = '';
+
+        document.getElementById('item_variant').value = '';
+        fetch('/items/api/itemvariant_by_item_id/' + pk)
+            .then(function (response) {
+                if (!response.ok) { throw Error(response.statusText); }
+                return response.json();
+            })
+            .then(Item_varient => {
+                // document.getElementById('item_variant_list').innerHTML = '';       
+                item_variant_data = Item_varient;
+                // console.log(Item_varient);
+                let variant_list = document.getElementById('item_variant_list');
+                variant_list.innerHTML = '';
+                for (let variant in Item_varient) {
+                    var opt = document.createElement('option');
+                    opt.setAttribute("data-id", Item_varient[variant]['id']);
+                    opt.setAttribute("price-g", Item_varient[variant]['client_price_' + '{{client_group}}']);
+                    opt.value = Item_varient[variant]['variant_name'];
+                    variant_list.appendChild(opt);
+                    // alert(Items[i]['id']);
+                   
+                }
+            })
+            .catch(err => { alert(err); })
+
+            }
+
+
+        document.getElementById('update-form').addEventListener('submit', function (e) {
+            
+            e.preventDefault();
+           
+           let order_update_data = {
+                "order_date": document.getElementById('order_date').value,
+                "item_veriant_price": document.getElementById('item_price').value,
+                "price_per_unit": document.getElementById('per_unit').value,
+                "item_qty": document.getElementById('qty').value,
+                "packing_type": document.getElementById('order_unit').value,                            
+                "comment": document.getElementById('comment').value,             
+                "item_id": selectedDatalistAttributeValue('item_input', 'item_list', 'data-id'),
+                "item_variant_id": selectedDatalistAttributeValue('item_variant', 'item_variant_list', 'data-id')
+            
+            }
+         
+            fetch('/orders/api/order_item/'+order_id+'/',ajexcall.patchoption(order_update_data))
+            .then(function(response){
+                if(!response.ok){
+                    throw Error(response.statusText);
+                }
+                return response.json();
+            })
+            .then(function (update_order){
+                const update = { 'con_id': update_order['consignee_id'] };
+                return fetch('/orders/order_item/', ajexcall.putoption(update))
+                            .then(function (response) {
+                                if (!response.ok) {
+                                    throw Error(response.statusText);
+                                }
+                                return response.json();
+                            })
+                            .then(updated_list => {
+                                dataFromFetch = updated_list; //all jSON data to dataFromfetch again assign
+                                orders('undispatched', updated_list);
+                                document.getElementById('fetch-html-content').style.display = 'none';                        
+                                c_alert.render('Order Status', 'Order Update Success', 3000);
+                               
+                            })
+                            .catch(err => { alert(err); })
+
+            })
+            .catch(err=>{alert(err);})
+
+           
+        })
+
 </script>

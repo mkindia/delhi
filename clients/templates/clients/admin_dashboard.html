@@ -1,8 +1,10 @@
 {% extends 'core/base.html' %}
+{% load static %}
 {% block title %}admin{% endblock title %}
 {% block page_head %}
 
-<style type="text/css">              
+<!-- Table css-->
+<style type="text/css">
     /* Basic CSS to design table */
     table {
         border-collapse: collapse;
@@ -15,15 +17,16 @@
         border-bottom: 1px solid #ddd;
         background-color: rgb(148, 214, 253);
     }
+
     td {
         padding: 6px;
         text-align: center;
-        text-transform:capitalize;
+        text-transform: capitalize;
         border-bottom: 1px solid #ddd;
     }
 </style>
-    
 
+<!-- for popup -->
 <style>
     .popupdiv {
         display: none;
@@ -66,7 +69,7 @@
         border-radius: 6px;
         padding: 0px 0px;
         position: absolute;
-        top: 0;        
+        top: 0;
         z-index: 99999999;
     }
 
@@ -167,77 +170,18 @@
 
 
         </div>
-        <div class="base-modal-body" >
+        <div class="base-modal-body">
             <div id="disp_div" style="top:0;bottom:0;max-height:75vh;" class="col-l-12 col-m-12 col-s-12 col-">
 
 
             </div>
         </div>
         <div class="base-modal-footer" style="height: auto;">
-                      
-        </div>
-    </div>
-</div>
-<!--fetch html content-->
-<div id="fetch-html-content" style="display:none;">
-
-</div>
-<!--for send/transfer-->
-<div class="basemodal" id="dis_tran" style="position: absolute; display:none">
-    <div class="base-modal-content col-l-6 col-m-9 col-s-11" style="margin-top:5px;">
-        <div class="base-modal-header">
-            <h
-                style="position: relative; font-weight: bold; margin:0; top: 25%; -ms-transform: translateY(-50%);transform: translateY(-50%);">
-                Dispatch/Tranfer Order
-            </h>
-        </div>
-        <div class="base-modal-body">
-            <form id="dispatch-form" method="POST">
-                {% csrf_token %}
-                <div class="col-l-6 col-m-6 col-s-6 col-6" style="float:left; padding:1px;">
-                    <label for="id_datel">Date</label>
-                    <input type="Date" name="date" class="inputstyle" style="padding: 3px;" required id="id_date">
-                </div>
-                <div class="col-l-6 col-m-6 col-s-6 col-6" style="float:left; padding:2px;">
-                    <label for="dippatch_qty">Qty</label>
-                    <input type="number" min="1" max="1000" step=".1" name="itemprice" placeholder="Enter Qty"
-                        class="inputstyle" required id="dispatch_qty">
-                </div>
-                <div class="col-l-6 col-m-6 col-s-6 col-12" style="float:left; padding:2px;">
-                    <label for="status">Status</label>
-                    <select id="status" placeholder="Select Status" class="inputstyle" required>
-                        <option selected>Dispatched</option>
-                        <option>Transfer to Consignee</option>
-                        <option>Cancelled</option>
-                    </select>
-                </div>
-                <div id="tranfer_to" class="col-l-6 col-m-6 col-s-6 col-12"
-                    style="float:left; padding:2px; display: none;">
-                    <label for="t_consignee">Transfer_to</label>
-                    <select id="t_consignee" placeholder="Select Consignee" class="inputstyle">
-
-                    </select>
-                </div>
-                <div id="docket_div" class="col-l-6 col-m-6 col-s-6 col-12" style="float:left; padding:2px;">
-                    <label for="docket">Docket No.</label>
-                    <input placeholder="Enter Docket No" class="inputstyle" id="docket" required>
-                </div>
-
-                <div class="col-l-12 col-m-12 col-s-12 col-12" style="float:left; padding:2px;">
-                    <label for="dispatch_comments">Comments</label>
-                    <input class="inputstyle" placeholder="add comments" id="dispatch_coments">
-                </div>
-            </form>
-        </div>
-        <div class="base-modal-footer">
-            <button type="button" id="exit_dis_trns" class="buttonstyle"
-                style="float:right; margin-right: 10px; margin-bottom: 10px;">Exit</button>
-            <button class="buttonstyle" form="dispatch-form" id="dispatch_order"
-                style="float:right; margin-right: 10px; margin-bottom: 10px;">Submit</button>
 
         </div>
     </div>
 </div>
+
 <!--for popup option-->
 <div class="popupdiv" id="popupdiv">
     <div class="popuptext" id="myPopup">
@@ -249,31 +193,31 @@
     </div>
 </div>
 
+<!--fetch html content -->
+<div id="fetch-html-content" style="display:none;">
 
+</div> 
 {% endblock main_content%}
 
-
 {% block main_scripts %}
-
 <script type="module">
-
     var tablerowdata = [];
     let consignee_ios = [];
-
+    let unit = '';
     import * as ajexcall from "/static/core/js/modules/ajex.js";
+
+    let url = '{% static "core/json/units.json" %}';
+    unit = await (await fetch(url)).json();
+
     let consignee_names = JSON.parse('{{consignee_names | escapejs }}');
     let items = JSON.parse('{{items  | escapejs }}');
     let item_variants = JSON.parse('{{item_variants | escapejs }}');
-    let unit = JSON.parse('{{unit | escapejs }}');
 
     const order1_div = document.getElementById('accordion');
     const mainDiv = document.getElementById('maindiv');
     const ord = document.getElementById('disp_div');
-   // ord.style.maxHeight = 100+'vh';
+    // ord.style.maxHeight = 100+'vh';
     let dataFromFetch = '';
-
-
-
 
     document.getElementById('consignee_input').addEventListener('change', show);
 
@@ -308,6 +252,7 @@
                                 return response.json();
                             })
                             .then(data1 => {
+                                console.log(data1);                            
                                 dataFromFetch = data1; //all jSON data to dataFromfetch assign
                                 orders('dispatched', dataFromFetch);
                             })
@@ -316,17 +261,17 @@
                     })
                     .catch(err => { alert(err); })
             }
-            else { alert('Please Select Consignee / Client'); }
-
+           
 
         }
         else {
+
 
             if (con_id != null) {
 
                 const data = { 'con_id': con_id };
 
-                fetch('/orders/api/ios_by_client_id/' + client_id1)
+                fetch('/orders/api/ios_by_client_id/' + client_id1+"/")
                     .then(function (response) {
                         if (!response.ok) {
                             throw Error(response.statusText);
@@ -344,7 +289,7 @@
                             })
                             .then(data1 => {
                                 dataFromFetch = data1; //all jSON data to dataFromfetch assign
-                                // console.log(data1);
+                               // console.log(data1);
                                 orders('undispatched', dataFromFetch);
 
                             })
@@ -353,11 +298,13 @@
                     })
                     .catch(err => { alert(err); })
             }
-            else { alert('Please Select Consignee / Client'); }
+           
         }
     };
 
     function orders(status, dataFromFetch,) {
+      //  console.log(dataFromFetch['items'][0]['order_type'])
+       // console.log(dataFromFetch['items']);
         let client_id = 0;
         let consignee_name = '';
         let consignee_id = 0;
@@ -373,7 +320,7 @@
         ord.innerHTML = '';
         let tb = document.createElement('table');
         tb.id = 'myTable';
-       
+
         tb.style = "text-align: center;";
         let the = document.createElement('thead');
         the.style = 'text-align: center;';
@@ -383,26 +330,26 @@
         let th1 = document.createElement('th');
         let th2 = document.createElement('th');
         let th3 = document.createElement('th');
-       
+
 
         let tbody = document.createElement('tbody')
         let tht0 = document.createTextNode('Item');
         let tht1 = document.createTextNode('Price');
         let tht2 = document.createTextNode('Order');
         let tht3 = document.createTextNode('Bal');
-       
+
 
         th0.appendChild(tht0);
         th1.appendChild(tht1);
         th2.appendChild(tht2);
         th3.appendChild(tht3);
-       
+
 
         tr.appendChild(th0);
         tr.appendChild(th1);
         tr.appendChild(th2);
         tr.appendChild(th3);
-       
+
 
         the.appendChild(tr);
         tb.appendChild(the);
@@ -417,7 +364,7 @@
             client_id = dataFromFetch['items'][i]['client_id_id']
             consignee_id = dataFromFetch['items'][i]['consignee_id_id']
             ois = 0.0;
-            date = formatDate(dataFromFetch['items'][i]['date'])
+            date = formatDate(dataFromFetch['items'][i]['order_date'])
             for (let it in items) {
                 if (dataFromFetch['items'][i]['item_id_id'] == items[it]['item_id']) {
                     item_name = items[it]['item_name']
@@ -434,16 +381,17 @@
                 }
             }
 
-            for (let un in unit) {
-                if (dataFromFetch['items'][i]['order_unit_id_id'] == unit[un]['unit_id']) {
-                    order_unit = unit[un]['unit_name'];
-                    order_unit_id = unit[un]['unit_id'];
+            for (let un in unit['units']) {                
+                if (dataFromFetch['items'][i]['price_per_unit'] == un) {
+                    per_unit = un;
+                    per_unit_id = un;                  
                 }
-                if (dataFromFetch['items'][i]['price_per_unit_id_id'] == unit[un]['unit_id']) {
-                    per_unit = unit[un]['unit_name'];
-                    per_unit_id = unit[un]['unit_id'];
+            }
+            for (let pt in unit['packing_type']) {               
+                if (dataFromFetch['items'][i]['packing_type'] == pt) {
+                    order_unit = pt;
+                    order_unit_id = pt;
                 }
-
             }
 
             for (let ios in consignee_ios) {
@@ -456,8 +404,6 @@
 
                 if (parseFloat((dataFromFetch['items'][i]['item_qty']) - ois).toFixed(1) == 0.0 || parseFloat((dataFromFetch['items'][i]['item_qty']) - ois).toFixed(1) < 0.0) {
 
-                    //parseInt((data['items'][i]['item_qty'])-ois);
-                    // alert(bal);
                     tbody.innerHTML += `
               <tr><td colspan=4 style="text-align: left; font-weight:bold; background-color:lightgray;">${consignee_name + ' - ' + date}</td></tr>            
               <tr>        
@@ -474,6 +420,7 @@
               <td hidden>${dataFromFetch['items'][i]['item_qty']}</td>
               <td hidden>${per_unit_id}</td>
               <td hidden>${order_unit_id}</td>
+              <td hidden>${dataFromFetch['items'][i]['order_type']}</td>
               <td hidden></td>      
               </tr>`;
 
@@ -481,10 +428,7 @@
 
             }
             if (status == 'undispatched') {
-
-
                 if (parseFloat((dataFromFetch['items'][i]['item_qty']) - ois).toFixed(1) != 0.0 || parseFloat((dataFromFetch['items'][i]['item_qty']) - ois).toFixed(1) < 0.0) {
-
                     tbody.innerHTML += `
               <tr><td colspan=4 style="text-align:left; font-weight:bold; background-color:lightgray;">${consignee_name + ' - ' + date}</td></tr>            
               <tr>        
@@ -501,6 +445,7 @@
               <td hidden>${dataFromFetch['items'][i]['item_qty']}</td>
               <td hidden>${per_unit_id}</td>
               <td hidden>${order_unit_id}</td>
+              <td hidden>${dataFromFetch['items'][i]['order_type']}</td>
               <td hidden></td>      
               </tr>`;
 
@@ -514,38 +459,42 @@
         document.getElementById(table_id)
             .addEventListener('click', function (e) {
                 tablerowdata = '';
-              //  if (e.target.classList.contains('optionBtn')) {
-                
-                    e = e || window.event;
-                    var data = [];
-                    var target = e.srcElement || e.target;
-                    while (target && target.nodeName !== "TR") {
-                        target = target.parentNode;
-                    }
-                    if (target) {
-                        var cells = target.getElementsByTagName("td");
-                        for (var i = 0; i < cells.length - 1; i++) {
-                            data.push(cells[i].innerHTML);
+                //  if (e.target.classList.contains('optionBtn')) {
 
-                        }
+                e = e || window.event;
+                var data = [];
+                var target = e.srcElement || e.target;
+                while (target && target.nodeName != "TR") {
+                    target = target.parentNode;
+                }
+                if (target) {
+                    var cells = target.getElementsByTagName("td");
+                    for (var i = 0; i < cells.length - 1; i++) {
+                        data.push(cells[i].innerHTML);
 
                     }
-                    if (!cells.length || target.parentNode.nodeName == 'THEAD') { // if clicked row is within thead
-            return;
-        }
-                  let  select_cells=cells.length;
-
-                    if(select_cells%2==0)
-                    {
-                   popupcordinate(e);
-                   tablerowdata = data;
-                  //alert(select_cells)
+                   
+                }
+                if (!cells.length || target.parentNode.nodeName == 'THEAD') { // if clicked row is within thead
+                    return;
+                }
+             
+                if (cells.length != 1) {                   
+                    tablerowdata = data;
+                    var x = e.offsetX;
+                    var y = e.offsetY;
+                    var w = e.offsetWidth;
+                    popup.style.marginTop = e.clientY - 70 - y + "px";
+                    if (e.clientX < 100) {
+                        popup.style.marginLeft = e.clientX + "px";
                     }
-                    // alert(data);        
-
-              //  }
-
-
+                    else if (e.clientX > 100 && e.clientX < 200) { popup.style.marginLeft = e.clientX - 100 + "px"; }
+                    else if (e.clientX > 200 && e.clientX < 290) { popup.style.marginLeft = e.clientX - 200 + "px"; }
+                    else { popup.style.marginLeft = e.clientX - 300 + "px"; }       
+                    popupdiv.style.display = 'block';
+                                      
+                }
+             
             });
     }
 
@@ -560,71 +509,59 @@
     const popupdiv = document.getElementById('popupdiv');
     const popup = document.getElementById("myPopup");
 
-    function popupcordinate(event) {
-        var x = event.offsetX;
-        var y = event.offsetY;
-        var w = event.offsetWidth;
-        popup.style.marginTop = event.clientY - 70 - y + "px";
-        if(event.clientX<100){
-        popup.style.marginLeft = event.clientX+"px";
-        }
-        else if(event.clientX>100 && event.clientX<200){popup.style.marginLeft = event.clientX-100 +"px";}
-        else if(event.clientX>200 && event.clientX<290){popup.style.marginLeft = event.clientX-200 +"px";}
-        else{ popup.style.marginLeft = event.clientX-300 +"px";}
-       // alert(event.clientX +" " + x);
-      //  popup.style.marginTop = event.screenY - 195-y + "px";
-        // popup.style.marginLeft=event.clientX-230-x +"px";
-        // popup.style.right=event.clientX-x +"px";
-        popupdiv.style.display = 'block';
-
-    }
-
-
-    document.getElementById('edit_order').addEventListener('click', function () {
-        // console.log(tablerowdata);
+    document.getElementById('edit_order').addEventListener('click', function () {       
         let item_qty = tablerowdata[2].split(' ');
         let sent_qty = tablerowdata[3].split(' ');
-
+        if(tablerowdata[13]!="trn"){
         if (parseFloat(item_qty[0]).toFixed(1) == parseFloat(sent_qty[0]).toFixed(1)) {
-           // window.location = '/orders/edit_disp_trans/' + tablerowdata[6];
+            // window.location = '/orders/edit_disp_trans/' + tablerowdata[6];
 
-           fetch('orders/edit_disp_trans/' + tablerowdata[6]+'/')
-            .then(function (response) {
-                if (!response.ok) {
-                    throw Error(response.statusText);
-                }
-                return response.text();
-            })
-            .then( function (edit_order)  {
-                document.getElementById('fetch-html-content').innerHTML = edit_order;
-                var scripts = document.getElementById("fetch-html-content").querySelectorAll("script");
-                for (var i = 0; i < scripts.length; i++) {
-                    if (scripts[i].innerText) {
-                        eval(scripts[i].innerText);
-                    } else {
-                        fetch(scripts[i].src).then(function (data) {
-                            data.text().then(function (r) {
-                                eval(r);
-                            })
-                        });
-
+            fetch('orders/edit_disp_trans/' + tablerowdata[6] + '/')
+                .then(function (response) {
+                    if (!response.ok) {
+                        throw Error(response.statusText);
                     }
-                    // To not repeat the element
-                    scripts[i].parentNode.removeChild(scripts[i]);
-                }
-                hide();
-                document.getElementById('fetch-html-content').style.display = 'block';
-            })
-            .catch(err => { alert(err); })
-        document.getElementById('popupdiv').style.display = 'none';
+                    return response.text();
+                })
+                .then(function (edit_order) {
+                    document.getElementById('fetch-html-content').innerHTML = edit_order;
+                    var scripts = document.getElementById("fetch-html-content").querySelectorAll("script");
+                    for (var i = 0; i < scripts.length; i++) {
+                        if (scripts[i].innerText) {
+                            eval(scripts[i].innerText);
+                        } else {
+                            fetch(scripts[i].src).then(function (script1) {
+                                script1.text().then(function (r) {
+                                    eval(r);
+                                })
+                            });
+
+                        }
+                        // To not repeat the element
+                        scripts[i].parentNode.removeChild(scripts[i]);
+                    }
+                    hide();
+                 
+                    document.getElementById('fetch-html-content').style.display = 'block';
+                })
+                .catch(err => { alert(err); })
+            document.getElementById('popupdiv').style.display = 'none';
         }
         else {
-            alert('Item not edit able');
+            alert('Item not editable');
         }
+    }
+    else{
+        alert('order transfer from party not editable');
+    }
     })
 
     document.getElementById('dispatch_details').addEventListener('click', function () {
+
+        let dispatched_qty =parseFloat(tablerowdata[2].split(' '))-parseFloat(tablerowdata[3].split(' '));
        
+        if (dispatched_qty >= 1){ 
+        
         fetch('orders/item_order_status/' + tablerowdata[6] + '/')
             .then(function (response) {
                 if (!response.ok) {
@@ -632,7 +569,7 @@
                 }
                 return response.text();
             })
-            .then( function (order_sent)  {
+            .then(function (order_sent) {
                 document.getElementById('fetch-html-content').innerHTML = order_sent;
                 var scripts = document.getElementById("fetch-html-content").querySelectorAll("script");
                 for (var i = 0; i < scripts.length; i++) {
@@ -654,203 +591,63 @@
             })
             .catch(err => { alert(err); })
         document.getElementById('popupdiv').style.display = 'none';
+        }
+        else{
+            alert('Details Not Found')
+        }
+
     })
 
     document.getElementById('dispatch').addEventListener('click', function () {
-        document.getElementById('status').value = 'Dispatched';
-        document.getElementById('tranfer_to').style.display = 'none';
-        document.getElementById('tranfer_to').setAttribute('required', false);
-        let t_con = document.getElementById('t_consignee');
-        t_con.innerHTML = '';
-
-        let dispatch_transfer_date = document.getElementById("id_date");
-        dispatch_transfer_date.valueAsDate = new Date();
-        let dispatch_qty = document.getElementById('dispatch_qty').value;
-        let dispatch_status = document.getElementById('status').value;
-        let dispatch_comment = document.getElementById('dispatch_coments').value;
-       
-        //ord.innerHTML='';
-
-        const data = { 'order_id': tablerowdata[4], 'item_order_id': tablerowdata[5] };
-
-        for (let i = 0; i < dataFromFetch['selected_consignes'].length; i++) {
-            if (tablerowdata[5] != dataFromFetch['selected_consignes'][i]['id']) {
-                let opt = document.createElement('option');
-                opt.innerHTML = dataFromFetch['selected_consignes'][i]['consignee_name'];
-
-                opt.value = dataFromFetch['selected_consignes'][i]['id'];;
-                t_con.appendChild(opt);
-            }
-        }
 
         let item_qty = tablerowdata[3].split(' ');
-        if (parseFloat(item_qty[0]).toFixed(1) != 0.0 && parseFloat(item_qty[0]).toFixed(1) > 0.0) {
-            document.getElementById('dispatch_qty').value = parseFloat(item_qty[0]).toFixed(1);
-            document.getElementById('dis_tran').style.display = 'block';
-        } else {
+        if (parseFloat(item_qty[0]).toFixed(1) != 0.0 && parseFloat(item_qty[0]).toFixed(1) > 0.0){ 
+        fetch('orders/dispatch_transfer/' + tablerowdata[6] + '/'+parseFloat(item_qty[0]).toFixed(1)+'/')
+            .then(function (response) {
+                if (!response.ok) {
+                    throw Error(response.statusText);
+                }
+                return response.text();
+            })
+            .then(function (order_sent) {
+                document.getElementById('fetch-html-content').innerHTML = order_sent;
+                var scripts = document.getElementById("fetch-html-content").querySelectorAll("script");
+                for (var i = 0; i < scripts.length; i++) {
+                    if (scripts[i].innerText) {
+                        eval(scripts[i].innerText);
+                    } else {
+                        fetch(scripts[i].src).then(function (dispatch_transfer) {
+                            dispatch_transfer.text().then(function (r) {
+                                eval(r);
+                            })
+                        });
+
+                    }
+                    // To not repeat the element
+                    scripts[i].parentNode.removeChild(scripts[i]);
+                }
+                hide();
+                document.getElementById('fetch-html-content').style.display = 'block';
+            })
+            .catch(err => { alert(err); })
+        document.getElementById('popupdiv').style.display = 'none';               
+        } 
+        else {
             alert('Order Completed');
         }
-        popupdiv.style.display = 'none';
-        document.getElementById('exit_dis_trns').addEventListener('click', function () {
-            document.getElementById('dis_tran').style.display = 'none';
-        })
+    
     })
 
-    document.getElementById('status').addEventListener('change', function () {
-        if (document.getElementById('status').value == 'Transfer to Consignee') {
-            document.getElementById('docket').setAttribute('required', false);
-            document.getElementById('docket').disabled = true;
-            document.getElementById('docket_div').style.display = 'none';
-            document.getElementById('tranfer_to').setAttribute('required', true);
-            document.getElementById('tranfer_to').style.display = 'block';
-
-        }
-        else {
-            document.getElementById('tranfer_to').setAttribute('required', false);
-            document.getElementById('tranfer_to').style.display = 'none';
-
-            document.getElementById('docket').disabled = false;
-            document.getElementById('docket').setAttribute('required', true);
-            document.getElementById('docket_div').style.display = 'block';
-
-        }
-    })
-
-    document.getElementById('dispatch-form').addEventListener('submit', function (e) {
-        e.preventDefault();
-        let item_qty = tablerowdata[3].split(' ');
-        let data = '';
-        let dispatch_transfer_date = document.getElementById("id_date");
-        let dispatch_qty = parseFloat(document.getElementById('dispatch_qty').value);
-        let dispatch_status = document.getElementById('status').value.toLowerCase();
-        let docket_number = document.getElementById('docket').value;
-        let dispatch_comment = document.getElementById('dispatch_coments').value;
-
-
-        let t_con = document.getElementById('t_consignee').value;
-        if (dispatch_status == 'transfer to consignee') {
-
-
-            data = {
-                'client_id': tablerowdata[4],
-                'consignee_id': tablerowdata[5],
-                'item_order_id': tablerowdata[6],
-                'date': dispatch_transfer_date.value,
-                'item_qty': dispatch_qty,
-                'status': 'transferred',
-                'transfer_id': t_con,
-                'dispatch_comment': dispatch_comment
-
-            };
-
-        }
-        else {
-            data = {
-                'client_id': tablerowdata[4],
-                'consignee_id': tablerowdata[5],
-                'item_order_id': tablerowdata[6],
-                'date': dispatch_transfer_date.value,
-                'item_qty': dispatch_qty,
-                'status': 'dispatched',
-                'docket_number':docket_number,
-                'transfer_id': null,
-                'dispatch_comment': dispatch_comment
-            };
-
-        }
-
-        if (parseFloat(item_qty[0]).toFixed(1) < dispatch_qty) {
-            alert('Balance Order Qty. is less then ' + dispatch_qty + " " + parseFloat(item_qty[0]).toFixed(1));
-        }
-        else {
-            // console.log(data)
-            fetch('/orders/api/ios/', ajexcall.postoption(data))
-                .then(function (response) {
-                    if (!response.ok) {
-                        throw Error(response.statusText);
-                    }
-                    return response.json(); // Convert response to json use text for text
-                })
-                .then(data3 => {
-
-                    if (data3['status'] == 'transferred') {
-                        let ordobj = {
-                            "date": data3['date'],
-                            "item_veriant_price": tablerowdata[9],
-                            "item_qty": data3['item_qty'],
-                            "client_id": data3['client_id'],
-                            "consignee_id": document.getElementById('t_consignee').value,
-                            "item_id": tablerowdata[7],
-                            "item_variant_id": tablerowdata[8],
-                            "price_per_unit_id": tablerowdata[11],
-                            "order_unit_id": tablerowdata[12],
-                            "order_type": "transferred",
-                            "comment": document.getElementById('dispatch_coments').value
-                        }
-
-                        fetch('/orders/api/order_item/', ajexcall.postoption(ordobj))
-                            .then(function (response) {
-                                if (!response.ok) {
-                                    throw Error(response.statusText);
-                                }
-                                return response.json();
-                            })
-                            .catch(err => { alert(err); })
-
-                    }
-
-                    const data23 = { 'con_id': data3['consignee_id'] };
-                    fetch('/orders/api/ios_by_client_id/' + data3['client_id'])
-                        .then(function (response) {
-                            if (!response.ok) {
-                                throw Error(response.statusText);
-                            }
-                            return response.json();
-                        })
-                        .then(data2r => {
-                            consignee_ios = data2r;
-                            return fetch('/orders/order_item/', ajexcall.putoption(data23))
-                                .then(function (response) {
-                                    if (!response.ok) {
-                                        throw Error(response.statusText);
-                                    }
-                                    return response.json();
-                                })
-                                .then(data1r => {
-                                    dataFromFetch = data1r; //all jSON data to dataFromfetch assign
-                                    orders('undispatched', data1r);
-                                    document.getElementById('dis_tran').style.display = 'none';
-                                    c_alert.render('Order Status', 'Order Process Success', 4000);
-                                    document.getElementById('docket').disabled = false;
-                                    document.getElementById('docket').setAttribute('required', true);
-                                    document.getElementById('docket_div').style.display = 'block';
-                                })
-                                .catch(err => { alert(err); })
-
-                        })
-                        .catch(err => { alert(err); })
-
-                })
-                .catch(err => { alert(err); })
-
-        }
-
-
-
-    })
-
+    
 </script>
 <script>
 
-    //  alert(document.getElementById('fetch-html-content').style.display);
-
+       
     function hide() {
         document.getElementById('hide').addEventListener('click', function () {
             document.getElementById('fetch-html-content').style.display = 'none';
         })
     }
-
-
 
     function popupclose() {
         let popupdiv = document.getElementById('popupdiv');
@@ -858,8 +655,8 @@
     }
 
     window.onclick = function (event) {
-        if (event.target.className == 'popupdiv') {
-            popupdiv.style.display = 'none';
+        if (event.target.className == 'popupdiv') {        
+           document.getElementById(event.target.id).style.display = 'none';    
         }
     }
 

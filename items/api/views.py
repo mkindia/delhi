@@ -1,8 +1,8 @@
 from rest_framework.permissions import BasePermission
 
 from core.models import Custom_User
-from items.models import Item_Group,Item,Unit,Item_Variant
-from items.api.serializers import itemGroupSerializers,itemSerializers,unitSerializers,itemVariantSerializers
+from items.models import Item_Group,Item,Item_Variant
+from items.api.serializers import itemGroupSerializers,itemSerializers,itemVariantSerializers
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import viewsets
@@ -10,14 +10,10 @@ from rest_framework import viewsets
 class CustomPermissions(BasePermission):
 
     def has_permission(self, request, view):
-        if (request.user.is_admin or request.user.is_staff and request.user.is_authenticated):
+        if (request.user.is_authenticated):
             return True
         return False
-class unit(viewsets.ModelViewSet):
-    queryset=Unit.objects.all()
-    serializer_class = unitSerializers
-    permission_classes=(CustomPermissions,)
-    http_method_names =['get']
+
 
 class itemgroup(viewsets.ModelViewSet):
    

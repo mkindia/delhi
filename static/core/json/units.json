@@ -1,0 +1,4 @@
+{
+    "units":{"kgs":"kgs.","pcs":"pcs."},   
+    "packing_type":{"cr":"carton","bl":"bundle","pcs":"pcs."}
+}
