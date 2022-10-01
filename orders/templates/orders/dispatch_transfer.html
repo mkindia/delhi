@@ -124,18 +124,20 @@
         .catch(err=>{alert(err);})
     }
     document.getElementById('status').addEventListener('change', function () {
+     
         if (document.getElementById('status').value == 'trn') {
+
             document.getElementById('docket').setAttribute('required', false);
             document.getElementById('docket').disabled = true;
             document.getElementById('docket_div').style.display = 'none';
-            document.getElementById('tranfer_to').setAttribute('required', true);
+            document.getElementById('t_consignee').setAttribute('required', true);
             document.getElementById('tranfer_to').style.display = 'block';
             document.getElementById('station_div').style.display = 'none';
             document.getElementById('transport_div').style.display = 'none';
-
+          
         }
         else {
-            document.getElementById('tranfer_to').setAttribute('required', false);
+            document.getElementById('t_consignee').setAttribute('required', false);
             document.getElementById('tranfer_to').style.display = 'none';
             document.getElementById('docket').disabled = false;
             document.getElementById('docket').setAttribute('required', true);
@@ -150,7 +152,7 @@
  document.getElementById('dispatch-form').addEventListener('submit', function (e) {
     e.preventDefault();
     let item_qty = document.getElementById('dispatch_qty').value;
-    let dis_trs_data = '';
+   
     let dispatch_transfer_date = document.getElementById("dispatch_date");
     let dispatch_qty = parseFloat(document.getElementById('dispatch_qty').value);
     let dispatch_status = document.getElementById('status').value.toLowerCase();
@@ -158,81 +160,113 @@
     let dispatch_comment = document.getElementById('dispatch_coments').value;
 
 
-    let t_con = document.getElementById('t_consignee').value;
-    if (dispatch_status == 'trn') {
-
-        dis_trs_data = {
-            'client_id': order_data['client_id'],
-            'consignee_id': order_data['consignee_id'],
-            'item_order_id': order_id,
-            'date': dispatch_transfer_date.value,
-            'item_qty': dispatch_qty,
-            'status': 'trn',
-            'transfer_id': t_con,
-            'dispatch_comment': dispatch_comment
-
-        };
-
-    }
-    else {
-        dis_trs_data = {
-            'client_id':order_data['client_id'],
-            'consignee_id': order_data['consignee_id'],
-            'item_order_id': order_id,
-            'date': dispatch_transfer_date.value,
-            'item_qty': dispatch_qty,
-            'status': 'dis',
-            'docket_number': docket_number,
-            'transfer_id': null,
-            'station':document.getElementById('station').value,
-            'transport':document.getElementById('transport').value,
-            'dispatch_comment': dispatch_comment
-        };
-
-    }
+    let t_con = document.getElementById('t_consignee').value;   
 
     if (order_bal < dispatch_qty) {
         alert('Balance Order Qty. is less then ' + dispatch_qty + " " + parseFloat(item_qty[0]).toFixed(1));
     }
     else {
-        
-        fetch('/orders/api/ios/', ajexcall.postoption(dis_trs_data))
+
+        if (dispatch_status == 'trn') {
+          
+            let ordobj = {
+                "client_group":order_data['client_group'],
+                "order_date": order_data['order_date'],
+                "item_veriant_price": order_data['item_veriant_price'],
+                "item_qty":item_qty,
+                "client_id": order_data['client_id'],
+                "consignee_id": document.getElementById('t_consignee').value,
+                "item_id": order_data['item_id'],
+                "item_variant_id": order_data['item_variant_id'],
+                "price_per_unit": order_data['price_per_unit'],
+                "packing_type": order_data['packing_type'],
+                "order_type": "trn"                       
+            }
+            fetch('/orders/api/order_item/', ajexcall.postoption(ordobj))
+            .then(function (response) {
+                if (!response.ok) {
+                    throw Error(response.statusText);
+                }
+                return response.json();
+            })
+            .then(function(addtrnferorder){
+                let dis_trs_data = {
+                    'client_id': order_data['client_id'],
+                    'consignee_id': order_data['consignee_id'],
+                    'item_order_id': order_id,
+                    'date': dispatch_transfer_date.value,
+                    'item_qty': dispatch_qty,
+                    'status': 'trn',
+                    'item_order_trn_id' : addtrnferorder['id'],
+                    'transfer_id': t_con,
+                    'dispatch_comment': dispatch_comment        
+                };
+                fetch('/orders/api/ios/', ajexcall.postoption(dis_trs_data))
+                .then(function (response) {
+                    if (!response.ok) {
+                        throw Error(response.statusText);
+                    }
+                    return response.json(); // Convert response to json use text for text
+                })
+                .then(orderstatus => {
+
+                    let addtnfupdate = {
+                        "item_order_status_id" : orderstatus['id']
+                    }
+                    fetch('/orders/api/order_item/'+addtrnferorder['id']+'/',ajexcall.patchoption(addtnfupdate))
+                            .then(function(response){
+                                if(!response.ok){throw Error(response.statusText);}
+                                return response.json();
+                            })
+                            .then(oupdate=>{
+                                pagerefresh();
+                            })
+                .catch(err=>{alert(err);})
+                })
+                .catch(err => { alert(err); })
+            })
+            .catch(err => { alert(err); })
+           
+        }
+        else {
+          let dis_trs_data = {
+                'client_id':order_data['client_id'],
+                'consignee_id': order_data['consignee_id'],
+                'item_order_id': order_id,
+                'date': dispatch_transfer_date.value,
+                'item_qty': dispatch_qty,
+                'status': 'dis',
+                'docket_number': docket_number,
+                'transfer_id': null,
+                'station':document.getElementById('station').value,
+                'transport':document.getElementById('transport').value,
+                'dispatch_comment': dispatch_comment
+            };
+
+            fetch('/orders/api/ios/', ajexcall.postoption(dis_trs_data))
             .then(function (response) {
                 if (!response.ok) {
                     throw Error(response.statusText);
                 }
                 return response.json(); // Convert response to json use text for text
             })
-            .then(data3 => {
+            .then(st=>{
+                pagerefresh();
+            })
+            .catch(err => {alert(err); })
+           
+        }
+           
+               
+    }
 
-                if (data3['status'] == 'trn') {
-                    let ordobj = {
-                        "client_group":order_data['client_group'],
-                        "order_date": order_data['order_date'],
-                        "item_veriant_price": order_data['item_veriant_price'],
-                        "item_qty":item_qty,
-                        "client_id": order_data['client_id'],
-                        "consignee_id": document.getElementById('t_consignee').value,
-                        "item_id": order_data['item_id'],
-                        "item_variant_id": order_data['item_variant_id'],
-                        "price_per_unit": order_data['price_per_unit'],
-                        "packing_type": order_data['packing_type'],
-                        "order_type": "trn"                       
-                    }
 
-                    fetch('/orders/api/order_item/', ajexcall.postoption(ordobj))
-                        .then(function (response) {
-                            if (!response.ok) {
-                                throw Error(response.statusText);
-                            }
-                            return response.json();
-                        })
-                        .catch(err => { alert(err); })
 
-                }
+})
 
-                const data23 = { 'con_id': data3['consignee_id'] };
-                fetch('/orders/api/ios_by_client_id/' + data3['client_id'])
+function pagerefresh(){
+    const data23 = { 'con_id': order_data['consignee_id'] };
+                fetch('/orders/api/ios_by_client_id/' + order_data['client_id'])
                     .then(function (response) {
                         if (!response.ok) {
                             throw Error(response.statusText);
@@ -262,17 +296,7 @@
                     })
                     .catch(err => { alert(err); })
             
-            })
-            .catch(err => { alert(err); })
-            
-    }
-
-
-
-})
-
-
-
-
+    
+}
 
 </script>

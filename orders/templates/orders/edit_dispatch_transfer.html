@@ -101,6 +101,7 @@
 <script type="module">
     // import * as ajexcall from "/static/core/js/modules/ajex.js";   
     let items_data;
+    let per_unit_id='';
     let item_variant_data;
     let unit = '';
     let order_id = "{{order_id}}";
@@ -109,16 +110,15 @@
     document.getElementById("order_date").valueAsDate = new Date();
 
     async function unitsjson() {
-        let opt = "";
-        let url = '{% static "core/json/units.json" %}';
-        let json_contents = await (await fetch(url)).json();
-        unit = json_contents['units'];
-
-        for (let pu in json_contents['packing_type']) {
-            opt += "<option value=" + pu + ">" + json_contents['packing_type'][pu] + "</option>"
-
+        unit = await (await fetch('/items/api/units/')).json();
+       document.getElementById('order_unit').innerHTML = '';
+        let json_contents = await (await fetch('/items/api/packing_unit/')).json();
+           
+        for (let pu in json_contents) {
+            document.getElementById("order_unit").innerHTML += "<option value=" + json_contents[pu]['id'] + ">" + json_contents[pu]['packing_unit_name'] + "</option>"
+            
         }
-        document.getElementById("order_unit").innerHTML = opt;
+    // console.log(unit);
     }
     unitsjson();
 
@@ -151,11 +151,19 @@
                 .then(orders => {
                     order_data=orders;
                   //  console.log(orders);
+                  //  console.log(unit);
                     document.getElementById('item_price').value = orders['item_veriant_price'];
                     document.getElementById('qty').value = orders['item_qty'];
-                    document.getElementById('order_date').value = orders['order_date'];
-                    document.getElementById('per_unit').value = orders['price_per_unit'];
+                    document.getElementById('order_date').value = orders['order_date'];                    
                     document.getElementById('comment').value =orders['comment'];
+
+                    for(let ui in unit){
+                        if(orders['price_per_unit'] == unit[ui]['id']){
+                            document.getElementById('per_unit').value = unit[ui]['unit_abbreviation'];
+                          //  console.log(unit[ui]['id']);
+                        }
+                    }
+
                     for(let it in Items)
                     {
                         if(Items[it]['id']==orders['item_id'])
@@ -203,9 +211,12 @@
 
     document.getElementById('item_input').addEventListener('change', function () {
         let item_id = selectedDatalistAttributeValue('item_input', 'item_list', 'data-id');    
-        for (let it in items_data) {
+        for (let it in unit) {
 
-            if (items_data[it]['id'] == item_id) { document.getElementById('per_unit').value = items_data[it]['item_unit']; }
+            if (unit[it]['id'] == item_id) { 
+                document.getElementById('per_unit').value = unit[it]['unit_abbreviation']; 
+                per_unit_id = unit[it]['id'];
+            }
 
         }
         document.getElementById('item_price').value = "";
@@ -254,16 +265,18 @@
             }
 
 
-        document.getElementById('update-form').addEventListener('submit', function (e) {
+    document.getElementById('update-form').addEventListener('submit', function (e) {
             
             e.preventDefault();
+
+
            
            let order_update_data = {
                 "order_date": document.getElementById('order_date').value,
                 "item_veriant_price": document.getElementById('item_price').value,
-                "price_per_unit": document.getElementById('per_unit').value,
+                "price_per_unit": per_unit_id,
                 "item_qty": document.getElementById('qty').value,
-                "packing_type": document.getElementById('order_unit').value,                            
+                "packing_type": document.getElementById('order_unit').value,                          
                 "comment": document.getElementById('comment').value,             
                 "item_id": selectedDatalistAttributeValue('item_input', 'item_list', 'data-id'),
                 "item_variant_id": selectedDatalistAttributeValue('item_variant', 'item_variant_list', 'data-id')

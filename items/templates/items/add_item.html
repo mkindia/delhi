@@ -76,12 +76,11 @@
     import * as ajexcall from "/static/core/js/modules/ajex.js";
    
     async function unitsjson() {
-      let  opt = "";     
-      let url = '{% static "core/json/units.json" %}';
-      let json_contents = await (await fetch(url)).json();
-    
-    for(var key in json_contents['units']) {      
-      opt += "<option value=" + key  + ">" +json_contents['units'][key] + "</option>"
+      let  opt = "";    
+      let json_contents = await (await fetch('/items/api/units/')).json();
+   
+    for(var key in json_contents) {      
+      opt += "<option value=" + json_contents[key]['id']  + ">" +json_contents[key]['unit_name'] + "</option>"
       }
       document.getElementById("id_unit").innerHTML = opt;
   }

@@ -31,7 +31,7 @@
                 <div id="tranfer_to" class="col-l-6 col-m-6 col-s-6 col-6"
                     style="float:left; padding:2px; display: none;">
                     <label for="t_consignee">Transfer_to</label>
-                    <select id="t_consignee" placeholder="Select Consignee" class="inputstyle">
+                    <select id="t_consignee" style="text-transform:capitalize;" placeholder="Select Consignee" class="inputstyle">
 
                     </select>
                 </div>
@@ -122,6 +122,8 @@
                   opt.innerHTML = getconsignees[con]['consignee_name'];
                   opt.value = getconsignees[con]['id'];
                   t_con.appendChild(opt);
+                  if(getconsignees[con]['id'] == getstatus['transfer_id'] )
+                  t_con.value = getstatus['transfer_id'];
                   }
               }
             })
@@ -160,7 +162,9 @@
             document.getElementById('edit_order_status').style.display = 'none';
         })
     
-   
+    document.getElementById('dispatch-form').addEventListener('submit',function(e){
 
-   // console.log(orderstatus);
+        e.preventDefault();
+    })
+   
 </script>

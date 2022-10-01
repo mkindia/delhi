@@ -22,7 +22,7 @@ class itemOrderStatus(viewsets.ModelViewSet):
     queryset = Item_Order_Status.objects.all()
     serializer_class =itemOrderStatus_serializers
     permission_classes = (CustomPermissions,)
-    http_method_names = ['get','post']
+    http_method_names = ['get','post','patch']
 
 class ios_by_client_id(viewsets.ModelViewSet):   
     serializer_class =itemOrderStatus_serializers   

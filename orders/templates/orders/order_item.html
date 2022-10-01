@@ -1,44 +1,27 @@
 {% extends 'core/base.html' %} {% load static %} {% block title %}neworders
 {% endblock title %} {% block page_head %}
-<style>
-  #myTable {
-    font-family: Arial, Helvetica, sans-serif;
-    border-collapse: collapse;
-    width: 100%;
-    font-size: 12px;
-    text-align: center;
+<style type="text/css">
+  /* Basic CSS to design table */
+  table {
+      border-collapse: collapse;
+      width: 100%;
   }
 
-  #myTable th:first-child {
-    border-radius: 0 0 0 0;
+  table th {
+      padding: 6px;
+      text-align: center;
+      border-bottom: 1px solid #ddd;
+      background-color: rgb(148, 214, 253);
   }
 
-  #myTable th:last-child {
-    border-radius: 0 0 0 0;
-  }
-
-  #myTable td,
-  #customers th {
-    border: 1px solid #ddd;
-    padding: 2px;
-  }
-
-  #myTable tr:nth-child(even) {
-    background-color: #f2f2f2;
-  }
-
-  /*
-    #myTable tr:hover {background-color: #ddd;}
-    */
-  #myTable th {
-    padding-top: 6px;
-    padding-bottom: 6px;
-    font-size: 12px;
-    text-align: center;
-    background-color: #047eaa;
-    color: white;
+  td {
+      padding: 6px;
+      text-align: center;
+      text-transform: capitalize;
+      border-bottom: 1px solid #ddd;
   }
 </style>
+
 {% endblock page_head %} {% block main_content %}
 
 <div class="basemodal">
@@ -129,12 +112,9 @@
             <thead>
               <tr style="font-size: 12px">
                 <th>SN.</th>
-                <th>Item Name</th>
-                <th>Varient</th>
-                <th>Price</th>
-                <th>Per</th>
-                <th>Qty.</th>
-                <th>Order Unit</th>
+                <th colspan="2">Item Name</th>                
+                <th colspan="2">Price</th>               
+                <th colspan="2">Qty.</th>               
                 <th>&#8942;</th>
               </tr>
             </thead>
@@ -238,11 +218,9 @@
             <datalist id="item_list" style="text-transform: capitalize">
               {% for item in items %}
 
-              <option
-                data-id="{{item.id}}"
-                item-unit="{{item.item_unit}}"
-                value="{{item.item_name}}"
-              ></option>
+              <option data-id="{{item.id}}" item-unit="{{item.item_unit}}" value="{{item.item_name}}">
+
+              </option>
               > {% endfor %}
             </datalist>
           </div>
@@ -271,11 +249,7 @@
             style="float: left; padding: 2px"
           >
             <label for="item_price">Item Price</label>
-            <input
-              type="number"
-              min="1"
-              max="1000"
-              step=".01"
+            <input type="number" min="1" max="1000" step=".01"
               {% if user.is_user %}
               disabled="true"
               {% endif %}
@@ -289,25 +263,11 @@
 
           <div
             class="col-l-4 col-m-5 col-s-4 col-4"
-            style="float: left; padding: 2px"
-          >
+            style="float: left; padding: 2px">
             <label for="qty">.</label>
-            <input
-              id="per_unit"
-              type="text"
-              class="validdatalist"
-              value="Kg."
-              disabled="True"
-              list="per_unit_list"
-              required
-              style="text-transform: capitalize"
-            />
-            <datalist id="per_unit_list" style="text-transform: capitalize">
-              {% for unit in units %}
-
-              <option data-id="{{unit.id}}" value="{{unit.unit_name}}"></option>
-              > {% endfor %}
-            </datalist>
+            <input id="per_unit" type="text" class="inputstyle validdatalist" disabled="True" required
+              style="text-transform: capitalize"/>
+           
           </div>
 
           <div
@@ -315,14 +275,7 @@
             style="float: left; padding: 2px"
           >
             <label for="qty">Qty.</label>
-            <input
-              type="number"
-              min="1"
-              max="1000"
-              step=".001"
-              name="itemname"
-              placeholder="Enter QTY."
-              class="inputstyle"
+            <input type="number" min="1" max="1000" step=".001" name="itemname" placeholder="Enter QTY." class="inputstyle"
               required
               id="qty"
             />
@@ -333,11 +286,7 @@
             style="float: left; padding: 2px"
           >
             <label for="order_unit">Order unit</label>
-            <select
-              id="order_unit"
-              class="inputstyle"
-              style="text-transform: capitalize"
-            ></select>
+            <select id="order_unit" class="inputstyle" style="text-transform: capitalize"></select>
           </div>
           <div
             class="col-l-12 col-m-12 col-s-12 col-"
@@ -411,21 +360,24 @@
   document.getElementById("id_date").valueAsDate = new Date();
   let item_varient_price = "";
   let client_phone_no = "";
+  let item_unit = "";
   var jsonArr = [];
-
+  let units = "";
+  let packing_unit = "";
   async function unitsjson() {
-    let url = '{% static "core/json/units.json" %}';
-    let units = await (await fetch(url)).json();
-    //   console.log(units['packing_type'])
-    for (let key in units["packing_type"]) {
+    document.getElementById("order_unit").innerHTML = "";
+   // let url = '{% static "core/json/units.json" %}';
+    units = await (await fetch('/items/api/units/')).json();
+
+    packing_unit = await(await fetch('/items/api/packing_unit/')).json();
+       //console.log(packing_unit)
+    for (let key in packing_unit) {
       document.getElementById("order_unit").innerHTML +=
-        "<option value=" + key + ">" + units["packing_type"][key] + "</option>";
+        "<option value=" + packing_unit[key]['id'] + ">" + packing_unit[key]['packing_unit_abbreviation'] + "</option>";
     }
   }
 
-  document
-    .getElementById("item_input")
-    .addEventListener("change", getItemVariants);
+  document.getElementById("item_input").addEventListener("change", getItemVariants);
   let item_variant = document.getElementById("item_variant");
   let consignee_input = document.getElementById("consignee_input");
   const formEl = document.getElementById("item-form");
@@ -437,20 +389,9 @@
   document.getElementById("exit_item").addEventListener("click", exit_item);
 
   consignee_input.addEventListener("change", function (event) {
-    let client_value = (document.getElementById("client_id").value =
-      selectedDatalistAttributeValue(
-        "consignee_input",
-        "consignee_list",
-        "client-id"
-      ));
-    item_varient_price =
-      "client_price_" +
-      selectedDatalistAttributeValue("client_id", "client_list", "group-id");
-    client_phone_no = selectedDatalistAttributeValue(
-      "client_id",
-      "client_list",
-      "mobile-no"
-    );
+    let client_value = (document.getElementById("client_id").value = selectedDatalistAttributeValue("consignee_input","consignee_list","client-id"));
+    item_varient_price = "client_price_" + selectedDatalistAttributeValue("client_id", "client_list", "group-id");
+    client_phone_no = selectedDatalistAttributeValue("client_id","client_list","mobile-no");
 
     if (typeof client_value != "undefined") {
       document.getElementById("select_item").style.display = "block";
@@ -482,13 +423,15 @@
     var element = (document.getElementById("item_variant_list").innerHTML = "");
     // var item_unit = selecteddatalistid('item_input','item_list');
     var sel = document.getElementById("item_variant_list");
-    let item_unit = selectedDatalistAttributeValue(
-      "item_input",
-      "item_list",
-      "item-unit"
-    );
-
-    document.getElementById("per_unit").value = " /" + item_unit;
+    item_unit = selectedDatalistAttributeValue("item_input","item_list","item-unit" );
+   
+   
+    for(let mu in units){      
+      if (units[mu]['id'] == item_unit){
+        document.getElementById("per_unit").value = " /" + units[mu]['unit_abbreviation'];
+      }
+    }
+   
     if (typeof item_id != "undefined") {
       fetch("/items/api/itemvariant_by_item_id/" + item_id)
         .then((response) => {
@@ -516,46 +459,35 @@
   function onAddItems(e) {
     e.preventDefault();
     const item_name = document.getElementById("item_input").value;
-    const item_id = selectedDatalistAttributeValue(
-      "item_input",
-      "item_list",
-      "data-id"
-    );
+    const item_id = selectedDatalistAttributeValue("item_input","item_list","data-id");
     const item_variant_name = document.getElementById("item_variant").value;
-    const item_variant_id = selectedDatalistAttributeValue(
-      "item_variant",
-      "item_variant_list",
-      "data-id"
-    );
+    const item_variant_id = selectedDatalistAttributeValue("item_variant","item_variant_list","data-id");
     const per = document.getElementById("per_unit").value;
-    const per_unit = selectedDatalistAttributeValue(
-      "per_unit",
-      "per_unit_list",
-      "data-id"
-    );
+    const per_unit = item_unit ;    
     const item_price = document.getElementById("item_price").value;
     const item_qty = document.getElementById("qty").value;
     const order_type = "or";
-    const packing_type = document.getElementById("order_unit").value; //selectedDatalistAttributeValue('order_unit', 'unit_list','data-id');
+    const packing_type = document.getElementById("order_unit").innerText; //selectedDatalistAttributeValue('order_unit', 'unit_list','data-id');
     const variant_comment = document.getElementById("variant_comment").value;
+    const order_unit_id = document.getElementById("order_unit").value;
     tbodyEl.innerHTML += `
         <tr>
         <td style="text-align: center; font-size: 12px;"> </td>  
-        <td style="text-align: center; font-size: 12px;"> ${item_name}</td>            
-        <td style="text-align: center; font-size: 12px;"> ${item_variant_name}</td>    
-        <td style="text-align: center; font-size: 12px;"> ${item_price}</td>          
-        <td style="text-align: center; font-size: 12px;"> ${per}</td>    
-        <td style="text-align: center; font-size: 12px;"> ${item_qty}</td>   
-        <td style="text-align: center; font-size: 12px;"> ${packing_type}</td>    
+        <td style="text-align: right; font-size: 12px;"> ${item_name}</td>            
+        <td style="text-align: left; font-size: 12px;"> ${item_variant_name}</td>    
+        <td style="text-align: right; font-size: 12px;"> ${item_price}</td>          
+        <td style="text-align: left; font-size: 12px;"> ${per}</td>    
+        <td style="text-align: right; font-size: 12px;"> ${item_qty}</td>   
+        <td style="text-align: left; font-size: 12px;"> ${packing_type}</td>    
         <td style="text-align: center; font-size: 12px;"><button class="deleteBtn">X</button></td>
         <td hidden> ${item_id}</td>
         <td hidden> ${item_variant_id}</td>
         <td hidden> ${per_unit}</td>
         <td hidden> ${order_type}</td>
-        <td hidden> ${variant_comment}</td> 
+        <td hidden> ${variant_comment}</td>
+        <td hidden> ${order_unit_id}</td>
         </tr>`;
-
-    //   alert(variant_comment);
+    
     document.getElementById("item_input").value = "";
     document.getElementById("item_variant").value = "";
     document.getElementById("per_unit").value = "";
@@ -590,9 +522,7 @@
     document.getElementById("item_modal").style.display = "none";
   }
 
-  document
-    .getElementById("order-item-form")
-    .addEventListener("submit", function (e) {
+  document.getElementById("order-item-form").addEventListener("submit", function (e) {
       e.preventDefault();
       var table = document.getElementById("myTable");
       if (table.rows.length <= 1) {
@@ -622,28 +552,16 @@
           duplicate.push(col[1].innerHTML.trim() + col[2].innerHTML.trim());
 
           let ordobj = {
-            client_group: selectedDatalistAttributeValue(
-              "client_id",
-              "client_list",
-              "group-id"
-            ),
+            client_group: selectedDatalistAttributeValue("client_id","client_list","group-id"),
             order_date: document.getElementById("id_date").value.trim(),
             item_veriant_price: col[3].innerHTML.trim(),
             item_qty: col[5].innerHTML.trim(),
-            client_id: selectedDatalistAttributeValue(
-              "client_id",
-              "client_list",
-              "data-id"
-            ).trim(),
-            consignee_id: selectedDatalistAttributeValue(
-              "consignee_input",
-              "consignee_list",
-              "data-id"
-            ).trim(),
+            client_id: selectedDatalistAttributeValue("client_id","client_list","data-id").trim(),
+            consignee_id: selectedDatalistAttributeValue("consignee_input","consignee_list","data-id").trim(),
             item_id: col[8].innerHTML.trim(),
             item_variant_id: col[9].innerHTML.trim(),
-            price_per_unit: col[4].innerHTML.trim(),
-            packing_type: col[6].innerHTML.trim(),
+            price_per_unit: col[10].innerHTML.trim(),
+            packing_type: col[13].innerHTML.trim(),
             comment: col[12].innerHTML.trim(),
           };
 
@@ -651,7 +569,8 @@
         }
 
         //  console.log(data);
-        console.log(data1);
+       // console.log(data1);
+        
         if (is_duplicate == false) {
           fetch("/orders/api/order_item/", ajexcall.postoption(data1))
             .then(function (response) {
@@ -691,10 +610,8 @@
               alert("Order Added Success");
               window.location.reload();
             })
-            .catch((err) => {
-              alert(err);
-            });
-        }
+            .catch((err) => {alert(err);});
+        } 
       }
     });
 

@@ -1,8 +1,8 @@
 from rest_framework.permissions import BasePermission
 
 from core.models import Custom_User
-from items.models import Item_Group,Item,Item_Variant
-from items.api.serializers import itemGroupSerializers,itemSerializers,itemVariantSerializers
+from items.models import Item_Group,Item,Item_Variant,Unit,Packing_Unit
+from items.api.serializers import itemGroupSerializers,itemSerializers,itemVariantSerializers,unitSerializers,packing_unitSerializers
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import viewsets
@@ -14,6 +14,18 @@ class CustomPermissions(BasePermission):
             return True
         return False
 
+class units(viewsets.ModelViewSet):   
+    queryset = Unit.objects.all()
+    serializer_class = unitSerializers
+    permission_classes = (CustomPermissions,) 
+    http_method_names = ['get','post']
+
+
+class packing_units(viewsets.ModelViewSet):   
+    queryset = Packing_Unit.objects.all()
+    serializer_class = packing_unitSerializers
+    permission_classes = (CustomPermissions,)
+    http_method_names = ['get','post']
 
 class itemgroup(viewsets.ModelViewSet):
    

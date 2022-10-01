@@ -7,6 +7,8 @@ from items.api import views
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
+router.register('units',views.units,basename='units')
+router.register('packing_unit',views.packing_units,basename='packing_unit')
 router.register('itemgroup',views.itemgroup,basename='itemgroup')
 router.register('items',views.items,basename='items')
 router.register('item_variant',views.item_variant,'item_variant') 

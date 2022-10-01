@@ -1,7 +1,4 @@
-
 from email.policy import default
-from enum import unique
-from random import choices
 from django.db import models
 
 
@@ -19,7 +16,19 @@ class Item_Group(models.Model):
     comment = LowerCase(max_length=200,blank=True,null=True)
     def __str__(self):
         return self.group_name
-    
+
+class Unit(models.Model):
+    unit_name = LowerCase(max_length=30)
+    unit_abbreviation = LowerCase(max_length=10,default='kg')
+    unit_des = LowerCase(max_length=100)
+    unit_comment = LowerCase(max_length=200)
+
+class Packing_Unit(models.Model):
+    packing_unit_name = LowerCase(max_length=30)
+    packing_unit_abbreviation = LowerCase(max_length=10,default='cr')
+    packing_unit_des = LowerCase(max_length=200)
+    packing_unit_comment = LowerCase(max_length=200)
+
 class Item(models.Model):   
     item_group=models.ForeignKey(Item_Group,on_delete=models.PROTECT)
     item_code = LowerCase(max_length=100,blank=True,null=True)   

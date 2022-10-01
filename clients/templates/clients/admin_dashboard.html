@@ -205,10 +205,9 @@
     let consignee_ios = [];
     let unit = '';
     import * as ajexcall from "/static/core/js/modules/ajex.js";
-
-    let url = '{% static "core/json/units.json" %}';
-    unit = await (await fetch(url)).json();
-
+    
+    unit = await (await fetch('/items/api/units/')).json();
+    let packing_unit = await (await fetch('/items/api/packing_unit/')).json();
     let consignee_names = JSON.parse('{{consignee_names | escapejs }}');
     let items = JSON.parse('{{items  | escapejs }}');
     let item_variants = JSON.parse('{{item_variants | escapejs }}');
@@ -252,7 +251,7 @@
                                 return response.json();
                             })
                             .then(data1 => {
-                                console.log(data1);                            
+                               // console.log(data1);                            
                                 dataFromFetch = data1; //all jSON data to dataFromfetch assign
                                 orders('dispatched', dataFromFetch);
                             })
@@ -381,16 +380,16 @@
                 }
             }
 
-            for (let un in unit['units']) {                
-                if (dataFromFetch['items'][i]['price_per_unit'] == un) {
-                    per_unit = un;
-                    per_unit_id = un;                  
+            for (let un in unit) {                
+                if (dataFromFetch['items'][i]['price_per_unit'] == unit[un]['id']) {
+                    per_unit = unit[un]['unit_abbreviation'];
+                    per_unit_id = unit[un]['unit_abbreviation'];                  
                 }
             }
-            for (let pt in unit['packing_type']) {               
-                if (dataFromFetch['items'][i]['packing_type'] == pt) {
-                    order_unit = pt;
-                    order_unit_id = pt;
+            for (let pt in packing_unit) {               
+                if (dataFromFetch['items'][i]['packing_type'] == packing_unit[pt]['id']) {
+                    order_unit = packing_unit[pt]['packing_unit_abbreviation'];
+                    order_unit_id = packing_unit[pt]['packing_unit_abbreviation'];
                 }
             }
 
