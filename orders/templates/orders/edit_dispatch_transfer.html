@@ -158,12 +158,12 @@
                     document.getElementById('comment').value =orders['comment'];
 
                     for(let ui in unit){
-                        if(orders['price_per_unit'] == unit[ui]['id']){
+                        if(orders['item_unit'] == unit[ui]['id']){
                             document.getElementById('per_unit').value = unit[ui]['unit_abbreviation'];
                           //  console.log(unit[ui]['id']);
                         }
                     }
-
+                   
                     for(let it in Items)
                     {
                         if(Items[it]['id']==orders['item_id'])
@@ -209,11 +209,14 @@
 
 
 
-    document.getElementById('item_input').addEventListener('change', function () {
-        let item_id = selectedDatalistAttributeValue('item_input', 'item_list', 'data-id');    
+
+        document.getElementById('item_input').addEventListener('change', function () {
+        let item_id = selectedDatalistAttributeValue('item_input', 'item_list', 'data-id');
+        let item_unit = selectedDatalistAttributeValue('item_input','item_list','unit-id') 
+       // alert(item_unit); 
         for (let it in unit) {
 
-            if (unit[it]['id'] == item_id) { 
+            if (unit[it]['id'] == item_unit) { 
                 document.getElementById('per_unit').value = unit[it]['unit_abbreviation']; 
                 per_unit_id = unit[it]['id'];
             }
@@ -274,7 +277,7 @@
            let order_update_data = {
                 "order_date": document.getElementById('order_date').value,
                 "item_veriant_price": document.getElementById('item_price').value,
-                "price_per_unit": per_unit_id,
+                "item_unit": per_unit_id,
                 "item_qty": document.getElementById('qty').value,
                 "packing_type": document.getElementById('order_unit').value,                          
                 "comment": document.getElementById('comment').value,             

@@ -1,5 +1,3 @@
-from email.policy import default
-from enum import unique
 from random import choices
 from django.db import models
 from django.core.validators import RegexValidator

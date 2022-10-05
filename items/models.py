@@ -1,6 +1,4 @@
-from email.policy import default
 from django.db import models
-
 
 # Create your models here.
 class LowerCase(models.CharField):
@@ -19,22 +17,26 @@ class Item_Group(models.Model):
 
 class Unit(models.Model):
     unit_name = LowerCase(max_length=30)
-    unit_abbreviation = LowerCase(max_length=10,default='kg')
+    unit_abbreviation = LowerCase(max_length=10)
     unit_des = LowerCase(max_length=100)
     unit_comment = LowerCase(max_length=200)
+    def __str__(self):
+        return self.unit_name
 
 class Packing_Unit(models.Model):
     packing_unit_name = LowerCase(max_length=30)
     packing_unit_abbreviation = LowerCase(max_length=10,default='cr')
     packing_unit_des = LowerCase(max_length=200)
     packing_unit_comment = LowerCase(max_length=200)
+    def __str__(self):
+        return self.packing_unit_name
 
 class Item(models.Model):   
     item_group=models.ForeignKey(Item_Group,on_delete=models.PROTECT)
-    item_code = LowerCase(max_length=100,blank=True,null=True)   
+    item_code = LowerCase(max_length=100,blank=True,null=True)
     item_name=LowerCase(max_length=100,unique=True)
     item_img = models.ImageField(upload_to='item', blank=True, null=True)
-    item_unit=LowerCase(max_length=30)
+    item_unit=models.ForeignKey(Unit, on_delete=models.PROTECT)
     hsn_sac = LowerCase(max_length=50,blank=True,null=True)
     is_active = models.BooleanField(default=True,blank=True,null=True)
     item_discraption = LowerCase(max_length=200,blank=True,null=True)    

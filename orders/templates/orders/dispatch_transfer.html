@@ -176,12 +176,13 @@
                 "item_qty":item_qty,
                 "client_id": order_data['client_id'],
                 "consignee_id": document.getElementById('t_consignee').value,
-                "item_id": order_data['item_id'],
+                "item_id": order_data['item_id'],               
                 "item_variant_id": order_data['item_variant_id'],
-                "price_per_unit": order_data['price_per_unit'],
-                "packing_type": order_data['packing_type'],
+                "item_unit": order_data['item_unit'],
+                "packing_unit": order_data['packing_unit'],
                 "order_type": "trn"                       
             }
+           
             fetch('/orders/api/order_item/', ajexcall.postoption(ordobj))
             .then(function (response) {
                 if (!response.ok) {
@@ -196,7 +197,7 @@
                     'item_order_id': order_id,
                     'date': dispatch_transfer_date.value,
                     'item_qty': dispatch_qty,
-                    'status': 'trn',
+                    'status': 'trn',                   
                     'item_order_trn_id' : addtrnferorder['id'],
                     'transfer_id': t_con,
                     'dispatch_comment': dispatch_comment        

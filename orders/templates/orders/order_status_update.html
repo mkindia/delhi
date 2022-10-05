@@ -73,6 +73,7 @@
     let s_i = '{{ status_id }}'  ; 
     let status_consignees = ' ' ;
     let status_consignee_id = ' ';
+    let current_status= '';
     function getorder_status(){
         let t_con = document.getElementById('t_consignee');
         t_con.innerHTML = '';
@@ -84,8 +85,8 @@
             }
             return response.json();
         })
-        .then(function(getstatus){
-          //  console.log(getstatus);
+        .then(function(getstatus){  
+            current_status = getstatus;      
             status_consignee_id = getstatus['consignee_id'];
             document.getElementById('status_update_date').value=getstatus['date'];
             document.getElementById('dispatch_qty').value=getstatus['item_qty'];
@@ -163,8 +164,35 @@
         })
     
     document.getElementById('dispatch-form').addEventListener('submit',function(e){
-
         e.preventDefault();
+        let date = document.getElementById('status_update_date').value;
+        let trn_to = document.getElementById('t_consignee').value;
+        let qty = document.getElementById('dispatch_qty').value;        
+        let docket = document.getElementById('docket').value;
+        let station = document.getElementById('station').value;
+        let transport = document.getElementById('transport').value;
+        let comment = document.getElementById('status_coments').value;
+        
+       // alert(current_status['status'])
+        if(current_status['status'] =='trn' && document.getElementById('status').value == 'trn')
+        {
+           let trn_to = document.getElementById('t_consignee').value;
+            alert(trn_to);
+        }
+        else if(current_status['status'] =='trn' &&  document.getElementById('status').value == 'dis')
+        {
+            alert('trn_to_dis')
+        }
+        else if(current_status['status'] =='dis' && document.getElementById('status').value == 'trn')
+        {
+            alert('dis_to_trn')
+        }
+        else if(current_status['status'] =='dis' &&  document.getElementById('status').value == 'dis' )
+        {
+            alert('dis_to_dis')
+            
+        }
+
     })
    
 </script>

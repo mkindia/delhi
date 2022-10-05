@@ -66,7 +66,8 @@ def home(request):
                      consignee_arry.append({'consignee_id':con.id,'consignee_name':con.consignee_name})
               consigne_names=json.dumps(consignee_arry)
               for i in Item.objects.all():                     
-                     item_arry.append({'item_id':i.id,'item_name':i.item_name})
+                     item_arry.append({'item_id':i.id,'item_name':i.item_name,'item_unit':i.item_unit_id})
+                     
               items=json.dumps(item_arry)
               for iv in Item_Variant.objects.all():
                      item_variants_arry.append({'variant_id':iv.id,'variant_name':iv.variant_name})

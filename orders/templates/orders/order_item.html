@@ -218,7 +218,7 @@
             <datalist id="item_list" style="text-transform: capitalize">
               {% for item in items %}
 
-              <option data-id="{{item.id}}" item-unit="{{item.item_unit}}" value="{{item.item_name}}">
+              <option data-id="{{item.id}}" item-unit="{{item.item_unit_id}}" value="{{item.item_name}}">
 
               </option>
               > {% endfor %}
@@ -411,25 +411,21 @@
   function getItemVariants() {
     // alert(item_varient_price);
     item_varient_price = item_varient_price;
-    // console.log(item_unit);
+     
     document.getElementById("item_variant").value = "";
     //let item_at=document.getElementById('item_input');
 
-    let item_id = selectedDatalistAttributeValue(
-      "item_input",
-      "item_list",
-      "data-id"
-    );
-    var element = (document.getElementById("item_variant_list").innerHTML = "");
-    // var item_unit = selecteddatalistid('item_input','item_list');
+    let item_id = selectedDatalistAttributeValue("item_input","item_list","data-id");
+    var element = (document.getElementById("item_variant_list").innerHTML = "");   
     var sel = document.getElementById("item_variant_list");
     item_unit = selectedDatalistAttributeValue("item_input","item_list","item-unit" );
    
-   
+   // console.log(item_unit);
     for(let mu in units){      
       if (units[mu]['id'] == item_unit){
-        document.getElementById("per_unit").value = " /" + units[mu]['unit_abbreviation'];
+        document.getElementById("per_unit").value = " /" + units[mu]['unit_abbreviation'];        
       }
+      
     }
    
     if (typeof item_id != "undefined") {
@@ -524,6 +520,7 @@
 
   document.getElementById("order-item-form").addEventListener("submit", function (e) {
       e.preventDefault();
+      console.log(item_unit);
       var table = document.getElementById("myTable");
       if (table.rows.length <= 1) {
         alert("Plese Select an Item");
@@ -560,18 +557,19 @@
             consignee_id: selectedDatalistAttributeValue("consignee_input","consignee_list","data-id").trim(),
             item_id: col[8].innerHTML.trim(),
             item_variant_id: col[9].innerHTML.trim(),
-            price_per_unit: col[10].innerHTML.trim(),
-            packing_type: col[13].innerHTML.trim(),
+            item_unit: col[10].innerHTML.trim(),
+            packing_unit: col[13].innerHTML.trim(),
             comment: col[12].innerHTML.trim(),
           };
 
           data1.push(ordobj);
         }
 
-        //  console.log(data);
-       // console.log(data1);
+       // console.log(data);
+      //  console.log(data1);
         
         if (is_duplicate == false) {
+          
           fetch("/orders/api/order_item/", ajexcall.postoption(data1))
             .then(function (response) {
               if (!response.ok) {
@@ -611,6 +609,7 @@
               window.location.reload();
             })
             .catch((err) => {alert(err);});
+            
         } 
       }
     });

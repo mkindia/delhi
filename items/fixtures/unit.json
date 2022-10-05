@@ -1,0 +1,1 @@
+[{"model": "items.unit", "pk": 1, "fields": {"unit_name": "pcs", "unit_abbreviation": "pcs", "unit_des": "pcs", "unit_comment": "pcs"}}, {"model": "items.unit", "pk": 2, "fields": {"unit_name": "kg", "unit_abbreviation": "kg", "unit_des": "kg", "unit_comment": "kg"}}]

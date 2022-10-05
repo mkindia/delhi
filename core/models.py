@@ -1,5 +1,3 @@
-
-from multiprocessing.connection import Client
 from django.contrib.auth.models import BaseUserManager,AbstractBaseUser
 from django.db import models
 from django.core.validators import RegexValidator
