@@ -69,7 +69,8 @@
     </div>
 </div>
 
-<script>
+<script type="text/javascript">
+   // import * as ajexcall from "/static/core/js/modules/ajex.js";
     let s_i = '{{ status_id }}'  ; 
     let status_consignees = ' ' ;
     let status_consignee_id = ' ';
@@ -164,6 +165,7 @@
         })
     
     document.getElementById('dispatch-form').addEventListener('submit',function(e){
+       
         e.preventDefault();
         let date = document.getElementById('status_update_date').value;
         let trn_to = document.getElementById('t_consignee').value;
@@ -171,13 +173,32 @@
         let docket = document.getElementById('docket').value;
         let station = document.getElementById('station').value;
         let transport = document.getElementById('transport').value;
-        let comment = document.getElementById('status_coments').value;
+        let comment = document.getElementById('status_coments').value;       
+        let status ="";
+        let item_order_trn_id = null;
+        
+       // console.log(current_status);
         
        // alert(current_status['status'])
         if(current_status['status'] =='trn' && document.getElementById('status').value == 'trn')
         {
-           let trn_to = document.getElementById('t_consignee').value;
-            alert(trn_to);
+            let dis_trns_update = {"date": date,"item_qty": qty,"transfer_id":trn_to,     
+                "comment": comment}
+
+                fetch('/orders/api/ios/'+current_status['id']+'/',ajexcall.patchoption(dis_trns_update))
+                .then(function(response){
+                 if(!response.ok){throw Error(response.statusText);}
+                 return response.json();
+                })
+                .then(function(dis_to_dis_update){
+                 show();
+                 document.getElementById('fetch-html-content').style.display = 'none';          
+                 alert('update success');
+                })
+                .catch(err=>{alert(err);})
+             
+          
+          //  alert(trn_to);
         }
         else if(current_status['status'] =='trn' &&  document.getElementById('status').value == 'dis')
         {
@@ -189,7 +210,19 @@
         }
         else if(current_status['status'] =='dis' &&  document.getElementById('status').value == 'dis' )
         {
-            alert('dis_to_dis')
+            let dis_trns_update = {"date": date,"item_qty": qty,"docket_number": docket,           
+                "station": station,"transport": transport,"comment": comment}
+           fetch('/orders/api/ios/'+current_status['id']+'/',ajexcall.patchoption(dis_trns_update))
+           .then(function(response){
+            if(!response.ok){throw Error(response.statusText);}
+            return response.json();
+           })
+           .then(function(dis_to_dis_update){
+            show();
+            document.getElementById('fetch-html-content').style.display = 'none';          
+            alert('update success');
+           })
+           .catch(err=>{alert(err);})
             
         }
 
